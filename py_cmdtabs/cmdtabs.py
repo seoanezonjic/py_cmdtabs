@@ -1,7 +1,9 @@
 import sys
 
 class CmdTabs:
-	def load_input_data(input_path, sep="\t", limit=1):
+	def load_input_data(input_path, sep="\t", limit=-1):
+		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
+			limit -= 1
 		if input_path == '-':
 			input_data = sys.stdin
 		else:
