@@ -9,7 +9,9 @@ class CmdTabs:
 		if input_path == '-':
 			input_data = sys.stdin
 		else:
-			input_data = open(input_path, "r").readlines()
+			file = open(input_path, "r")
+			input_data = file.readlines()
+			file.close()
 		input_data_arr = []
 		for line in input_data:
 			#print('---', file=sys.stderr)
