@@ -36,6 +36,7 @@ setup(
     ],
     packages=["py_cmdtabs"],
     include_package_data=True,
-    scripts=['bin/py_cmdtabs']
+    scripts=['bin/py_cmdtabs'],
+    install_requires=["openpyxl"]
 
 )
