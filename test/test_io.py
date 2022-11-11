@@ -23,6 +23,3 @@ class IOTestCase(unittest.TestCase):
 		load_data_test = CmdTabs.load_input_data(input_file, ",", 2)
 		expected_result = [["HGNC:21197\t483_ref", "1039_ref,1071_ref"], ["HGNC:21143\t211_ref", "4705_ref"]]
 		self.assertEqual(expected_result, load_data_test)
-
-if __name__ == '__main__':
-    unittest.main()

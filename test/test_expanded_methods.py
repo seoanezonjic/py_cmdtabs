@@ -16,15 +16,13 @@ class ExpandedTestCase(unittest.TestCase):
 		string = "Hello world"
 		pattern = "Hello"
 		match_test = CmdTabs.expanded_match(string, pattern, "i")
-		expected_result = True
-		self.assertEqual(expected_result, match_test)
+		self.assertTrue(match_test)
 
 	def test_expanded_match_c(self):
 		string = "Hello world"
 		pattern = "Hello"
 		match_test = CmdTabs.expanded_match(string, pattern, "c")
-		expected_result = False
-		self.assertEqual(expected_result, match_test)
+		self.assertFalse(match_test)
 
 	def test_extract_columns(self):
 		sheet = CmdTabs.get_table_from_excel(os.path.join(DATA_TEST_PATH, 'cluster_genes.xlsx'), 0)

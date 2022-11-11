@@ -83,8 +83,7 @@ class CmdTabsTestCase(unittest.TestCase):
 		keywords = "HGNC&ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
 		filter_test = CmdTabs.filter(line, patterns, "s", "i")
-		expected_result = False
-		self.assertEqual(expected_result, filter_test)
+		self.assertFalse(filter_test)
 
 	def test_filter_s_i_True(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
@@ -92,8 +91,7 @@ class CmdTabsTestCase(unittest.TestCase):
 		keywords = "HGNC&ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
 		filter_test = CmdTabs.filter(line, patterns, "s", "i", True)
-		expected_result = True
-		self.assertEqual(expected_result, filter_test)
+		self.assertTrue(filter_test)
 
 	def test_filter_c_i(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
@@ -101,8 +99,7 @@ class CmdTabsTestCase(unittest.TestCase):
 		keywords = "ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
 		filter_test = CmdTabs.filter(line, patterns, "c", "i")
-		expected_result = True
-		self.assertEqual(expected_result, filter_test)
+		self.assertTrue(filter_test)
 
 	def test_filter_c_c(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
@@ -110,8 +107,7 @@ class CmdTabsTestCase(unittest.TestCase):
 		keywords = "HGNC&ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
 		filter_test = CmdTabs.filter(line, patterns, "c", "c")
-		expected_result = True
-		self.assertEqual(expected_result, filter_test)
+		self.assertTrue(filter_test)
 
 	def test_filter_columns(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_desagg'))
