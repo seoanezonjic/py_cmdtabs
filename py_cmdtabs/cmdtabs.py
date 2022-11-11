@@ -1,6 +1,7 @@
 import sys
 import os.path
 from collections import defaultdict
+import openpyxl
 
 class CmdTabs:
 	def load_input_data(input_path, sep="\t", limit=-1):
@@ -227,3 +228,21 @@ class CmdTabs:
 			header = CmdTabs.shift_by_array_indexes(header, options['cols_to_show'])
 			filtered_table.insert(0, header)
 		return filtered_table
+
+	def extract_columns(table, columns2extract):
+		storage = []
+		for row in table:
+			storage.append(CmdTabs.shift_by_array_indexes(row, columns2extract))
+		return storage
+
+	def get_table_from_excel(file, sheet_number):
+		x = openpyxl.load_workbook(file)
+		sheets = x.sheetnames # list excel sheets by name
+		ws = x[sheets[sheet_number]] #select sheet by index (so, we select by sheet order)
+		sheet = []
+		for i in range(0, ws.max_row): # Convert sheet in nested list
+			row = []
+			for col in ws.iter_cols(1, ws.max_column):
+		 		row.append(col[i].value)
+			sheet.append(row)
+		return sheet

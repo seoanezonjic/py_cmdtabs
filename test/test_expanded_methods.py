@@ -1,6 +1,5 @@
 import unittest
 import os
-import openpyxl
 from py_cmdtabs import CmdTabs
 ROOT_PATH=os.path.dirname(__file__)
 DATA_TEST_PATH = os.path.join(ROOT_PATH, 'data_tests')
@@ -28,9 +27,7 @@ class ExpandedTestCase(unittest.TestCase):
 		self.assertEqual(expected_result, match_test)
 
 	def test_extract_columns(self):
-		x = openpyxl.load_workbook(os.path.join(DATA_TEST_PATH, 'cluster_genes.xlsx'))
-		x.active=1
-		#sheet = x.sheets[0].to_a
-		test_result = CmdTabs.extract_columns(x, [0, 2])
+		sheet = CmdTabs.get_table_from_excel(os.path.join(DATA_TEST_PATH, 'cluster_genes.xlsx'), 0)
+		test_result = CmdTabs.extract_columns(sheet, [0, 2])
 		expected_result =[['HGNC:21197', '1039_ref'], ['HGNC:21143', '4705_ref']]
 		self.assertEqual(expected_result, test_result)
