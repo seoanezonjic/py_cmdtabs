@@ -22,20 +22,24 @@ class CmdTabsTestCase(unittest.TestCase):
 		attributes = []
 		samples_tag = 'sample'
 		metric_names, indexed_metrics = CmdTabs.index_metrics(metric_file, attributes)
-		create_table_test = CmdTabs.create_table(indexed_metrics, samples_tag, attributes, metric_names)
-		expected_result = [[["sample", "initial_total_sequences", "initial_read_max_length", "initial_read_min_length", "initial_%gc"], 
-			["CTL_1_cell", "11437331.0", "76.0", "35.0", "45.0"], ["CTL_1_exo", "10668412.0", "76.0", "35.0", "48.0"]], [["sample", "initial_total_sequences", "initial_read_max_length", "initial_read_min_length", "initial_%gc"]]]
-		self.assertEqual(expected_result, create_table_test)
+		created_table, corrupted_records = CmdTabs.create_table(indexed_metrics, samples_tag, attributes, metric_names)
+		expected_table = [["sample", "initial_total_sequences", "initial_read_max_length", "initial_read_min_length", "initial_%gc"], 
+			["CTL_1_cell", "11437331.0", "76.0", "35.0", "45.0"], 
+			["CTL_1_exo", "10668412.0", "76.0", "35.0", "48.0"]]
+		expected_corrupted_records = [["sample", "initial_total_sequences", "initial_read_max_length", "initial_read_min_length", "initial_%gc"]]
+		self.assertEqual(expected_table, created_table)
+		self.assertEqual(expected_corrupted_records, corrupted_records)
 
 	def test_name_replacer(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'disease_cluster'))
 		input_index = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'disease_gene'))
 		indexed_index = CmdTabs.index_array(input_index)
-		name_replaces_test = CmdTabs.name_replaces(input_table, "\t", [0], indexed_index)
-		expected_result = [['HGNC:16873', '19_ref'], ["HGNC:21197", "36_ref"], ["HGNC:21197", "53_ref"], ["HGNC:21144", "53_ref"], ['HGNC:3527', '54_ref'], ["HGNC:21144", "66_ref"], ['HGNC:21176', '1189_ref']], 
-		[["MONDO:0007172", "22_ref"], ["MONDO:0014823", "25_ref"], ["MONDO:0009833", "53_ref"], 
+		replaced, unreplaced = CmdTabs.name_replaces(input_table, "\t", [0], indexed_index)
+		expected_replaced = [['HGNC:16873', '19_ref'], ["HGNC:21197", "36_ref"], ["HGNC:21197", "53_ref"], ["HGNC:21144", "53_ref"], ['HGNC:3527', '54_ref'], ["HGNC:21144", "66_ref"], ['HGNC:21176', '1189_ref']] 
+		expected_unreplaced = [["MONDO:0007172", "22_ref"], ["MONDO:0014823", "25_ref"], ["MONDO:0009833", "53_ref"], 
 		["MONDO:0009594", "54_ref"], ["MONDO:0012176", "62_ref"]]
-		self.assertEqual(expected_result, name_replaces_test)
+		self.assertEqual(expected_replaced, replaced)
+		self.assertEqual(expected_unreplaced, unreplaced)
 
 	def test_link_table(self):
 		input_linker = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'disease_cluster'))
@@ -111,7 +115,6 @@ class CmdTabsTestCase(unittest.TestCase):
 
 	def test_filter_columns(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_desagg'))
-		patterns = CmdTabs.build_pattern(col_filter, patterns)
 		options = {'col_filter' : [0], 'keywords' : "21197", 'search_mode' : "s", 'match_mode' : "i", 'reverse' : False, 'cols_to_show' : [0, 1]}
 		filter_columns_test = CmdTabs.filter_columns(input_table, options)
 		expected_result = [["HGNC:21197", "483_ref"], ["HGNC:21197", "1039_ref"], ["HGNC:21197", "1071_ref"]]
@@ -119,7 +122,7 @@ class CmdTabsTestCase(unittest.TestCase):
 
 	def test_merge_and_filter_tables(self):
 		options = {'header' : '', 'col_filter' : [0], 'keywords' : "0008995&0017999&0013969&0009594", 
-			'search_mode' : "s", 'match_mode' : "i", 'reverse' : False, 'cols_to_show' : [0, 1]}
+			'search_mode' : "s", 'match_mode' : "i", 'reverse' : False, 'cols_to_show' : [0, 1], 'uniq' : False }
 		input_tables = CmdTabs.load_several_files([os.path.join(DATA_TEST_PATH, 'disease_cluster'), os.path.join(DATA_TEST_PATH, 'disease_gene')])
 		test_result = CmdTabs.merge_and_filter_tables(input_tables, options)
 		expected_result = [["MONDO:0008995", "19_ref"], ["MONDO:0017999", "36_ref"], ["MONDO:0017999", "53_ref"], ["MONDO:0009594", "54_ref"], 
