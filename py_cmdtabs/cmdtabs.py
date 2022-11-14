@@ -246,3 +246,12 @@ class CmdTabs:
 		 		row.append(col[i].value)
 			sheet.append(row)
 		return sheet
+
+	def write_output_data(output_data, output_path=None, sep="\t"):
+		if output_path != None:
+			with open(output_path, 'w') as out_file:
+				for line in output_data:
+					out_file.write(sep.join(line))
+		else:
+			for line in output_data:
+				print(sep.join(line))

@@ -2,15 +2,15 @@
 
 source ~soft_bio_267/initializes/init_python
 export PATH=`pwd`/bin:$PATH
-test_data=test/data
+test_data=test/data_tests
 out=output_test_scripts 
 mkdir $out
 
 #aggregate_column_data
 
 
-aggregate_column_data.py -i $test_data/cluster_genes_dis_desagg -x 0 -s "," -a 1 1> $out/cluster_genes_dis_AGG
-cat $test_data/cluster_genes_dis_desagg | aggregate_column_data.py -i '-' -x 0 -s "," -a 1 1> $out/cluster_genes_dis_AGG_stdin
+aggregate_column_data.py -i $test_data/cluster_genes_dis_desagg -x 1 -s "," -a 2 1> $out/cluster_genes_dis_AGG
+cat $test_data/cluster_genes_dis_desagg | aggregate_column_data.py -i '-' -x 1 -s "," -a 2 1> $out/cluster_genes_dis_AGG_stdin
 exit
 
 #desaggregate_column_data
