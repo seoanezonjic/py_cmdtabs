@@ -15,12 +15,12 @@ cat $test_data/cluster_genes_dis_desagg | aggregate_column_data.py -i '-' -x 1 -
 #desaggregate_column_data
 desaggregate_column_data.py -i $test_data/cluster_genes_dis_agg -x 1 1> $out/cluster_genes_dis_DESAGG
 cat $test_data/cluster_genes_dis_agg| aggregate_column_data.py -i '-' -x 1 -s "," -a 0 1> $out/cluster_genes_dis_DESAGG_stdin
-exit
 
 
 
 #create_metric_table
 create_metric_table.py $test_data/all_metrics sample $out/metric_table -c TEST_file
+exit
 
 #merge_tabular
 #merge_tabular.py $test_data/disease_gene $test_data/disease_cluster > $out/merge_disease_cluster_gene
@@ -32,7 +32,7 @@ tag_table.py -i $test_data/cluster_stats -t $test_data/tracker 1> $out/tag_table
 ##default values
 intersect_columns.py -a $test_data/disease_cluster -b $test_data/disease_gene -A 0 -B 0 1> $out/intersect_columns_default
 ##STDIN a
-cat $test_data/disease_cluster | intersect_columns.py -a'-' -b $test_data/disease_gene -A 0 -B 0 1> $out/intersect_columns_default_stdin_a
+cat $test_data/disease_cluster | intersect_columns.py -a '-' -b $test_data/disease_gene -A 0 -B 0 1> $out/intersect_columns_default_stdin_a
 ##STDIN b
 cat $test_data/disease_gene | intersect_columns.py -a $test_data/disease_cluster -b '-' -A 0 -B 0 1> $out/intersect_columns_default_stdin_b
 ##STDIN a y b
