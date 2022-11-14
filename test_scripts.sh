@@ -11,11 +11,11 @@ mkdir $out
 
 aggregate_column_data.py -i $test_data/cluster_genes_dis_desagg -x 1 -s "," -a 2 1> $out/cluster_genes_dis_AGG
 cat $test_data/cluster_genes_dis_desagg | aggregate_column_data.py -i '-' -x 1 -s "," -a 2 1> $out/cluster_genes_dis_AGG_stdin
-exit
 
 #desaggregate_column_data
-desaggregate_column_data.py -i $test_data/cluster_genes_dis_agg -x 1 1> test/$out/cluster_genes_dis_DESAGG
+desaggregate_column_data.py -i $test_data/cluster_genes_dis_agg -x 1 1> $out/cluster_genes_dis_DESAGG
 cat $test_data/cluster_genes_dis_agg| aggregate_column_data.py -i '-' -x 1 -s "," -a 0 1> $out/cluster_genes_dis_DESAGG_stdin
+exit
 
 
 
