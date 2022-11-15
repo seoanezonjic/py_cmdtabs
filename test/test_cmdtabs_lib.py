@@ -34,7 +34,7 @@ class CmdTabsTestCase(unittest.TestCase):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'disease_cluster'))
 		input_index = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'disease_gene'))
 		indexed_index = CmdTabs.index_array(input_index)
-		replaced, unreplaced = CmdTabs.name_replaces(input_table, "\t", [0], indexed_index)
+		replaced, unreplaced = CmdTabs.name_replaces(input_table, "\t", [0], indexed_index, remove_uns=True)
 		expected_replaced = [['HGNC:16873', '19_ref'], ["HGNC:21197", "36_ref"], ["HGNC:21197", "53_ref"], ["HGNC:21144", "53_ref"], ['HGNC:3527', '54_ref'], ["HGNC:21144", "66_ref"], ['HGNC:21176', '1189_ref']] 
 		expected_unreplaced = [["MONDO:0007172", "22_ref"], ["MONDO:0014823", "25_ref"], ["MONDO:0009833", "53_ref"], 
 		["MONDO:0009594", "54_ref"], ["MONDO:0012176", "62_ref"]]

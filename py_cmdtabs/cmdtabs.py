@@ -137,7 +137,7 @@ class CmdTabs:
 		corrupted_records.insert(0, allTags) # Add header
 		return table_output, corrupted_records
 	
-	def name_replaces(tabular_input, sep, cols_to_replace, indexed_file_index):
+	def name_replaces(tabular_input, sep, cols_to_replace, indexed_file_index, remove_uns=False):
 		translated_fields = []
 		untranslated_fields = []
 		for fields in tabular_input:
@@ -145,6 +145,8 @@ class CmdTabs:
 				replaced_field = indexed_file_index[fields[col]]
 				if replaced_field:
 					fields[col] = replaced_field 
+					translated_fields.append(fields)
+				elif not remove_uns:
 					translated_fields.append(fields)
 				else:
 					untranslated_fields.append(fields)
