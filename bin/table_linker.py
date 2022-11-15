@@ -11,7 +11,7 @@ from py_cmdtabs import CmdTabs
 ## OPTPARSE
 ######################################################################
 
-parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')
+parser = argparse.ArgumentParser(description='Merge tabular files.')
 parser.add_argument("-i", "--input_file", dest="input_file",
   help="Path to input file")
 parser.add_argument("-o", "--output_file", dest="output_file",
