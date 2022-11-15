@@ -1,4 +1,5 @@
 import unittest
+import sys
 import os
 from py_cmdtabs import CmdTabs
 ROOT_PATH=os.path.dirname(__file__)
@@ -42,11 +43,11 @@ class InputParsingTestCase(unittest.TestCase):
 		selected_fields, full_records = CmdTabs.load_records(input_table, [0], True)
 		expected_selected_fields = ['MONDO:0008995', 'MONDO:0007172', 'MONDO:0014823', 'MONDO:0017999', 'MONDO:0011142',
 		'MONDO:0009833', 'MONDO:0009594', 'MONDO:0010193', 'MONDO:0012176', 'MONDO:0013969'] 
-		expected_full_records = {'MONDO:0008995' : ['MONDO:0008995', '19_ref'], 'MONDO:0007172' : ['MONDO:0007172', '22_ref'], 
-		'MONDO:0014823' : ['MONDO:0014823', '25_ref'], 'MONDO:0017999' : ['MONDO:0017999', '53_ref'],
-		'MONDO:0011142' : ['MONDO:0011142', '66_ref'], 'MONDO:0009833' : ['MONDO:0009833', '53_ref'],
-		'MONDO:0009594' : ['MONDO:0009594', '54_ref'], 'MONDO:0010193' : ['MONDO:0010193', '54_ref'], 
-		'MONDO:0012176' : ['MONDO:0012176', '62_ref'], 'MONDO:0013969' : ['MONDO:0013969', '1189_ref']}
+		expected_full_records = {"MONDO:0008995" : ["MONDO:0008995\t19_ref"], "MONDO:0007172" : ["MONDO:0007172\t22_ref"], 
+		"MONDO:0014823" : ["MONDO:0014823\t25_ref"], "MONDO:0017999" : ["MONDO:0017999\t53_ref"],
+		"MONDO:0011142" : ["MONDO:0011142\t66_ref"], "MONDO:0009833" : ["MONDO:0009833\t53_ref"],
+		"MONDO:0009594" : ["MONDO:0009594\t54_ref"], "MONDO:0010193" : ["MONDO:0010193\t54_ref"], 
+		"MONDO:0012176" : ["MONDO:0012176\t62_ref"], "MONDO:0013969" : ["MONDO:0013969\t1189_ref"]}
 		self.assertEqual(expected_selected_fields, selected_fields)
 		self.assertEqual(expected_full_records, full_records)
 
