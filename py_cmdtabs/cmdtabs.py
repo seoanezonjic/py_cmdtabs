@@ -67,10 +67,10 @@ class CmdTabs:
 		return metric_names, indexed_metrics
 
 	def parse_column_indices(sep, col_string):
-			cols = []
-			for col in col_string.split(sep):
-				cols.append(int(col) - 1)
-			return cols
+		cols = []
+		for col in col_string.split(sep):
+			cols.append(int(col) - 1)
+		return cols
 
 	def load_and_parse_tags(tags, sep):
 		parsed_tags = []
@@ -88,7 +88,7 @@ class CmdTabs:
 		for fields in input_file:
 			field = "\t".join([fields[c] for c in cols]) # Lists are not hasheable in Python so we covert them to string
 			records[field] = True
-			if full: full_row_of_records[field] = fields 
+			if full: full_row_of_records[field] = ["\t".join(fields)]
 		return list(records.keys()), full_row_of_records
 
 
@@ -247,11 +247,20 @@ class CmdTabs:
 			sheet.append(row)
 		return sheet
 
+	def get_groups(a_records, b_records): # inputs are list of string but should be nested lists. This is due to python don't allow to hash list in dicts.
+		a_rec = set(a_records)				# For this reason, the last lines convert in lists the strings of the original list to keep the format
+		b_rec = set(b_records)
+		common_set = a_rec.intersection(b_rec)
+		a_only = [[r] for r in a_rec if r not in common_set]
+		b_only = [[r] for r in b_rec if r not in common_set]
+		common = [[r] for r in common_set]
+		return common, a_only, b_only
+
 	def write_output_data(output_data, output_path=None, sep="\t"):
 		if output_path != None:
 			with open(output_path, 'w') as out_file:
 				for line in output_data:
-					out_file.write(sep.join(line))
+					out_file.write(sep.join(line) + "\n")
 		else:
 			for line in output_data:
 				print(sep.join(line))
