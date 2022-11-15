@@ -42,7 +42,6 @@ intersect_columns.py -a $test_data/disease_cluster -b $test_data/disease_gene -A
 #intersect_columns.py -a $test_data/disease_cluster -b $test_data/disease_gene -A 1 -B 1 -k 'ab' > $out/intersect_columns_ab
 ##full = true
 intersect_columns.py -a $test_data/disease_cluster -b $test_data/disease_gene -A 1 -B 1 --full 1> $out/intersect_columns_full
-exit
 
 #table_linker
 table_linker.py -i $test_data/disease_cluster -l $test_data/disease_gene -o $out/linked_table
@@ -50,6 +49,7 @@ table_linker.py -i $test_data/disease_cluster -l $test_data/disease_gene -o $out
 table_linker.py -i $test_data/disease_gene -l $test_data/disease_cluster -o $out/linked_table_2
 
 table_linker.py -i $test_data/disease_cluster -l $test_data/disease_gene -o $out/linked_table_matches --drop
+exit
 
 
 #standard_name_replacer
