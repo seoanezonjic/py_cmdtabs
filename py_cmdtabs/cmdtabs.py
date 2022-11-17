@@ -51,9 +51,15 @@ class CmdTabs:
 		indexed_metrics = defaultdict(lambda: False	)
 		metric_names = []
 		for entry in input_data:
+			entry = entry.copy()
 			sample_id = entry.pop(0)
-			sample_attributes = entry[0:n_attrib - 1]
-			metric_name, metric = entry[n_attrib:n_attrib + 2] # +2 due to select the next element and the upper bound is not contained in the subset
+			sample_attributes =  [entry.pop(0) for i in range(n_attrib)]
+			if len(entry) == 2: 
+				metric_name, metric = entry # The metric is full and it has key and val
+			else:
+				metric_name = entry[0] # The metric is corrupted and it has only the key but val
+				metric = None
+
 			if metric_name not in metric_names: metric_names.append(metric_name)
 			query = indexed_metrics[sample_id]
 			if not query:
@@ -117,7 +123,7 @@ class CmdTabs:
 				desaggregated_data.append(record)
 		return desaggregated_data
 
-	def create_table(indexed_metrics, samples_tag, attributes, metric_names): #TODO: Corrupted entries not works. Think to move the entire library to pandas and use split with extend=true
+	def create_table(indexed_metrics, samples_tag, attributes, metric_names):
 		allTags = []
 		allTags.extend(attributes)
 		allTags.extend(metric_names)
@@ -127,8 +133,8 @@ class CmdTabs:
 			record = [sample_name]
 			for tag in allTags:
 				record.append(sample_data[tag])
-			if record.count(None) > 0: # This not works, python split not fill empty cuts up to complete the given limit. Move to pandas
-		 		warn("Record " + sample_name + "is corrupted:\n" + record.inspect + "\n")
+			if record.count(None) > 0:
+		 		warn("Record " + sample_name + "is corrupted:\n" + repr(record) + "\n")
 		 		corrupted_records.append(record)
 			else:
 		 		table_output.append(record)
