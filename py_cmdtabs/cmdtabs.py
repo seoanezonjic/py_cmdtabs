@@ -170,16 +170,14 @@ class CmdTabs:
 				if not drop_line: linked_table.append(fields) 
 		return linked_table
 
-
 	def tag_file(input_file, tags, header):
 		taged_file = []
-		if header: empty_header = [""] * len(tags)
 		n_row = 0
 		for fields in input_file:
 			if n_row == 0 and header:
-				record = empty_header.copy()
-			else:
-				record = tags.copy()
+				n_row += 1
+				continue
+			record = tags.copy()
 			record.extend(fields)
 			taged_file.append(record)
 			n_row += 1
@@ -225,7 +223,7 @@ class CmdTabs:
 		filtered_table = []
 		if options.get('cols_to_show') == None: options['cols_to_show'] = [*range(0, len(input_files[0][0]), 1)] 
 		for filename, file in input_files.items():
-			if options.get('header') == None:
+			if options.get('header') != None and options['header']:
 				if len(header.empty) == 0:
 					header = file.pop(0)
 				else:

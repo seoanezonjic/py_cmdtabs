@@ -73,8 +73,7 @@ class CmdTabsTestCase(unittest.TestCase):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_agg'))
 		tags = CmdTabs.load_and_parse_tags([os.path.join(DATA_TEST_PATH, 'tracker')], "\t")
 		taged_test = CmdTabs.tag_file(input_table, tags, True)
-		expected_result = [['', '', '', '', '', 'HGNC:21197', '483_ref,1039_ref,1071_ref'], 
-		['MERGED_net_no_raw_cpm', 'MERGED', 'no', 'no', 'cpm', 'HGNC:21143', '211_ref,4705_ref']]
+		expected_result = [['MERGED_net_no_raw_cpm', 'MERGED', 'no', 'no', 'cpm', 'HGNC:21143', '211_ref,4705_ref']]
 		self.assertEqual(expected_result, taged_test)
 
 	def test_filter_s_i(self):

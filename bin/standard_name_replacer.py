@@ -29,6 +29,8 @@ parser.add_argument("-s", "--input_separator", dest="input_separator", default="
   help="Character separator")
 parser.add_argument("-c", "--columns", dest="columns", default=[1], type=list_based_0,
   help="Index of columns in base 1 to compare")
+parser.add_argument("-u", "--remove_untranslated", dest="remove_untranslated", default=False, action='store_true',
+  help="Activate this flag for outputting the untranslated entries")
 
 options = parser.parse_args()
 
@@ -37,10 +39,10 @@ options = parser.parse_args()
 ##################################################################################################
 
 input_index = CmdTabs.load_input_data(options.index_file)
-indexed_index = CmdTabs.index_array(input_index, options.frm, options.to)
+translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
 
 input_table = CmdTabs.load_input_data(options.input_file, options.input_separator)
 
-tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, indexed_index)
+tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, translation_index, options.remove_untranslated)
 
 CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)

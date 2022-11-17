@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(description='Collapse table rows aggregatting o
 parser.add_argument("-i", "--input_file", dest="input_file",
   help="Path to input file")
 parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
-  help="Indicate if input file has a header line")
+  help="Indicate if input file has a header line. Header will not be printed in output")
 parser.add_argument("-t", "--tags", dest="tags",
   help="Strings or files (only first line will be used) sepparated by commas", type=list_str)
 parser.add_argument("-s", "--sep_char", dest="sep", default="\t",
