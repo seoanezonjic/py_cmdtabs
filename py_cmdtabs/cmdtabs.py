@@ -29,6 +29,17 @@ class CmdTabs:
 			loaded_files[file] = CmdTabs.load_input_data(file, sep, limit)
 		return loaded_files
 
+	def load_files(files_path): #NO TEST # Cleaning an filling behaviour could be sent to load_input_data as options and use on load_several_files
+		files = {}
+		for file_name in files_path:
+			input_table = CmdTabs.load_input_data(file_name)
+			file = []
+			for fields in input_table:
+				if fields.count('') == len(fields): continue #skip blank records
+				file.append([ '-' if field == "" else field for field in fields])
+			files[file_name] = file
+		return files
+
 	def build_pattern(col_filter, keywords):
 		pattern = defaultdict(lambda: False	)
 		if col_filter != None and keywords != None:
@@ -218,22 +229,50 @@ class CmdTabs:
 	def shift_by_array_indexes(arr_sub, indexes):
 		return [ arr_sub[idx] for idx in indexes]
 
+	def merge_files(files): #NO TEST
+		parent_table = {}
+		table_length = 0
+		for file_names, file in files.items():
+			local_length = 0
+			for fields in file:
+				id = fields.pop(0) 
+				local_length = len(fields)
+				if not parent_table.get(id):
+					parent_table[id] = ["-"] * table_length
+				elif len(parent_table[id]) < table_length:
+					diference = table_length - len(parent_table[id])
+					parent_table[id].extend( ["-"] * diference)
+				parent_table[id].extend(fields)				
+			table_length += local_length
+			
+		parent_table_arr = []
+		for id, fields in parent_table.items():
+			diference = table_length - len(fields)
+			if diference > 0: fields.extend(["-"] * diference)
+			record = [id]
+			record.extend(fields)
+			parent_table_arr.append(record)
+		return parent_table_arr
+
 	def merge_and_filter_tables(input_files, options):
 		header = []
 		filtered_table = []
 		if options.get('cols_to_show') == None: options['cols_to_show'] = [*range(0, len(input_files[0][0]), 1)] 
 		for filename, file in input_files.items():
 			if options.get('header') != None and options['header']:
-				if len(header.empty) == 0:
+				if len(header) == 0:
 					header = file.pop(0)
 				else:
 					file.pop(0)
 			filtered_table.extend(CmdTabs.filter_columns(file, options)) 
-		if options.get('uniq') != None and options['uniq']: filtered_table = list(set(numbers)) 
+		if options.get('uniq') != None and options['uniq']: filtered_table = CmdTabs.get_uniq(filtered_table)
 		if len(header) > 0:
 			header = CmdTabs.shift_by_array_indexes(header, options['cols_to_show'])
 			filtered_table.insert(0, header)
 		return filtered_table
+
+	def get_uniq(table):
+		return [list(i) for i in set(tuple(i) for i in table)] # list cannot be used by set so we use tuples change back the format
 
 	def extract_columns(table, columns2extract):
 		storage = []
@@ -249,7 +288,9 @@ class CmdTabs:
 		for i in range(0, ws.max_row): # Convert sheet in nested list
 			row = []
 			for col in ws.iter_cols(1, ws.max_column):
-		 		row.append(col[i].value)
+				val = col[i].value
+				if val == None: val = ''
+				row.append(val)
 			sheet.append(row)
 		return sheet
 
