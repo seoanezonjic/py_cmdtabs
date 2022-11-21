@@ -123,3 +123,16 @@ class CmdTabsTestCase(unittest.TestCase):
 		expected_result = [["MONDO:0008995", "19_ref"], ["MONDO:0017999", "36_ref"], ["MONDO:0017999", "53_ref"], ["MONDO:0009594", "54_ref"], 
 		["MONDO:0013969", "1189_ref"], ["MONDO:0008995", "HGNC:16873"], ["MONDO:0017999", "HGNC:21197"], ["MONDO:0013969", "HGNC:21176"]]
 		self.assertEqual(expected_result, test_result)
+
+	def test_load_files(self):
+		loaded_files_ref = {
+			os.path.join(DATA_TEST_PATH, "disease_gene") : [["MONDO:0010193", "HGNC:3527"], ["MONDO:0008995", "HGNC:16873"], ["MONDO:0012866", "HGNC:21197"], ["MONDO:0017999", "HGNC:21197"], ["MONDO:0011142", "HGNC:21144"], ["MONDO:0013969", "HGNC:21176"], ["MONDO:0018053", "HGNC:21157"]],
+			os.path.join(DATA_TEST_PATH, "disease_cluster_uniq") : [["MONDO:0008995", "19_ref"], ["MONDO:0007172", "22_ref"], ["MONDO:0014823", "25_ref"], ["MONDO:0017999", "53_ref"], ["MONDO:0009833", "53_ref"], ["MONDO:0009594", "54_ref"], ["MONDO:0010193", "54_ref"], ["MONDO:0012176", "62_ref"], ["MONDO:0011142", "66_ref"], ["MONDO:0013969", "1189_ref"]]}
+		loaded_files_to_test = CmdTabs.load_files([os.path.join(DATA_TEST_PATH, "disease_gene"), os.path.join(DATA_TEST_PATH, "disease_cluster_uniq")])
+		self.assertEqual(loaded_files_ref, loaded_files_to_test)
+
+	def test_merge_files(self):
+		merged_ref_file = [["MONDO:0010193", "HGNC:3527", "54_ref"], ["MONDO:0008995", "HGNC:16873", "19_ref"], ["MONDO:0012866", "HGNC:21197", "-"], ["MONDO:0017999", "HGNC:21197", "53_ref"], ["MONDO:0011142", "HGNC:21144", "66_ref"], ["MONDO:0013969", "HGNC:21176", "1189_ref"], ["MONDO:0018053", "HGNC:21157", "-"], ["MONDO:0007172", "-", "22_ref"], ["MONDO:0014823", "-", "25_ref"], ["MONDO:0009833", "-", "53_ref"], ["MONDO:0009594", "-", "54_ref"], ["MONDO:0012176", "-", "62_ref"]]
+		loaded_files_to_test = CmdTabs.load_files([os.path.join(DATA_TEST_PATH, "disease_gene"), os.path.join(DATA_TEST_PATH, "disease_cluster_uniq")])
+		merged_files_to_test = CmdTabs.merge_files(loaded_files_to_test)
+		self.assertEqual(merged_ref_file, merged_files_to_test)
