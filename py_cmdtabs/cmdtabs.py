@@ -223,10 +223,10 @@ class CmdTabs:
 		filtered_table = []
 		for line in input_table:
 			if not pattern or not CmdTabs.filter(line, pattern, options['search_mode'], options['match_mode'], options['reverse']):
-				filtered_table.append(CmdTabs.shift_by_array_indexes(line, options['cols_to_show']) )
+				filtered_table.append(CmdTabs.extract_fields(line, options['cols_to_show']) )
 		return filtered_table
 
-	def shift_by_array_indexes(arr_sub, indexes):
+	def extract_fields(arr_sub, indexes):
 		return [ arr_sub[idx] for idx in indexes]
 
 	def merge_files(files): #NO TEST
@@ -264,10 +264,11 @@ class CmdTabs:
 					header = file.pop(0)
 				else:
 					file.pop(0)
-			filtered_table.extend(CmdTabs.filter_columns(file, options)) 
+			fields = CmdTabs.filter_columns(file, options)
+			filtered_table.extend(fields) 
 		if options.get('uniq') != None and options['uniq']: filtered_table = CmdTabs.get_uniq(filtered_table)
 		if len(header) > 0:
-			header = CmdTabs.shift_by_array_indexes(header, options['cols_to_show'])
+			header = CmdTabs.extract_fields(header, options['cols_to_show'])
 			filtered_table.insert(0, header)
 		return filtered_table
 
@@ -277,7 +278,7 @@ class CmdTabs:
 	def extract_columns(table, columns2extract):
 		storage = []
 		for row in table:
-			storage.append(CmdTabs.shift_by_array_indexes(row, columns2extract))
+			storage.append(CmdTabs.extract_fields(row, columns2extract))
 		return storage
 
 	def get_table_from_excel(file, sheet_number):
@@ -296,8 +297,8 @@ class CmdTabs:
 
 	def get_groups(a_records, b_records): # inputs are list of string but should be nested lists. This is due to python don't allow to hash list in dicts.
 		a_rec = set(a_records)				# For this reason, the last lines convert in lists the strings of the original list to keep the format
-		b_rec = set(b_records)
-		common_set = a_rec.intersection(b_rec)
+		b_rec = set(b_records)				# TODO: See to tranfor to tuples instead to string
+		common_set = a_rec & b_rec
 		a_only = [[r] for r in a_rec if r not in common_set]
 		b_only = [[r] for r in b_rec if r not in common_set]
 		common = [[r] for r in common_set]

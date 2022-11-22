@@ -5,10 +5,10 @@ ROOT_PATH=os.path.dirname(__file__)
 DATA_TEST_PATH = os.path.join(ROOT_PATH, 'data_tests')
 
 class ExpandedTestCase(unittest.TestCase):
-	def test_shift_by_array_indexes(self):
+	def test_extract_fields(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
 		cols_to_show = [0]
-		test_result = CmdTabs.shift_by_array_indexes(line, cols_to_show)
+		test_result = CmdTabs.extract_fields(line, cols_to_show)
 		expected_result = ["HGNC:21197"]
 		self.assertEqual(expected_result, test_result)
 
