@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-source ~soft_bio_267/initializes/init_ruby
 export PATH=`pwd`/bin:$PATH
 test_data=test/data_tests/
 out=output_test_scripts 
