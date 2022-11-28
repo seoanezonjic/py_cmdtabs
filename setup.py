@@ -36,7 +36,7 @@ setup(
     ],
     packages=["py_cmdtabs"],
     include_package_data=True,
-    scripts=['bin/py_cmdtabs'],
+    scripts=['bin/aggregate_column_data.py', 'bin/column_filter.py', 'bin/create_metric_table.py', 'bin/desaggregate_column_data.py', 'bin/excel_to_tabular.py', 'bin/intersect_columns.py', 'bin/merge_tabular.py', 'bin/standard_name_replacer.py', 'bin/table_linker.py', 'bin/tag_table.py'],
     install_requires=["openpyxl"]
 
 )

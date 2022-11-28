@@ -227,7 +227,7 @@ class CmdTabs:
 		return filtered_table
 
 	def extract_fields(arr_sub, indexes):
-		return [ arr_sub[idx] for idx in indexes]
+		return [ str(arr_sub[idx]) for idx in indexes] # The str instruction is used to ensure that always we have string data (i.e: when this function is used with excel objecb it could extrac numerical data)
 
 	def merge_files(files): #NO TEST
 		parent_table = {}
