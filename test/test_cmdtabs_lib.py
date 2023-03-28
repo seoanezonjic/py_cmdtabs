@@ -1,4 +1,5 @@
 import unittest
+import sys
 import os
 from py_cmdtabs import CmdTabs
 ROOT_PATH=os.path.dirname(__file__)
@@ -40,6 +41,22 @@ class CmdTabsTestCase(unittest.TestCase):
 		["MONDO:0009594", "54_ref"], ["MONDO:0012176", "62_ref"]]
 		self.assertEqual(expected_replaced, replaced)
 		self.assertEqual(expected_unreplaced, unreplaced)
+		#TEst for multiple columns, check that output is not N times the input. Is expected that the second col in not changed
+		rep, unrep = CmdTabs.name_replaces(input_table, "\t", [0, 1], indexed_index, remove_uns=False)
+		ext_rep =   [['HGNC:16873', '19_ref'],
+		   ['MONDO:0007172', '22_ref'],
+		   ['MONDO:0014823', '25_ref'],
+		   ['HGNC:21197', '36_ref'],
+		   ['HGNC:21197', '53_ref'],
+		   ['HGNC:21144', '53_ref'],
+		   ['MONDO:0009833', '53_ref'],
+		   ['MONDO:0009594', '54_ref'],
+		   ['HGNC:3527', '54_ref'],
+		   ['MONDO:0012176', '62_ref'],
+		   ['HGNC:21144', '66_ref'],
+		   ['HGNC:21176', '1189_ref']]
+		self.assertEqual(ext_rep, rep)
+		self.assertEqual([], unrep)
 
 	def test_link_table(self):
 		input_linker = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'disease_cluster'))

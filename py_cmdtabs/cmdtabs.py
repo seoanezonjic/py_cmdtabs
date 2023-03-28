@@ -1,4 +1,5 @@
 import sys
+import copy
 import os.path
 from collections import defaultdict
 import openpyxl
@@ -158,15 +159,20 @@ class CmdTabs:
 		translated_fields = []
 		untranslated_fields = []
 		for fields in tabular_input:
+			replaced_field = True
+			fields = copy.copy(fields) # To avoid modify original data
 			for col in cols_to_replace:
-				replaced_field = indexed_file_index[fields[col]]
-				if replaced_field:
-					fields[col] = replaced_field 
-					translated_fields.append(fields)
-				elif not remove_uns:
-					translated_fields.append(fields)
+				rep_field = indexed_file_index[fields[col]]
+				if not rep_field: 
+					replaced_field = False
 				else:
-					untranslated_fields.append(fields)
+					fields[col] = rep_field
+			if replaced_field:
+				translated_fields.append(fields)
+			elif not remove_uns:
+				translated_fields.append(fields)
+			else:
+				untranslated_fields.append(fields)
 		return translated_fields, untranslated_fields
 
 	def link_table(indexed_linker, tabular_file, drop_line, sep):
