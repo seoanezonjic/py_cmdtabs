@@ -18,7 +18,7 @@ parser.add_argument("-i", "--input_file", dest="input",
   help="Path to input file")
 parser.add_argument("-x", "--column_index", dest="col_index",
   help="Column index (1 based) to use as reference", type=based_0)
-parser.add_argument("-s", "--separator", dest="sep",
+parser.add_argument("-s", "--separator", dest="sep", default="\t",
   help="Character separator when collapse data")
 parser.add_argument("-a", "--column_aggregate", dest="col_aggregate",
   help="Column index (1 based) to extract data and join for each id in column index", type=based_0)
