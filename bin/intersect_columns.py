@@ -30,8 +30,11 @@ parser.add_argument("--full", dest="full", default=False, action='store_true',
   help="Give full record")
 parser.add_argument("-k", "--keep", dest="keep", default='c', choices=['a', 'b', 'c' 'ab'],
   help="Keep records. c for common, 'a' for specific of file a, 'b' for specific of file b and 'ab' for specific of file a AND b")
+parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 
 options = parser.parse_args()
+
+CmdTabs.transposed = options.transposed
 
 input_data_a = CmdTabs.load_input_data(options.a_file, options.sep)
 input_data_b = CmdTabs.load_input_data(options.b_file, options.sep)

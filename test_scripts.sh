@@ -53,6 +53,8 @@ table_linker.py -i $test_data/disease_cluster -l $test_data/disease_gene -o $out
 standard_name_replacer.py -i $test_data/disease_cluster -I $test_data/disease_gene -o $out/replaced_name -c 1 -f 1 -t 2 
 #test keep untranslated
 standard_name_replacer.py -i $test_data/disease_cluster -I $test_data/disease_gene -o $out/replaced_name_untranstaled -c 1 -f 1 -t 2 -u
+#testing with transposed version
+standard_name_replacer.py -i $test_data/transposed_disease_cluster -I $test_data/disease_gene -o $out/transposed_replaced_name -c 1 -f 1 -t 2 --transposed
 
 #excel_to_tabular.py --------------------------------------------------------------------------
 excel_to_tabular.py -i $test_data/cluster_genes.xlsx -c 2,3,4 -s 1 -o $out/cluster_genes_from_excel.txt

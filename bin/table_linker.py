@@ -22,12 +22,13 @@ parser.add_argument("--drop", dest="drop_line", default=False, action='store_tru
   help="Write the lines whose identifiers have been matched")
 parser.add_argument("-s", "--separator", dest="sep", default="\t",
   help="Character separator when collapse data")
+parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 options = parser.parse_args()
 
 ##################################################################################################
 ## MAIN
 ##################################################################################################
-
+CmdTabs.transposed = options.transposed
 input_linker = CmdTabs.load_input_data(options.linker_file)
 indexed_linker = CmdTabs.index_array(input_linker)
 input_table = CmdTabs.load_input_data(options.input_file, "\t", 2)

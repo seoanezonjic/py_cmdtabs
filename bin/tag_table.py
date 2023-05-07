@@ -21,12 +21,13 @@ parser.add_argument("-t", "--tags", dest="tags",
   help="Strings or files (only first line will be used) sepparated by commas", type=list_str)
 parser.add_argument("-s", "--sep_char", dest="sep", default="\t",
   help="Column character separator")
+parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 options = parser.parse_args()
 
 ##################################################################################################
 ## MAIN
 ##################################################################################################
-
+CmdTabs.transposed = options.transposed
 input_table = CmdTabs.load_input_data(options.input_file)
 tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
 taged_table = CmdTabs.tag_file(input_table, tags, options.header)

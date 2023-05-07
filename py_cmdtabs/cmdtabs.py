@@ -5,6 +5,7 @@ from collections import defaultdict
 import openpyxl
 
 class CmdTabs:
+	transposed = False
 	def load_input_data(input_path, sep="\t", limit=-1):
 		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
 			limit -= 1
@@ -19,6 +20,10 @@ class CmdTabs:
 			#print('---', file=sys.stderr)
 			#print(repr(), file=sys.stderr)
 			input_data_arr.append(line.rstrip().split(sep, limit))
+
+		if CmdTabs.transposed:
+			input_data_arr = list(map(list, zip(*input_data_arr)))
+
 		return input_data_arr
 
 	def load_several_files(all_files, sep = "\t", limit=-1):
@@ -311,6 +316,10 @@ class CmdTabs:
 		return common, a_only, b_only
 
 	def write_output_data(output_data, output_path=None, sep="\t"):
+
+		if CmdTabs.transposed:
+			output_data = list(map(list, zip(*output_data)))
+			
 		if output_path != None:
 			with open(output_path, 'w') as out_file:
 				for line in output_data:

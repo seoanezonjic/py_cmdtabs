@@ -31,18 +31,17 @@ parser.add_argument("-c", "--columns", dest="columns", default=[1], type=list_ba
   help="Index of columns in base 1 to compare")
 parser.add_argument("-u", "--remove_untranslated", dest="remove_untranslated", default=False, action='store_true',
   help="Activate this flag for outputting the untranslated entries")
+parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 
 options = parser.parse_args()
 
 ##################################################################################################
 ## MAIN
 ##################################################################################################
-
 input_index = CmdTabs.load_input_data(options.index_file)
 translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
 
+CmdTabs.transposed = options.transposed
 input_table = CmdTabs.load_input_data(options.input_file, options.input_separator)
-
 tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, translation_index, options.remove_untranslated)
-
 CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)

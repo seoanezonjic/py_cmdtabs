@@ -35,12 +35,14 @@ parser.add_argument("-u", "--uniq", dest="uniq", default=False, action='store_tr
   help="Delete redundant items")
 parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
   help="Indicate if files have header")
+parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 options = parser.parse_args()
 
 ##################################################################################################
 ## MAIN
 ##################################################################################################
 if options.table_file == None: sys.exit('Tabulated file not specified') 
+CmdTabs.transposed = options.transposed
 file_names = glob.glob(options.table_file)
 input_files = CmdTabs.load_several_files(file_names, options.separator)
 filtered_table = CmdTabs.merge_and_filter_tables(input_files, vars(options))

@@ -20,11 +20,13 @@ parser.add_argument("output_file", metavar='O',
   help="Output file path")
 parser.add_argument("-c", "--corrupted", dest="corrupted",
   help="File where corrupted metrics are stored")
+parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 options = parser.parse_args()
 
 ##################################################################################################
 ## MAIN
 ##################################################################################################
+CmdTabs.transposed = options.transposed
 metric_file = CmdTabs.load_input_data(options.metric_file)
 attributes = options.attributes.split(',')
 samples_tag = attributes.pop(0)

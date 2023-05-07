@@ -23,13 +23,14 @@ parser.add_argument("-c", "--columns2extract", dest="columns2extract", default=[
   help="Column position to extract (1 based). Default 1")
 parser.add_argument("-s", "--sheet_number", dest="sheet_number", default=0, type=based_0,
   help="Sheet number to work with. Default 1")
+parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 
 options = parser.parse_args()
 
 #######################
 ## MAIN
 #######################
-
+CmdTabs.transposed = options.transposed
 sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
 storage = CmdTabs.extract_columns(sheet, options.columns2extract)
 CmdTabs.write_output_data(storage, options.output_file)
