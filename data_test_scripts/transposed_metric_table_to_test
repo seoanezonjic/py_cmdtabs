@@ -1,0 +1,5 @@
+sample	CTL_1_cell	CTL_1_exo
+initial_total_sequences	11437331.0	10668412.0
+initial_read_max_length	76.0	76.0
+initial_read_min_length	35.0	35.0
+initial_%gc	45.0	48.0

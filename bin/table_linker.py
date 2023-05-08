@@ -31,7 +31,9 @@ options = parser.parse_args()
 CmdTabs.transposed = options.transposed
 input_linker = CmdTabs.load_input_data(options.linker_file)
 indexed_linker = CmdTabs.index_array(input_linker)
-input_table = CmdTabs.load_input_data(options.input_file, "\t", 2)
-
+if CmdTabs.transposed:
+  input_table = CmdTabs.load_input_data(options.input_file, "\t")
+else:
+  input_table = CmdTabs.load_input_data(options.input_file, "\t", 2)
 linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep)
 CmdTabs.write_output_data(linked_table, options.output_file)

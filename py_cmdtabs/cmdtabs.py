@@ -22,7 +22,7 @@ class CmdTabs:
 			input_data_arr.append(line.rstrip().split(sep, limit))
 
 		if CmdTabs.transposed:
-			input_data_arr = list(map(list, zip(*input_data_arr)))
+			input_data_arr = CmdTabs.transpose(input_data_arr)
 
 		return input_data_arr
 
@@ -304,6 +304,10 @@ class CmdTabs:
 				if val == None: val = ''
 				row.append(val)
 			sheet.append(row)
+
+		if CmdTabs.transposed:
+			sheet = CmdTabs.transpose(sheet)
+			
 		return sheet
 
 	def get_groups(a_records, b_records): # inputs are list of string but should be nested lists. This is due to python don't allow to hash list in dicts.
@@ -318,7 +322,7 @@ class CmdTabs:
 	def write_output_data(output_data, output_path=None, sep="\t"):
 
 		if CmdTabs.transposed:
-			output_data = list(map(list, zip(*output_data)))
+			output_data = CmdTabs.transpose(output_data)
 			
 		if output_path != None:
 			with open(output_path, 'w') as out_file:
@@ -327,3 +331,7 @@ class CmdTabs:
 		else:
 			for line in output_data:
 				print(sep.join(line))
+
+	def transpose(table):
+		transposed_table = list(map(list, zip(*table)))
+		return transposed_table
