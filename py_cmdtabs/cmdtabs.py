@@ -99,8 +99,7 @@ class CmdTabs:
 		parsed_tags = []
 		for tag in tags:
 			if os.path.exists(tag):
-				parsed_tags.extend(CmdTabs.load_input_data(tag, sep))
-				break
+				parsed_tags.extend(CmdTabs.load_input_data(tag, sep)[0])
 			else:
 				parsed_tags.append(tag.split(sep))
 		return [item for sublist in parsed_tags for item in sublist] #Flatten list
