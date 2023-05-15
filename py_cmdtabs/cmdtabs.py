@@ -1,4 +1,6 @@
 import sys
+import os
+import warnings
 import copy
 import os.path
 from collections import defaultdict
@@ -6,7 +8,7 @@ import openpyxl
 
 class CmdTabs:
 	transposed = False
-	def load_input_data(input_path, sep="\t", limit=-1):
+	def load_input_data(input_path, sep="\t", limit=-1, first_only=False):
 		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
 			limit -= 1
 		if input_path == '-':
@@ -20,7 +22,8 @@ class CmdTabs:
 			#print('---', file=sys.stderr)
 			#print(repr(), file=sys.stderr)
 			input_data_arr.append(line.rstrip().split(sep, limit))
-
+			if first_only:
+				break
 		if CmdTabs.transposed:
 			input_data_arr = CmdTabs.transpose(input_data_arr)
 
@@ -30,7 +33,7 @@ class CmdTabs:
 		loaded_files = {}
 		for file in all_files:
 			if os.path.isdir(file):
-				warn(file +" is not a valid file")
+				warnings.warn(file +" is not a valid file")
 				continue
 			loaded_files[file] = CmdTabs.load_input_data(file, sep, limit)
 		return loaded_files
@@ -50,7 +53,7 @@ class CmdTabs:
 		pattern = defaultdict(lambda: False	)
 		if col_filter != None and keywords != None:
 			keys_per_col = keywords.split('%')
-			if len(keys_per_col) != len(col_filter): abort('Number of keywords not equal to number of filtering columns') 
+			if len(keys_per_col) != len(col_filter): os.abort('Number of keywords not equal to number of filtering columns') 
 			i = 0
 			for col in col_filter:
 					pattern[col] = keys_per_col[i].split('&')
@@ -99,7 +102,7 @@ class CmdTabs:
 		parsed_tags = []
 		for tag in tags:
 			if os.path.exists(tag):
-				parsed_tags.extend(CmdTabs.load_input_data(tag, sep)[0])
+				parsed_tags.extend(CmdTabs.load_input_data(tag, sep, first_only=True))
 			else:
 				parsed_tags.append(tag.split(sep))
 		return [item for sublist in parsed_tags for item in sublist] #Flatten list
@@ -150,10 +153,10 @@ class CmdTabs:
 			for tag in allTags:
 				record.append(sample_data[tag])
 			if record.count(None) > 0:
-		 		warn("Record " + sample_name + "is corrupted:\n" + repr(record) + "\n")
-		 		corrupted_records.append(record)
+				warnings.warn("Record " + sample_name + "is corrupted:\n" + repr(record) + "\n")
+				corrupted_records.append(record)
 			else:
-		 		table_output.append(record)
+				table_output.append(record)
 		allTags.insert(0, samples_tag)
 		table_output.insert(0, allTags) # Add header
 		corrupted_records.insert(0, allTags) # Add header
