@@ -151,7 +151,7 @@ class CmdTabs:
 		for sample_name, sample_data in indexed_metrics.items():
 			record = [sample_name]
 			for tag in allTags:
-				record.append(sample_data[tag])
+				record.append(sample_data.get(tag))
 			if record.count(None) > 0:
 				warnings.warn("Record " + sample_name + "is corrupted:\n" + repr(record) + "\n")
 				corrupted_records.append(record)
