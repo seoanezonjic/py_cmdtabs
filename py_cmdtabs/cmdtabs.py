@@ -329,10 +329,10 @@ class CmdTabs:
 		if output_path != None:
 			with open(output_path, 'w') as out_file:
 				for line in output_data:
-					out_file.write(sep.join(line) + "\n")
+					out_file.write(sep.join([str(l) for l in line]) + "\n")
 		else:
 			for line in output_data:
-				print(sep.join(line))
+				print(sep.join([str(l) for l in line]))
 
 	def transpose(table):
 		transposed_table = list(map(list, zip(*table)))
