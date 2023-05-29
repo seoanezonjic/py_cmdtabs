@@ -103,6 +103,8 @@ column_filter.py  -t "$test_data/disease*" -c 1 -f 1 -k "17" -s "c" -m "i" -r | 
 # test --transposed
 column_filter.py  -t "$transposed_test_data/disease*" -c 1,2 -f 1 -k "MONDO:0008995" -s "c" -m "c" --transposed > $out/transposed_column_matching_hard
 
+#test records_count.py ------------------------------------------------------------------------------------------------------------------
+records_count.py -i $test_data/ids2count -x 2 > $out/ids2count
 
 for file_to_test in `ls $out`; do
 	echo $file_to_test

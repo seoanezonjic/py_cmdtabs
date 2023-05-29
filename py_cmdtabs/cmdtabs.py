@@ -126,6 +126,15 @@ class CmdTabs:
 			aggregated_data_arr.append([k, sep.join(value)])
 		return aggregated_data_arr
 
+        def records_count(input_table, col_index):
+            aggregated_data = defaultdict(lambda: 0 )
+            for fields in input_table:
+                aggregated_data[fields[col_index]]+=1
+                output_list = []
+            for k, value in aggregated_data.items():
+                output_list.append([k, str(value)])
+            return output_list
+
 	def add2dict(dict, key, val): # dict must be a defaultdict with default value set to False	
 		query = dict[key]
 		if not query:
