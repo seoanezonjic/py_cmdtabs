@@ -132,6 +132,23 @@ class CmdTabsTestCase(unittest.TestCase):
 		expected_result = [["HGNC:21197", "483_ref"], ["HGNC:21197", "1039_ref"], ["HGNC:21197", "1071_ref"]]
 		self.assertEqual(expected_result, filter_columns_test)
 
+	def test_filter_by_list(self):
+		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'ids2count'))
+		filterlist = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'filterlist'))
+		filterlist = list(map(list, zip(*filterlist)))[0]
+		filter_columns_test = CmdTabs.filter_by_whitelist(input_table, filterlist , 1)
+		expected_result = [['000039', 'HP:0002140'],
+		['000665', 'HP:0002140'],
+		['000707', 'HP:0001082'],
+		['000909', 'HP:0002315'],
+		['000911', 'HP:0002140'],
+		['000942', 'HP:0001082'],
+		['000943', 'HP:0001082'],
+		['001861', 'HP:0001082'],
+		['002072', 'HP:0001082']]
+		self.assertEqual(expected_result, filter_columns_test)
+
+
 	def test_merge_and_filter_tables(self):
 		options = {'header' : '', 'col_filter' : [0], 'keywords' : "0008995&0017999&0013969&0009594", 
 			'search_mode' : "s", 'match_mode' : "i", 'reverse' : False, 'cols_to_show' : [0, 1], 'uniq' : False }
