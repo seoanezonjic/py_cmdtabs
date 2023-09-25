@@ -6,11 +6,16 @@ ROOT_PATH=os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(ROOT_PATH, '..'))
 from py_cmdtabs import CmdTabs
 
+
+def process_columns_based_0(string): 
+	return int(string) - 1
+
+
 ####################### ARGPARSE #################
 ##################################################
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--files2befiltered", default= None, type = lambda x: x.split(","), required=True, help="The root to the files that has to be filtered, separated by commas")
-parser.add_argument("-c", "--columns2befiltered", default = None, type = lambda	x: [list(map(int,r.split(","))) for r in x.split(";")] ,help="The columns that need to be filtered for each file, separated by semicolons, with each set of columns separated by commas")
+parser.add_argument("-c", "--columns2befiltered", default = None, type = lambda	x: lambda x: [list(map(lambda y: int(y) -1,r.split(","))) for r in x.split(";")],help="The columns (based 1) that need to be filtered for each file, separated by semicolons, with each set of columns separated by commas")
 parser.add_argument("-t", "--terms2befiltered", default= None, required=True, help="The PATH to the list of terms to be filtered")
 parser.add_argument("--transposed", dest= "transposed", default= False, action="store_true", help="To perform the operations in rows and not columns")
 parser.add_argument("--prefix", dest= "prefix", default= "filtered_", help="To select which prefix to add in new filterd files")
