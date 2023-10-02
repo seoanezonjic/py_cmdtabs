@@ -15,7 +15,7 @@ def process_columns_based_0(string):
 ##################################################
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--files2befiltered", default= None, type = lambda x: x.split(","), required=True, help="The root to the files that has to be filtered, separated by commas")
-parser.add_argument("-c", "--columns2befiltered", default = None, type = lambda	x: lambda x: [list(map(lambda y: int(y) -1,r.split(","))) for r in x.split(";")],help="The columns (based 1) that need to be filtered for each file, separated by semicolons, with each set of columns separated by commas")
+parser.add_argument("-c", "--columns2befiltered", default = None, type = lambda	x: [list(map(lambda y: int(y) -1,r.split(","))) for r in x.split(";")],help="The columns (based 1) that need to be filtered for each file, separated by semicolons, with each set of columns separated by commas")
 parser.add_argument("-t", "--terms2befiltered", default= None, required=True, help="The PATH to the list of terms to be filtered")
 parser.add_argument("--transposed", dest= "transposed", default= False, action="store_true", help="To perform the operations in rows and not columns")
 parser.add_argument("--prefix", dest= "prefix", default= "filtered_", help="To select which prefix to add in new filterd files")
@@ -32,6 +32,8 @@ terms2befiltered = list(map(list, zip(*terms2befiltered )))[0]
 CmdTabs.transposed = options.transposed
 files2befiltered = options.files2befiltered
 columns2befiltered = options.columns2befiltered
+print(files2befiltered)
+print(columns2befiltered)
 files_columns2befiltered = list(zip(files2befiltered,columns2befiltered))
 loaded_files = CmdTabs.load_several_files(options.files2befiltered)
 
