@@ -1,0 +1,8 @@
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_num	1988
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_size_min	1
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_size_max	296
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_size_median	3.0
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_size_mean	4.667505030181086
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_nodes_mean	1.0
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_nodes	9279
+MERGED_net_no_raw_cpm	MERGED	no	no	cpm	cl_pairs	147578
