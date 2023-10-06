@@ -6,6 +6,8 @@ ROOT_PATH=os.path.dirname(__file__)
 DATA_TEST_PATH = os.path.join(ROOT_PATH, 'data_tests')
 
 class CmdTabsTestCase(unittest.TestCase):
+	def setUp(self):
+		CmdTabs.transposed = False
 	def test_aggregate_column(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_desagg'))
 		aggrgated_test = CmdTabs.aggregate_column(input_table, 0, 1, ", ") 
