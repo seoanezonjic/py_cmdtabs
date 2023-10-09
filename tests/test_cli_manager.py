@@ -3,7 +3,7 @@ import sys
 import os 
 from io import StringIO
 from py_cmdtabs import CmdTabs
-import py_cmdtabs #TODO(Fred): Dont know if this is correct.
+import py_cmdtabs 
 ROOT_PATH=os.path.dirname(__file__)
 DATA_TEST_PATH = os.path.join(ROOT_PATH, 'data_tests')
 TRANS_DATA_TEST_PATH = os.path.join(DATA_TEST_PATH, 'transposed')
@@ -59,7 +59,7 @@ def test_aggregate_column_tanspose():
 		return py_cmdtabs.aggregate_column_data(lsargs)
 	_, printed = script2test(args)
 	test_result = strng2table(printed)
-	CmdTabs.transposed = False #TODO: Check this part.
+	CmdTabs.transposed = False 
 	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'transposed_cluster_genes_dis_AGG'))
 	assert expected_result == test_result
 
@@ -280,4 +280,157 @@ def test_table_linker_transpose(tmp_dir):
 	assert expected_result_file == test_result_file
 
 
+def test_standard_name_replacer(tmp_dir):
+	input_file1 = os.path.join(DATA_TEST_PATH, 'disease_cluster')
+	input_file2 = os.path.join(DATA_TEST_PATH, 'disease_gene')
+	out_file1 = os.path.join(tmp_dir, 'replaced_name')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.standard_name_replacer(lsargs)
 
+	args = f"-i {input_file1} -I {input_file2} -o {out_file1} -c 1 -f 1 -t 2".split(" ") 
+	script2test(args)
+	test_result = CmdTabs.load_input_data(out_file1) 
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'replaced_name'))
+	assert expected_result == test_result
+	
+def test_standard_name_replacer_untraslated(tmp_dir):
+	input_file1 = os.path.join(DATA_TEST_PATH, 'disease_cluster')
+	input_file2 = os.path.join(DATA_TEST_PATH, 'disease_gene')
+	out_file1 = os.path.join(tmp_dir, 'replaced_name_untranslated')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.standard_name_replacer(lsargs)
+
+	args = f"-i {input_file1} -I {input_file2} -o {out_file1} -c 1 -f 1 -t 2 -u".split(" ") 
+	script2test(args)
+	test_result = CmdTabs.load_input_data(out_file1) 
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'replaced_name_untranslated'))
+	assert expected_result == test_result
+
+def test_standard_name_replacer_transposed(tmp_dir):
+	input_file1 = os.path.join(TRANS_DATA_TEST_PATH, 'disease_cluster')
+	input_file2 = os.path.join(DATA_TEST_PATH, 'disease_gene')
+	out_file1 = os.path.join(tmp_dir, 'transposed_replaced_name')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.standard_name_replacer(lsargs)
+
+	args = f"-i {input_file1} -I {input_file2} -o {out_file1} -c 1 -f 1 -t 2 --transposed".split(" ") 
+	script2test(args)
+	CmdTabs.transposed = False
+	test_result = CmdTabs.load_input_data(out_file1) 
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'transposed_replaced_name'))
+	assert expected_result == test_result
+
+
+def test_excel_to_tabular(tmp_dir):
+	input_file1 = os.path.join(DATA_TEST_PATH, 'cluster_genes.xlsx')
+	out_file1 = os.path.join(tmp_dir, 'cluster_genes_from_excel.txt')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.excel_to_tabular(lsargs)
+
+	args = f"-i {input_file1} -c 2,3,4 -s 1 -o {out_file1}".split(" ") 
+	script2test(args)
+	test_result = CmdTabs.load_input_data(out_file1) 
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'cluster_genes_from_excel.txt'))
+	assert expected_result == test_result
+
+def test_excel_to_tabular_transposed(tmp_dir):
+	input_file1 = os.path.join(TRANS_DATA_TEST_PATH, 'cluster_genes.xlsx')
+	out_file1 = os.path.join(tmp_dir, 'transposed_cluster_genes_from_excel.txt')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.excel_to_tabular(lsargs)
+	args = f"-i {input_file1} -c 2,3,4 -s 1 -o {out_file1} --transposed".split(" ") 
+	script2test(args)
+	test_result = CmdTabs.load_input_data(out_file1) 
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'transposed_cluster_genes_from_excel.txt'))
+	assert expected_result == test_result
+
+
+def test_column_filter():
+	input_file = os.path.join(DATA_TEST_PATH, 'disease*')
+	argsls = [[f"-t {input_file} -c 1,2 -f 1 -k MONDO:0008995 -s c -m c", "column_matching_hard"],
+			  [f"-t {input_file} -c 1,2 -f 1 -k MONDO -s c -m i", "column_matching_soft"],
+			  [f"-t {input_file} -c 1,2 -f 1 -k MONDO:0008995&MONDO:0017999 -s c -m c", "column_matching_hard_various_keys"],
+			  [f"-t {input_file} -c 1,2 -f 1,2 -k MONDO:0008995&MONDO:0017999%53_ref -s c -m c", "column_matching_hard_various_keys_and_every_columns"],
+			  [f"-t {input_file} -c 1,2 -f 1,2 -k MONDO:0008995&MONDO:0017999%53_ref -s c -m c -H", "column_matching_hard_various_keys_and_every_columns_header"],
+			  [f"-t {input_file} -c 1,2 -f 1,2 -k MONDO:0008995&MONDO:0017999%53_ref -s s -m c","column_matching_hard_various_keys_and_some_columns"],
+			  [f"-t {input_file} -c 1,2 -f 1,2 -k MONDO%ref -s s -m i", "column_matching_soft_and_some_columns"],
+			  [f"-t {input_file} -c 1,2 -f 1,2 -k MONDO%ref -s c -m i", "column_matching_soft_and_every_columns"],
+			  [f"-t {input_file} -c 1 -f 1 -k MONDO -s c -m i", "column_matching_soft_1_column"],
+			  [f"-t {input_file} -c 1 -f 1 -k MONDO -s c -m i -u", "column_matching_soft_1_column_uniq"],
+			  [f"-t {input_file} -c 1 -f 1 -k 17 -s c -m i -r", "column_matching_soft_1_column_reverse"]]
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.column_filter(lsargs)
+
+	for str_script, out_name in argsls:
+		args = str_script.split(" ")
+		_, printed = script2test(args)
+		test_result = sort_table(strng2table(printed), sort_by=0)
+		if len(test_result[0]) > 1:
+			test_result = sort_table(test_result, sort_by=1)
+		expected_result = sort_table(CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, out_name)), sort_by=0)
+		if len(expected_result[0]) > 1:
+			expected_result = sort_table(expected_result, sort_by=1)
+		assert expected_result == test_result
+
+def test_column_filter_transposed():
+	input_file = os.path.join(TRANS_DATA_TEST_PATH, 'disease*')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.column_filter(lsargs)
+	args = f"-t {input_file} -c 1,2 -f 1 -k MONDO:0008995 -s c -m c --transposed".split(" ") 
+	_, printed = script2test(args)
+	test_result = strng2table(printed)
+	CmdTabs.transposed = False
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'transposed_column_matching_hard'))
+	assert expected_result == test_result
+
+
+def test_records_count():
+	input_file = os.path.join(DATA_TEST_PATH, 'ids2count')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.records_count(lsargs)
+	args = f"-i {input_file} -x 2".split(" ") 
+	_, printed = script2test(args)
+	test_result = strng2table(printed)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'ids2count'))
+	assert expected_result == test_result
+
+
+def test_filter_by_list(tmp_dir):
+	input_table = os.path.join(DATA_TEST_PATH, 'ids2count')
+	filterlist = os.path.join(DATA_TEST_PATH, 'filterlist')
+	out_file = os.path.join(tmp_dir, 'filter_ids2count')
+	args = f"-f {input_table} -c 2 -t {filterlist} --prefix filter_ -o {tmp_dir} --metrics".split(" ")
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.filter_by_list(lsargs)
+	_, printed = script2test(args)
+	test_result = CmdTabs.load_input_data(out_file)
+	expected_result = [['000039', 'HP:0002140'],
+		['000665', 'HP:0002140'],
+		['000707', 'HP:0001082'],
+		['000909', 'HP:0002315'],
+		['000911', 'HP:0002140'],
+		['000942', 'HP:0001082'],
+		['000943', 'HP:0001082'],
+		['001861', 'HP:0001082'],
+		['002072', 'HP:0001082']]
+	assert expected_result == test_result
+
+def test_records_count():
+	input_file = os.path.join(DATA_TEST_PATH, 'ids2count')
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.records_count(lsargs)
+	args = f"-i {input_file} -x 2".split(" ") 
+	_, printed = script2test(args)
+	test_result = strng2table(printed)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'ids2count'))
+	assert expected_result == test_result

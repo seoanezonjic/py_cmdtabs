@@ -148,7 +148,6 @@ def filter_by_list(args=None):
     parser.add_argument("--prefix", dest= "prefix", default= "filtered_", help="To select which prefix to add in new filterd files")
     parser.add_argument("-o", "--output_path", default=".", help="The name of the output path")
     parser.add_argument("--metrics", default=False, action="store_true", help= "Getting a table with the proportion of lines removed for each file")
-
     opts = parser.parse_args(args)
     main_filter_by_list(opts)
 
@@ -159,8 +158,6 @@ def main_filter_by_list(options):
     CmdTabs.transposed = options.transposed
     files2befiltered = options.files2befiltered
     columns2befiltered = options.columns2befiltered
-    print(files2befiltered)
-    print(columns2befiltered)
     files_columns2befiltered = list(zip(files2befiltered,columns2befiltered))
     loaded_files = CmdTabs.load_several_files(options.files2befiltered)
 
@@ -184,10 +181,10 @@ def main_filter_by_list(options):
         for file2befiltered in options.files2befiltered:
             filtered_file = file_filteredfile.get(file2befiltered)
             if filtered_file is None:
-                print(file2befiltered + "\t" + "Not Filtered")
+                print(f"{file2befiltered}\tNot Filtered")
             else:
                 ratio_lines_removed = round(100*(len(file_filteredfile[file2befiltered])/len(loaded_files[file2befiltered])),2)
-                print(file2befiltered + "\t" + str(ratio_lines_removed))
+                print(f"{file2befiltered}\t{ratio_lines_removed}")
 
 def intersect_columns(args=None):
     if args == None: args = sys.argv[1:]
