@@ -342,8 +342,8 @@ def tag_table(args=None):
     main_tag_table(opts)
 
 def main_tag_table(options):
+    tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
     CmdTabs.transposed = options.transposed
     input_table = CmdTabs.load_input_data(options.input_file)
-    tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
     taged_table = CmdTabs.tag_file(input_table, tags, options.header)
     CmdTabs.write_output_data(taged_table, None, options.sep)

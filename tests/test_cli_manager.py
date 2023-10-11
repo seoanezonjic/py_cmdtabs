@@ -175,7 +175,7 @@ def test_tag_table():
 
 def test_tag_table_transpose():
 	input_file1 = os.path.join(TRANS_DATA_TEST_PATH, 'cluster_stats')
-	input_file2 = os.path.join(TRANS_DATA_TEST_PATH, 'tracker')
+	input_file2 = os.path.join(DATA_TEST_PATH, 'tracker')
 	args = f"-i {input_file1} -t {input_file2} --transposed".split(" ") 
 	@capture_stdout
 	def script2test(lsargs):
@@ -227,7 +227,6 @@ def test_intersect_columns_transpose():
 	CmdTabs.transposed = False
 	expected_result = sort_table(CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'transposed_intersect_columns_default')), sort_by=0, transposed=True)
 	assert expected_result == test_result
-
 
 def test_table_linker(tmp_dir):
 	input_file1 = os.path.join(DATA_TEST_PATH, 'disease_cluster')
