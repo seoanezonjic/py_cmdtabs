@@ -53,7 +53,7 @@ def column_filter(args=None):
     parser.add_argument("-p", "--separator", dest="separator", default="\t",
       help="Column character separator")
     parser.add_argument("-k", "--keywords", dest="keywords",
-      help="Keywords for select rows. Format: key1_col1&key2_col1%key1_col2&key2_col2")
+      help="Keywords for select rows. Format: key1_col1&key2_col1%%key1_col2&key2_col2")
     parser.add_argument("-s", "--search", dest="search_mode", default='c', choices=['c', 's'],
       help="c for match in every columns set, s some match in some column. Default c")
     parser.add_argument("-m", "--match_mode", dest="match_mode", default='i', choices=['i', 'c'],
