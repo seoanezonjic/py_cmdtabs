@@ -377,14 +377,11 @@ def test_column_filter():
 
 	for str_script, out_name in argsls:
 		args = str_script.split(" ")
-		print(args)
 		_, printed = script2test(args)
 		test_result = sort_table(strng2table(printed), sort_by=0)
 		if len(test_result[0]) > 1:
 			test_result = sort_table(test_result, sort_by=1)
-			print(test_result)
 		expected_result = sort_table(CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, out_name)), sort_by=0)
-		print(expected_result)
 		if len(expected_result[0]) > 1:
 			expected_result = sort_table(expected_result, sort_by=1)
 		assert expected_result == test_result

@@ -334,12 +334,12 @@ def main_standard_name_replacer(options):
 def main_table_linker(options):
     CmdTabs.transposed = options.transposed
     input_linker = CmdTabs.load_input_data(options.linker_file)
-    indexed_linker = CmdTabs.index_array(input_linker, options.id_linker, options.columns2linker)
+    indexed_linker = CmdTabs.index_array(input_linker, options.id_linker, options.columns2linker, options.header)
     if CmdTabs.transposed:
       input_table = CmdTabs.load_input_data(options.input_file, "\t")
     else:
       input_table = CmdTabs.load_input_data(options.input_file, "\t", 2)
-    linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep)
+    linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep, options.header)
     CmdTabs.write_output_data(linked_table, options.output_file)
 
 def main_tag_table(options):
