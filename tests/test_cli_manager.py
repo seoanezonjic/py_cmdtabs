@@ -244,6 +244,15 @@ def test_table_linker(tmp_dir):
 	expected_result_file = CmdTabs.load_input_data(expected_result_file) 
 	assert expected_result_file == test_result_file
 
+	out_file = os.path.join(tmp_dir, 'linked_table')
+	input_file3 = os.path.join(DATA_TEST_PATH, 'dis_gene_attrs')
+	expected_result_file= os.path.join(REF_DATA_PATH, 'linked_table3')
+	args = f"-i {input_file1} -l {input_file3} --columns2linker 2,3,4 --drop -o {out_file}".split(" ") 
+	_, printed = script2test(args)
+	test_result_file = CmdTabs.load_input_data(out_file) 
+	expected_result_file = CmdTabs.load_input_data(expected_result_file) 
+	assert test_result_file == expected_result_file
+
 
 	out_file = os.path.join(tmp_dir, 'linked_table_2')
 	expected_result_file= os.path.join(REF_DATA_PATH, 'linked_table_2')
@@ -368,11 +377,14 @@ def test_column_filter():
 
 	for str_script, out_name in argsls:
 		args = str_script.split(" ")
+		print(args)
 		_, printed = script2test(args)
 		test_result = sort_table(strng2table(printed), sort_by=0)
 		if len(test_result[0]) > 1:
 			test_result = sort_table(test_result, sort_by=1)
+			print(test_result)
 		expected_result = sort_table(CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, out_name)), sort_by=0)
+		print(expected_result)
 		if len(expected_result[0]) > 1:
 			expected_result = sort_table(expected_result, sort_by=1)
 		assert expected_result == test_result

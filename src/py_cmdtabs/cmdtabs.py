@@ -60,10 +60,17 @@ class CmdTabs:
 					i += 1
 		return pattern
 
-	def index_array(array, col_from=0, col_to=1):
-		indexed_array = defaultdict(lambda: False	)
+	def index_array(array, col_from=0, col_to=1, header=False):
+		indexed_array = defaultdict(lambda: False)
+		if type(col_to) != list:
+			f = lambda x: x[col_to]
+		else: 
+			f = lambda x: [x[c] for c in col_to]
+		if header: 
+			head = array.pop(0)
+			indexed_array['header'] = f(head)
 		for elements in array:
-			indexed_array[elements[col_from]] = elements[col_to]
+			indexed_array[elements[col_from]] = f(elements)
 		return indexed_array
 
 	def index_metrics(input_data, attributes):
@@ -191,14 +198,19 @@ class CmdTabs:
 				untranslated_fields.append(fields)
 		return translated_fields, untranslated_fields
 
-	def link_table(indexed_linker, tabular_file, drop_line, sep):
+	def link_table(indexed_linker, tabular_file, drop_line, sep, header=False):
 		linked_table = []
+		if header: linked_table.append(tabular_file.pop(0)+indexed_linker['header'])
 		for fields in tabular_file:
 			id = fields[0]
-			info_id = indexed_linker[id]
+			info_id = indexed_linker.get(id)
 			if info_id:
-				fields.append(info_id)
-				linked_table.append(fields)
+				if type(info_id) == list:
+					fields += info_id
+					linked_table.append(fields)
+				else:
+					fields.append(info_id)
+					linked_table.append(fields)
 			else:
 				if not drop_line: linked_table.append(fields) 
 		return linked_table
