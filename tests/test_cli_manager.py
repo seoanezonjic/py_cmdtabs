@@ -51,6 +51,16 @@ def test_aggregate_column():
 	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'cluster_genes_dis_AGG'))
 	assert expected_result == test_result
 
+	input_file_3_cols = os.path.join(DATA_TEST_PATH, 'agg_data_3_columns.txt')
+	args=f"-i {input_file_3_cols} -x 3 -a 1,2 -s ,"
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.aggregate_column_data(lsargs)
+	_, printed = script2test(args.split(" "))
+	test_result = strng2table(printed)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'agg_data_3_columns_result.txt'))
+	assert expected_result == test_result
+
 def test_aggregate_column_tanspose():
 	input_file = os.path.join(TRANS_DATA_TEST_PATH, 'cluster_genes_dis_desagg')
 	args = f"-i {input_file} -x 1 -s , -a 2 --transposed".split(" ")

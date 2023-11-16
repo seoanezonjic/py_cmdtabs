@@ -29,7 +29,7 @@ def aggregate_column_data(args=None):
     parser.add_argument("-s", "--separator", dest="sep", default=",",
       help="Character separator when collapse data")
     parser.add_argument("-a", "--column_aggregate", dest="col_aggregate",
-      help="Column index (1 based) to extract data and join for each id in column index", type=based_0)
+      help="Column(s) index (1 based) to extract data and join for each id in column index (if more than one, comma separated)", type=list_based_0)
     
     opts =  parser.parse_args(args)
     main_aggregate_column_data(opts)

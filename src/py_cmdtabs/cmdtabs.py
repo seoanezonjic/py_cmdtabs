@@ -124,13 +124,17 @@ class CmdTabs:
 		return list(records.keys()), full_row_of_records
 
 
-	def aggregate_column(input_table, col_index, col_agg, sep):
+	def aggregate_column(input_table, col_index, cols_agg, sep):
 		aggregated_data = defaultdict(lambda: False	)
 		for fields in input_table:
-			CmdTabs.add2dict(aggregated_data, fields[col_index], fields[col_agg])
+			for col_agg in cols_agg:
+				CmdTabs.add2nesteddict(aggregated_data, fields[col_index], col_agg, fields[col_agg])
 		aggregated_data_arr = []
-		for k, value in aggregated_data.items():
-			aggregated_data_arr.append([k, sep.join(value)])
+		for k, agg_dict in aggregated_data.items():
+			col_data = [k]
+			for aggregated_column in agg_dict.values():
+				col_data.append(sep.join(aggregated_column))
+			aggregated_data_arr.append(col_data)
 		return aggregated_data_arr
 
 	def records_count(input_table, col_index):
@@ -148,6 +152,15 @@ class CmdTabs:
 			dict[key] = [val]
 		else:
 			query.append(val)
+
+	def add2nesteddict(hash, node1, node2, val): 
+		query_node1 = hash.get(node1)
+		if query_node1 is None:
+			hash[node1] = {node2: [val]}
+		elif query_node1.get(node2) is None:
+			query_node1[node2] = [val]
+		else:
+			query_node1[node2].append(val)
 
 	def desaggregate_column(input_table, col_index, sep):
 		desaggregated_data = []
