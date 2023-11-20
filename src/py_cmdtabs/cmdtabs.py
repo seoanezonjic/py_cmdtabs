@@ -126,6 +126,7 @@ class CmdTabs:
 
 	def aggregate_column(input_table, col_index, cols_agg, sep):
 		aggregated_data = defaultdict(lambda: False	)
+		if type(cols_agg) == int: cols_agg = [cols_agg] 
 		for fields in input_table:
 			for col_agg in cols_agg:
 				CmdTabs.add2nesteddict(aggregated_data, fields[col_index], col_agg, fields[col_agg])

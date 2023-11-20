@@ -10,7 +10,7 @@ class CmdTabsTestCase(unittest.TestCase):
 		CmdTabs.transposed = False
 	def test_aggregate_column(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_desagg'))
-		aggrgated_test = CmdTabs.aggregate_column(input_table, 0, [1], ", ") 
+		aggrgated_test = CmdTabs.aggregate_column(input_table, 0, 1, ", ") 
 		expected_result = [['HGNC:21197', '483_ref, 1039_ref, 1071_ref'], ['HGNC:21143', '211_ref, 4705_ref']]
 		self.assertEqual(expected_result, aggrgated_test)
 
