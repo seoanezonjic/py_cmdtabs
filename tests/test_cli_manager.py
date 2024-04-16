@@ -452,3 +452,17 @@ def test_records_count():
 	test_result = strng2table(printed)
 	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'ids2count'))
 	assert expected_result == test_result
+
+
+def test_subset_table(tmp_dir):
+	input_file = os.path.join(DATA_TEST_PATH, 'hp_long_list.txt')
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'subset_table'))
+	out_file = os.path.join(tmp_dir, 'subset_table')
+	args = f"-i {input_file} -s 10 -l 10 -o {out_file}".split(" ")
+	
+	py_cmdtabs.subset_table(args)
+	returned = CmdTabs.load_input_data(out_file)
+	print(returned)
+	print()
+	print(expected_result)
+	assert expected_result == returned

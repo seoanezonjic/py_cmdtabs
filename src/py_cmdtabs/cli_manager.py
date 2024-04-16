@@ -21,6 +21,19 @@ def add_common_options(parser):
     parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 
 ##############################################
+def subset_table(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-s", "--start_line", dest="start_line", default= 0, type= based_0,
+                        help="Set the first line of subset. 0 based index")
+    parser.add_argument("-l", "--lines_to_subset", dest="chunk_lines", default= 5, type= int,
+                        help="Set the number of lines to extract from --start_line")
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    opts = parser.parse_args(args)
+    main_subset_table(opts)
+
 
 def aggregate_column_data(args=None):
     if args == None: args = sys.argv[1:]
@@ -131,7 +144,7 @@ def intersect_columns(args=None):
       help="Only compute number of matches")
     parser.add_argument("--full", dest="full", default=False, action='store_true',
       help="Give full record")
-    parser.add_argument("-k", "--keep", dest="keep", default='c', choices=['a', 'b', 'c' 'ab'],
+    parser.add_argument("-k", "--keep", dest="keep", default='c', choices=['a', 'b', 'c', 'ab'],
       help="Keep records. c for common, 'a' for specific of file a, 'b' for specific of file b and 'ab' for specific of file a AND b")
     
     opts = parser.parse_args(args)
@@ -205,6 +218,12 @@ def tag_table(args=None):
 
     opts = parser.parse_args(args)
     main_tag_table(opts)
+
+def main_subset_table(options):
+    CmdTabs.transposed = options.transposed
+    input_table = CmdTabs.load_input_data(options.input_file)
+    subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
+    CmdTabs.write_output_data(subset_table, options.output_file)
 
 def main_aggregate_column_data(options):
     CmdTabs.transposed = options.transposed

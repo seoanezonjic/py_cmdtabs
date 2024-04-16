@@ -378,3 +378,12 @@ class CmdTabs:
 	def transpose(table):
 		transposed_table = list(map(list, zip(*table)))
 		return transposed_table
+	
+	def subset_table(table, start_line, number_of_lines, has_header):
+		final_line = start_line + number_of_lines 
+		if has_header: header = table.pop(0) 
+		if final_line > len(table) - 1: final_line = len(table)
+		subset_table = table[start_line:final_line]
+		if has_header: subset_table.insert(0, header)
+		return subset_table 
+		
