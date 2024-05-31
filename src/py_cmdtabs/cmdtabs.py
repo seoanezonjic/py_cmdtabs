@@ -277,7 +277,7 @@ class CmdTabs:
 	def extract_fields(arr_sub, indexes):
 		return [ str(arr_sub[idx]) for idx in indexes] # The str instruction is used to ensure that always we have string data (i.e: when this function is used with excel objecb it could extrac numerical data)
 
-	def merge_files(files): #NO TEST
+	def merge_files(files, fill_character='-'): #NO TEST
 		parent_table = {}
 		table_length = 0
 		for file_names, file in files.items():
@@ -286,17 +286,17 @@ class CmdTabs:
 				id = fields.pop(0) 
 				local_length = len(fields)
 				if not parent_table.get(id):
-					parent_table[id] = ["-"] * table_length
+					parent_table[id] = [fill_character] * table_length
 				elif len(parent_table[id]) < table_length:
 					diference = table_length - len(parent_table[id])
-					parent_table[id].extend( ["-"] * diference)
+					parent_table[id].extend( [fill_character] * diference)
 				parent_table[id].extend(fields)				
 			table_length += local_length
 			
 		parent_table_arr = []
 		for id, fields in parent_table.items():
 			diference = table_length - len(fields)
-			if diference > 0: fields.extend(["-"] * diference)
+			if diference > 0: fields.extend([fill_character] * diference)
 			record = [id]
 			record.extend(fields)
 			parent_table_arr.append(record)

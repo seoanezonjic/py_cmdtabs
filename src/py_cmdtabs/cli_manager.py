@@ -154,6 +154,8 @@ def merge_tabular(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Merge several tabulated files in one single file.')
     add_common_options(parser)
+    parser.add_argument("-f", "--fill_character", dest="fill_character", default="-",
+      help="Character to fill when a field is empty")
     parser.add_argument("files", metavar='F', nargs='+',
       help="Paths to tabulated files")
     
@@ -333,7 +335,7 @@ def main_intersect_columns(options):
 def main_merge_tabular(options):
     CmdTabs.transposed = options.transposed
     files = CmdTabs.load_files(options.files)
-    merged = CmdTabs.merge_files(files)
+    merged = CmdTabs.merge_files(files, options.fill_character)
     CmdTabs.write_output_data(merged)
 
 def main_records_count(options):
