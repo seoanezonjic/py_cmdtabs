@@ -3,6 +3,7 @@ import os
 import warnings
 import copy
 import os.path
+import numpy as np
 from collections import defaultdict
 import openpyxl
 
@@ -124,21 +125,26 @@ class CmdTabs:
 		return list(records.keys()), full_row_of_records
 
 
-	def aggregate_column(input_table, col_index, cols_agg, sep):
+	def aggregate_column(input_table, col_index, cols_agg, sep, agg_mode):
+		make_aggregation = {"concatenate": lambda agg_col: sep.join(agg_col), "mean": np.mean, "median": np.median, "max": np.max, "min": np.min}
 		aggregated_data = defaultdict(lambda: False	)
 		if type(cols_agg) == int: cols_agg = [cols_agg] 
 		for fields in input_table:
 			for col_agg in cols_agg:
-				CmdTabs.add2nesteddict(aggregated_data, fields[col_index], col_agg, fields[col_agg])
+				CmdTabs.add2nesteddict(aggregated_data, tuple([fields[idx] for idx in col_index]), col_agg, fields[col_agg])
 		aggregated_data_arr = []
 		for k, agg_dict in aggregated_data.items():
-			col_data = [k]
+			col_data = [idx_col for idx_col in k]
 			for aggregated_column in agg_dict.values():
-				col_data.append(sep.join(aggregated_column))
+				if agg_mode != "concatenate": aggregated_column = [float(item) for item in aggregated_column]
+				col_data.append( str(make_aggregation[agg_mode](aggregated_column)) )
 			aggregated_data_arr.append(col_data)
 		return aggregated_data_arr
 
 	def records_count(input_table, col_index):
+		if len(col_index) == 1: col_index = col_index[0]
+		elif len(col_index) > 1: raise ValueError("Only one column can be used to count records")
+		
 		aggregated_data = defaultdict(lambda: 0 )
 		for fields in input_table:
 			aggregated_data[fields[col_index]]+=1
@@ -166,9 +172,10 @@ class CmdTabs:
 	def desaggregate_column(input_table, col_index, sep):
 		desaggregated_data = []
 		for fields in input_table:
-			for field  in fields[col_index].split(sep):
+			desagg_dict = {col_idx: fields[col_idx].split(sep) for col_idx in col_index}
+			for agg_idx in range(len(desagg_dict[col_index[0]])):
 				record = fields.copy()
-				record[col_index] = field 
+				for col_idx in col_index: record[col_idx] = desagg_dict[col_idx][agg_idx]
 				desaggregated_data.append(record)
 		return desaggregated_data
 

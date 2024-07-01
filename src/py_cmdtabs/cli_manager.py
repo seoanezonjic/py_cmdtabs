@@ -15,7 +15,7 @@ def add_common_options(parser):
     parser.add_argument("-i", "--input_file", dest="input_file",
       help="Path to input file")
     parser.add_argument("-x", "--column_index", dest="col_index",
-      help="Column index (1 based) to use as reference", type=based_0)
+      help="Column index (1 based) to use as reference", type=list_based_0)
     parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
       help="Indicate if files have header")
     parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
@@ -43,7 +43,8 @@ def aggregate_column_data(args=None):
       help="Character separator when collapse data")
     parser.add_argument("-a", "--column_aggregate", dest="col_aggregate",
       help="Column(s) index (1 based) to extract data and join for each id in column index (if more than one, comma separated)", type=list_based_0)
-    
+    parser.add_argument("-A", "--aggregation_mode", dest="agg_mode", default="concatenate",
+      help="Mode to perform aggregation. Current available: max,min,mean,median,concatenate. Default (concatenate) is string concatenation by defined separator")    
     opts =  parser.parse_args(args)
     main_aggregate_column_data(opts)
 
@@ -230,7 +231,7 @@ def main_subset_table(options):
 def main_aggregate_column_data(options):
     CmdTabs.transposed = options.transposed
     input_table = CmdTabs.load_input_data(options.input_file)
-    agg_data = CmdTabs.aggregate_column(input_table, options.col_index, options.col_aggregate, options.sep)
+    agg_data = CmdTabs.aggregate_column(input_table, options.col_index, options.col_aggregate, options.sep, options.agg_mode)
     CmdTabs.write_output_data(agg_data)
 
 def main_column_filter(options):

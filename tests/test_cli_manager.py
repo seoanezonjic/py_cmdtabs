@@ -52,13 +52,24 @@ def test_aggregate_column():
 	assert expected_result == test_result
 
 	input_file_3_cols = os.path.join(DATA_TEST_PATH, 'agg_data_3_columns.txt')
-	args=f"-i {input_file_3_cols} -x 3 -a 1,2 -s ,"
+	args=f"-i {input_file_3_cols} -x 1 -a 2,3 -s ,"
 	@capture_stdout
 	def script2test(lsargs):
 		return py_cmdtabs.aggregate_column_data(lsargs)
 	_, printed = script2test(args.split(" "))
 	test_result = strng2table(printed)
 	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'agg_data_3_columns_result.txt'))
+	assert expected_result == test_result
+
+	#Testing new aggregation modes
+	input_2index_2values = os.path.join(DATA_TEST_PATH, 'agg_2index_2values.txt')
+	args=f"-i {input_2index_2values} -x 1,2 -a 3,4 -A mean"
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.aggregate_column_data(lsargs)
+	_, printed = script2test(args.split(" "))
+	test_result = strng2table(printed)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'agg_2index_2values.txt'))
 	assert expected_result == test_result
 
 def test_aggregate_column_tanspose():
@@ -83,6 +94,18 @@ def test_desaggregate_column():
 	_, printed = script2test(args)
 	test_result = strng2table(printed)
 	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'cluster_genes_dis_DESAGG'))
+	assert expected_result == test_result
+
+	#Testing desaggregation with multiple columns
+	input_file = os.path.join(REF_DATA_PATH, 'agg_data_3_columns_result.txt')
+	args = f"-i {input_file} -x 2,3".split(" ") 
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.desaggregate_column_data(lsargs)
+
+	_, printed = script2test(args)
+	test_result = strng2table(printed)
+	expected_result = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'agg_data_3_columns.txt'))
 	assert expected_result == test_result
 
 def test_desaggregate_column_transposed():
@@ -462,7 +485,4 @@ def test_subset_table(tmp_dir):
 	
 	py_cmdtabs.subset_table(args)
 	returned = CmdTabs.load_input_data(out_file)
-	print(returned)
-	print()
-	print(expected_result)
 	assert expected_result == returned
