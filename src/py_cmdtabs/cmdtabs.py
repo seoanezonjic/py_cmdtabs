@@ -6,6 +6,7 @@ import os.path
 import numpy as np
 from collections import defaultdict
 import openpyxl
+import py_exp_calc.exp_calc as pxc
 
 class CmdTabs:
 	transposed = False
@@ -131,7 +132,7 @@ class CmdTabs:
 		if type(cols_agg) == int: cols_agg = [cols_agg] 
 		for fields in input_table:
 			for col_agg in cols_agg:
-				CmdTabs.add2nesteddict(aggregated_data, tuple([fields[idx] for idx in col_index]), col_agg, fields[col_agg])
+				pxc.add_nested_value(aggregated_data, (tuple([fields[idx] for idx in col_index]), col_agg), fields[col_agg], True)
 		aggregated_data_arr = []
 		for k, agg_dict in aggregated_data.items():
 			col_data = [idx_col for idx_col in k]
@@ -152,22 +153,6 @@ class CmdTabs:
 		for k, value in aggregated_data.items():
 			output_list.append([k, str(value)])
 		return output_list
-
-	def add2dict(dict, key, val): # dict must be a defaultdict with default value set to False	
-		query = dict[key]
-		if not query:
-			dict[key] = [val]
-		else:
-			query.append(val)
-
-	def add2nesteddict(hash, node1, node2, val): 
-		query_node1 = hash.get(node1)
-		if query_node1 is None:
-			hash[node1] = {node2: [val]}
-		elif query_node1.get(node2) is None:
-			query_node1[node2] = [val]
-		else:
-			query_node1[node2].append(val)
 
 	def desaggregate_column(input_table, col_index, sep):
 		desaggregated_data = []
