@@ -327,7 +327,7 @@ def main_intersect_columns(options):
         result = b_only
         if options.full: result = [full_b_rec[r[0]] for r in b_only]
       elif options.keep == 'ab':
-        if options[:full]:
+        if options.full:
           a_only = [full_a_rec[r[0]] for r in a_only]
           b_only = [full_b_rec[r[0]] for r in b_only]
         result = a_only + b_only
