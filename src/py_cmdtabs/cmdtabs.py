@@ -126,10 +126,11 @@ class CmdTabs:
 		return list(records.keys()), full_row_of_records
 
 
-	def aggregate_column(input_table, col_index, cols_agg, sep, agg_mode):
+	def aggregate_column(input_table, col_index, cols_agg, sep, agg_mode="concatenate"):
 		make_aggregation = {"concatenate": lambda agg_col: sep.join(agg_col), "mean": np.mean, "median": np.median, "max": np.max, "min": np.min}
 		aggregated_data = defaultdict(lambda: False	)
-		if type(cols_agg) == int: cols_agg = [cols_agg] 
+		if type(cols_agg) == int: cols_agg = [cols_agg]
+		if type(col_index) == int: col_index = [col_index]
 		for fields in input_table:
 			for col_agg in cols_agg:
 				pxc.add_nested_value(aggregated_data, (tuple([fields[idx] for idx in col_index]), col_agg), fields[col_agg], True)
