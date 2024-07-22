@@ -34,16 +34,17 @@ py_cmdtabs
 ==========
 
 
-    Add a short description here!
+    Set of tools to facilitate parsing of tabulated files
 
 
-A longer description of your project goes here...
+py_cmdtabs includes tools that make it easier for its user to manipulate tabulated files. It is designed to carry out the following functionalities:
 
-
-.. _pyscaffold-notes:
-
-Note
-====
-
-This project has been set up using PyScaffold 4.5. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
+* Add columns: the aggregate_columns.py script allows you to change the format of the information saved in the same file, combining its columns into a single one as specified in the script.
+* Disaggregate columns: the desaggregate_columns.py script allows you to change the format of the information saved in the same file, disaggregating its columns into several using a specific pattern.
+* Join tables: the merge_tabular.py script allows two or more tabular tables to be joined by a common join pattern between both.
+* Tag tables: the tag_table.py script is used to include a series of specific tags to elements of a table.
+* Intersect columns: the intersect_columns.py script compares the elements of two columns belonging to two different tables.
+* Obtain common information: the table_linker.py script allows you to save in the same output file the information extracted from a tabulated file, based on the identifiers of a second file.
+* Replace information: The standard_name_replacer.py script replaces values ​​in a table based on a contributed value code.
+* Filter columns: The column_filter.py script filters columns from a tabulated file whose elements match a specified pattern.
+* Transform Excel format into tabular: the excel_to_tabular.py script transforms files with an .xlsx extension into tabular files and makes their handling easier.
