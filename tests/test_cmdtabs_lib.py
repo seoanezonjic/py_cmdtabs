@@ -156,6 +156,15 @@ class CmdTabsTestCase(unittest.TestCase):
 		['002072', 'HP:0001082']]
 		self.assertEqual(expected_result, filter_columns_test)
 
+	def test_filter_by_list_blacklist_case(self):
+		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'ids2count_short'))
+		filterlist = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'blacklist'))
+		filterlist = list(map(list, zip(*filterlist)))[0]
+		filter_columns_test = CmdTabs.filter_by_blacklist(input_table, filterlist , 1)
+		expected_result = [['000707', 'HP:0001082'],
+							['000909', 'HP:0002315']]
+		self.assertEqual(expected_result, filter_columns_test)		
+
 
 	def test_merge_and_filter_tables(self):
 		options = {'header' : '', 'col_filter' : [0], 'keywords' : "0008995&0017999&0013969&0009594", 

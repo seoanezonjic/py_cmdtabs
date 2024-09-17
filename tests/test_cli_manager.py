@@ -465,6 +465,20 @@ def test_filter_by_list(tmp_dir):
 		['002072', 'HP:0001082']]
 	assert expected_result == test_result
 
+def test_filter_by_list_blacklist_case(tmp_dir):
+	input_table = os.path.join(DATA_TEST_PATH, 'ids2count_short')
+	filterlist = os.path.join(DATA_TEST_PATH, 'blacklist')
+	out_file = os.path.join(tmp_dir, 'filter_ids2count_short')
+	args = f"-f {input_table} -c 2 -t {filterlist} --prefix filter_ -o {tmp_dir} --metrics --blacklist".split(" ")
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.filter_by_list(lsargs)
+	_, printed = script2test(args)
+	test_result = CmdTabs.load_input_data(out_file)
+	expected_result = [['000707', 'HP:0001082'],
+						['000909', 'HP:0002315']]
+	assert expected_result == test_result
+
 def test_records_count():
 	input_file = os.path.join(DATA_TEST_PATH, 'ids2count')
 	@capture_stdout

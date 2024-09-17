@@ -318,6 +318,11 @@ class CmdTabs:
 		terms2filter = set(terms2filter)
 		terms2filter = {term: True for term in terms2filter}
 		return [row for row in table if terms2filter.get(row[column2filter])]
+	
+	def filter_by_blacklist(table, terms2filter, column2filter):
+		terms2filter = set(terms2filter)
+		terms2filter = {term: True for term in terms2filter}
+		return [row for row in table if not terms2filter.get(row[column2filter])]
 
 	def get_uniq(table):
 		return [list(i) for i in set(tuple(i) for i in table)] # list cannot be used by set so we use tuples change back the format
