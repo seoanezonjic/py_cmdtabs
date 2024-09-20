@@ -465,11 +465,46 @@ def test_filter_by_list(tmp_dir):
 		['002072', 'HP:0001082']]
 	assert expected_result == test_result
 
+def test_filter_by_list_partial_match(tmp_dir):
+	input_table = os.path.join(DATA_TEST_PATH, 'ids2count')
+	filterlist = os.path.join(DATA_TEST_PATH, 'filterlist_partial')
+	out_file = os.path.join(tmp_dir, 'filter_ids2count')
+	args = f"-f {input_table} -c 2 -t {filterlist} --prefix filter_ -o {tmp_dir} --metrics --not_exact_match".split(" ")
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.filter_by_list(lsargs)
+	_, printed = script2test(args)
+	test_result = CmdTabs.load_input_data(out_file)
+	expected_result = [['000039', 'HP:0002140'],
+		['000665', 'HP:0002140'],
+		['000707', 'HP:0001082'],
+		['000909', 'HP:0002315'],
+		['000911', 'HP:0002140'],
+		['000942', 'HP:0001082'],
+		['000943', 'HP:0001082'],
+		['001861', 'HP:0001082'],
+		['002072', 'HP:0001082']]
+	assert expected_result == test_result
+
 def test_filter_by_list_blacklist_case(tmp_dir):
 	input_table = os.path.join(DATA_TEST_PATH, 'ids2count_short')
 	filterlist = os.path.join(DATA_TEST_PATH, 'blacklist')
 	out_file = os.path.join(tmp_dir, 'filter_ids2count_short')
 	args = f"-f {input_table} -c 2 -t {filterlist} --prefix filter_ -o {tmp_dir} --metrics --blacklist".split(" ")
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.filter_by_list(lsargs)
+	_, printed = script2test(args)
+	test_result = CmdTabs.load_input_data(out_file)
+	expected_result = [['000707', 'HP:0001082'],
+						['000909', 'HP:0002315']]
+	assert expected_result == test_result
+
+def test_filter_by_list_blacklist_case_partial_match(tmp_dir):
+	input_table = os.path.join(DATA_TEST_PATH, 'ids2count_short')
+	filterlist = os.path.join(DATA_TEST_PATH, 'blacklist_partial')
+	out_file = os.path.join(tmp_dir, 'filter_ids2count_short')
+	args = f"-f {input_table} -c 2 -t {filterlist} --prefix filter_ -o {tmp_dir} --metrics --blacklist --not_exact_match".split(" ")
 	@capture_stdout
 	def script2test(lsargs):
 		return py_cmdtabs.filter_by_list(lsargs)

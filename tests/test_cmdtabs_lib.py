@@ -156,6 +156,22 @@ class CmdTabsTestCase(unittest.TestCase):
 		['002072', 'HP:0001082']]
 		self.assertEqual(expected_result, filter_columns_test)
 
+	def test_filter_by_list_partial_match(self):
+		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'ids2count'))
+		filterlist = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'filterlist_partial'))
+		filterlist = list(map(list, zip(*filterlist)))[0]
+		filter_columns_test = CmdTabs.filter_by_whitelist(input_table, filterlist , 1, not_exact_match=True)
+		expected_result = [['000039', 'HP:0002140'],
+		['000665', 'HP:0002140'],
+		['000707', 'HP:0001082'],
+		['000909', 'HP:0002315'],
+		['000911', 'HP:0002140'],
+		['000942', 'HP:0001082'],
+		['000943', 'HP:0001082'],
+		['001861', 'HP:0001082'],
+		['002072', 'HP:0001082']]
+		self.assertEqual(expected_result, filter_columns_test)
+
 	def test_filter_by_list_blacklist_case(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'ids2count_short'))
 		filterlist = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'blacklist'))
@@ -165,6 +181,14 @@ class CmdTabsTestCase(unittest.TestCase):
 							['000909', 'HP:0002315']]
 		self.assertEqual(expected_result, filter_columns_test)		
 
+	def test_filter_by_list_blacklist_case_partial_match(self):
+		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'ids2count_short'))
+		filterlist = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'blacklist_partial'))
+		filterlist = list(map(list, zip(*filterlist)))[0]
+		filter_columns_test = CmdTabs.filter_by_blacklist(input_table, filterlist , 1, not_exact_match=True)
+		expected_result = [['000707', 'HP:0001082'],
+							['000909', 'HP:0002315']]
+		self.assertEqual(expected_result, filter_columns_test)	
 
 	def test_merge_and_filter_tables(self):
 		options = {'header' : '', 'col_filter' : [0], 'keywords' : "0008995&0017999&0013969&0009594", 

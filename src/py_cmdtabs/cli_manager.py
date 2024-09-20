@@ -125,6 +125,7 @@ def filter_by_list(args=None):
     parser.add_argument("-o", "--output_path", default=".", help="The name of the output path")
     parser.add_argument("--metrics", default=False, action="store_true", help= "Getting a table with the proportion of lines removed for each file")
     parser.add_argument("--blacklist", default=False, action="store_true", help="To select the blacklist mode instead of whitelist. Default is False (whitelist case)")
+    parser.add_argument("--not_exact_match", default=False, action="store_true", help="To select the partial match mode instead of full match mode. Default is False (exact match case)")
     opts = parser.parse_args(args)
     main_filter_by_list(opts)
 
@@ -286,9 +287,9 @@ def main_filter_by_list(options):
         table = loaded_files[file]
         for column in columns:
             if options.blacklist:
-              table = CmdTabs.filter_by_blacklist(table, terms2befiltered, column)
+              table = CmdTabs.filter_by_blacklist(table, terms2befiltered, column, options.not_exact_match)
             else:
-              table = CmdTabs.filter_by_whitelist(table, terms2befiltered, column)
+              table = CmdTabs.filter_by_whitelist(table, terms2befiltered, column, options.not_exact_match)
         file_filteredfile[file] = table
 
     for file_path, filtered_table in file_filteredfile.items():
