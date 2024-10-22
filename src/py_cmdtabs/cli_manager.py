@@ -53,7 +53,7 @@ def column_filter(args=None):
     parser = argparse.ArgumentParser(description='Get records from table an extract desired columns.')
     add_common_options(parser)
     parser.add_argument("-t", "--table_file", dest="table_file",
-      help="Input tabulated file")
+      help="Input tabulated file. LGACY PARAMETER TO BE DEPRECATED. Use -i instead")
     parser.add_argument("-c", "--column", dest="cols_to_show", type=list_based_0,
       help="Column/s to show (1 based). Format: x,y,z..")
     parser.add_argument("-f", "--col_filter", dest="col_filter", type=list_based_0,
@@ -237,9 +237,11 @@ def main_aggregate_column_data(options):
     CmdTabs.write_output_data(agg_data)
 
 def main_column_filter(options):
-    if options.table_file == None: sys.exit('Tabulated file not specified') 
+    table_file = options.input_file
+    if table_file == None: table_file = options.table_file # legacy option kept by compatibility
+    if table_file == None: sys.exit('Tabulated file not specified') 
     CmdTabs.transposed = options.transposed
-    file_names = glob.glob(options.table_file)
+    file_names = glob.glob(table_file)
     input_files = CmdTabs.load_several_files(file_names, options.separator)
     filtered_table = CmdTabs.merge_and_filter_tables(input_files, vars(options))
     CmdTabs.write_output_data(filtered_table)
