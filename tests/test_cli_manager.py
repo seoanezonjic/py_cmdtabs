@@ -535,3 +535,14 @@ def test_subset_table(tmp_dir):
 	py_cmdtabs.subset_table(args)
 	returned = CmdTabs.load_input_data(out_file)
 	assert expected_result == returned
+
+
+def test_transpose_table(tmp_dir):
+	input_file = os.path.join(DATA_TEST_PATH, 'disease_gene')
+	out_file = os.path.join(tmp_dir, 'disease_gene_transposed')
+	args = f"-i {input_file} -o {out_file}".split(" ")
+	py_cmdtabs.transpose_table(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'disease_gene_transposed'))
+	assert expected_result == returned

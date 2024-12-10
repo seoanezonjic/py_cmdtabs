@@ -21,6 +21,15 @@ def add_common_options(parser):
     parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
 
 ##############################################
+def transpose_table(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    opts = parser.parse_args(args)
+    main_transpose_table(opts)
+
 def subset_table(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
@@ -223,6 +232,10 @@ def tag_table(args=None):
 
     opts = parser.parse_args(args)
     main_tag_table(opts)
+
+def main_transpose_table(options):
+    transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
+    CmdTabs.write_output_data(transposed_table, options.output_file)
 
 def main_subset_table(options):
     CmdTabs.transposed = options.transposed
