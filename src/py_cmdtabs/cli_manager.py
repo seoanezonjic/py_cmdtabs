@@ -19,6 +19,7 @@ def add_common_options(parser):
     parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
       help="Indicate if files have header")
     parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
+    parser.add_argument("--compressed", default=False, action="store_true", help="To indicate that the input file is compressed")
 
 ##############################################
 def transpose_table(args=None):
@@ -234,17 +235,20 @@ def tag_table(args=None):
     main_tag_table(opts)
 
 def main_transpose_table(options):
+    CmdTabs.compressed = options.compressed
     transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
     CmdTabs.write_output_data(transposed_table, options.output_file)
 
 def main_subset_table(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     input_table = CmdTabs.load_input_data(options.input_file)
     subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
     CmdTabs.write_output_data(subset_table, options.output_file)
 
 def main_aggregate_column_data(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     input_table = CmdTabs.load_input_data(options.input_file)
     agg_data = CmdTabs.aggregate_column(input_table, options.col_index, options.col_aggregate, options.sep, options.agg_mode)
     CmdTabs.write_output_data(agg_data)
@@ -254,6 +258,7 @@ def main_column_filter(options):
     if table_file == None: table_file = options.table_file # legacy option kept by compatibility
     if table_file == None: sys.exit('Tabulated file not specified') 
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     file_names = glob.glob(table_file)
     input_files = CmdTabs.load_several_files(file_names, options.separator)
     filtered_table = CmdTabs.merge_and_filter_tables(input_files, vars(options))
@@ -261,6 +266,7 @@ def main_column_filter(options):
 
 def main_create_metric_table(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     metric_file = CmdTabs.load_input_data(options.metric_file)
     attributes = options.attributes.split(',')
     samples_tag = attributes.pop(0)
@@ -273,12 +279,14 @@ def main_create_metric_table(options):
 
 def main_desaggregate_column_data(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     input_table = CmdTabs.load_input_data(options.input_file)
     desagg_data = CmdTabs.desaggregate_column(input_table, options.col_index, options.sep)
     CmdTabs.write_output_data(desagg_data)
 
 def main_excel_to_tabular(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
     storage = CmdTabs.extract_columns(sheet, options.columns2extract)
     CmdTabs.write_output_data(storage, options.output_file)
@@ -288,6 +296,7 @@ def main_filter_by_list(options):
     terms2befiltered = list(map(list, zip(*terms2befiltered )))[0]
 
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     files2befiltered = options.files2befiltered
     columns2befiltered = options.columns2befiltered
     files_columns2befiltered = list(zip(files2befiltered,columns2befiltered))
@@ -322,6 +331,7 @@ def main_filter_by_list(options):
 
 def main_intersect_columns(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
 
     input_data_a = CmdTabs.load_input_data(options.a_file, options.sep)
     input_data_b = CmdTabs.load_input_data(options.b_file, options.sep)
@@ -355,6 +365,7 @@ def main_intersect_columns(options):
 
 def main_merge_tabular(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     files = CmdTabs.load_files(options.files)
     merged = CmdTabs.merge_files(files, options.fill_character)
     CmdTabs.write_output_data(merged)
@@ -369,12 +380,14 @@ def main_standard_name_replacer(options):
     translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
 
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     input_table = CmdTabs.load_input_data(options.input_file, options.input_separator)
     tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, translation_index, options.remove_untranslated)
     CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)
 
 def main_table_linker(options):
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     input_linker = CmdTabs.load_input_data(options.linker_file)
     indexed_linker = CmdTabs.index_array(input_linker, options.id_linker, options.columns2linker, options.header)
     if CmdTabs.transposed:
@@ -387,6 +400,7 @@ def main_table_linker(options):
 def main_tag_table(options):
     tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
     CmdTabs.transposed = options.transposed
+    CmdTabs.compressed = options.compressed
     input_table = CmdTabs.load_input_data(options.input_file)
     taged_table = CmdTabs.tag_file(input_table, tags, options.header)
     CmdTabs.write_output_data(taged_table, None, options.sep)

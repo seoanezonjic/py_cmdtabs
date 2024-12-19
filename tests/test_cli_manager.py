@@ -538,11 +538,24 @@ def test_subset_table(tmp_dir):
 
 
 def test_transpose_table(tmp_dir):
-	input_file = os.path.join(DATA_TEST_PATH, 'disease_gene')
-	out_file = os.path.join(tmp_dir, 'disease_gene_transposed')
+	input_file = os.path.join(DATA_TEST_PATH, 'mondo_genes')
+	out_file = os.path.join(tmp_dir, 'mondo_genes_transposed')
 	args = f"-i {input_file} -o {out_file}".split(" ")
 	py_cmdtabs.transpose_table(args)
 	
 	returned = CmdTabs.load_input_data(out_file)
-	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'disease_gene_transposed'))
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'mondo_genes_transposed'))
+	assert expected_result == returned
+
+
+def test_transpose_table_compressed(tmp_dir):
+	input_file = os.path.join(DATA_TEST_PATH, 'mondo_genes.gz')
+	out_file = os.path.join(tmp_dir, 'mondo_genes_transposed.gz')
+	args = f"-i {input_file} -o {out_file} --compressed".split(" ")
+	py_cmdtabs.transpose_table(args)
+	
+	CmdTabs.compressed = True
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'mondo_genes_transposed.gz'))
+	CmdTabs.compressed = False
 	assert expected_result == returned

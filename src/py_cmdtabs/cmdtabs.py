@@ -1,4 +1,5 @@
 import sys
+import gzip
 import os
 import warnings
 import copy
@@ -10,15 +11,16 @@ import py_exp_calc.exp_calc as pxc
 
 class CmdTabs:
 	transposed = False
+	compressed = False
 	def load_input_data(input_path, sep="\t", limit=-1, first_only=False):
+		open_file = gzip.open if CmdTabs.compressed else open
 		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
 			limit -= 1
 		if input_path == '-':
 			input_data = sys.stdin
 		else:
-			file = open(input_path, "r")
-			input_data = file.readlines()
-			file.close()
+			with open_file(input_path, "rt") as f:
+				input_data = f.readlines()
 		input_data_arr = []
 		for line in input_data:
 			#print('---', file=sys.stderr)
@@ -369,12 +371,12 @@ class CmdTabs:
 		return common, a_only, b_only
 
 	def write_output_data(output_data, output_path=None, sep="\t"):
-
+		open_file = gzip.open if CmdTabs.compressed else open
 		if CmdTabs.transposed:
 			output_data = CmdTabs.transpose(output_data)
 			
 		if output_path != None:
-			with open(output_path, 'w') as out_file:
+			with open_file(output_path, 'wt') as out_file:
 				for line in output_data:
 					out_file.write(sep.join([str(l) for l in line]) + "\n")
 		else:
