@@ -20,7 +20,7 @@ class CmdTabs:
 			limit -= 1
 		if input_path == '-':
 			if CmdTabs.compressed_input: 
-				input_data = gzip.decompress(sys.stdin.buffer.read()).decode().split('\n')
+				input_data = gzip.decompress(sys.stdin.buffer.read()).decode().strip().split('\n')
 			else: 
 				input_data = sys.stdin
 		else:
@@ -385,10 +385,14 @@ class CmdTabs:
 				for line in output_data:
 					out_file.write(sep.join([str(l) for l in line]) + "\n")
 		else:
-			for line in output_data:
-				if CmdTabs.compressed_output:
-					sys.stdout.buffer.write(gzip.compress(bytes(sep.join([str(l) for l in line]) + "\n", 'utf-8')))
-				else:
+			if CmdTabs.compressed_output:
+				columns_joined = []
+				for line in output_data:
+					columns_joined.append(sep.join([str(l) for l in line]))
+				all_joined = "\n".join(columns_joined) + "\n"
+				sys.stdout.buffer.write(gzip.compress(bytes(all_joined, 'utf-8')))
+			else:
+				for line in output_data:
 					print(sep.join([str(l) for l in line]))
 
 	def transpose(table):

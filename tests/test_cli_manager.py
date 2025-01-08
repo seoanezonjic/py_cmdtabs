@@ -588,3 +588,35 @@ def test_transpose_table_compressed_file(tmp_dir):
 	assert expected_result == returned
 	CmdTabs.compressed_input = False
 	CmdTabs.compressed_output = False
+
+def test_transpose_table_compressed_pipe():
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'mondo_genes_transposed'))
+
+	###### TESTING WITH UNCOMPRESSED INPUT AND COMPRESSED OUTPUT
+	#reading an uncompressed file and adding it to stdin (to simulate a pipe)
+	input_file = open(os.path.join(DATA_TEST_PATH, 'mondo_genes')).readlines()
+	sys.stdin = input_file
+
+	args = f"-i - --compressed_out".split(" ")
+
+	old_stdout = sys.stdout
+	sys.stdout = io.TextIOWrapper(io.BytesIO(), sys.stdout.encoding)
+	
+	py_cmdtabs.transpose_table(args)
+	
+	sys.stdout.seek(0)
+	out = sys.stdout.read()
+	
+	sys.stdout.close()
+	sys.stdout = old_stdout
+
+	print(gzip.decompress(out).decode())
+	#print(type(sys.stdout.buffer.getvalue()))
+	assert False == True
+	#reading and decompressing the output from the pipe
+	#returned = gzip.decompress(sys.stdin.buffer.read()).decode()
+#
+	#print(returned)
+	#print()
+	#print(expected_result)
+	#assert expected_result == returned
