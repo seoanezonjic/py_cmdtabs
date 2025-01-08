@@ -1,7 +1,11 @@
 import pytest
 import sys
-import os 
-from io import StringIO
+import os
+import gzip
+import io 
+from io import StringIO, BytesIO
+from contextlib import redirect_stdout
+from base64 import b64encode
 from py_cmdtabs import CmdTabs
 import py_cmdtabs 
 ROOT_PATH=os.path.dirname(__file__)
@@ -547,15 +551,40 @@ def test_transpose_table(tmp_dir):
 	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'mondo_genes_transposed'))
 	assert expected_result == returned
 
+def test_transpose_table_compressed_file(tmp_dir):
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'mondo_genes_transposed'))
 
-def test_transpose_table_compressed(tmp_dir):
+	###### TESTING WITH COMPRESSED INPUT AND UNCOMPRESSED OUTPUT
+	input_file = os.path.join(DATA_TEST_PATH, 'mondo_genes.gz')
+	out_file = os.path.join(tmp_dir, 'mondo_genes_transposed')
+	args = f"-i {input_file} -o {out_file} --compressed_in".split(" ")
+	py_cmdtabs.transpose_table(args)
+
+	CmdTabs.compressed_input = False
+	returned = CmdTabs.load_input_data(out_file)
+	assert expected_result == returned
+
+
+	###### TESTING WITH UNCOMPRESSED INPUT AND COMPRESSED OUTPUT
+	input_file = os.path.join(DATA_TEST_PATH, 'mondo_genes')
+	out_file = os.path.join(tmp_dir, 'mondo_genes_transposed.gz')
+	args = f"-i {input_file} -o {out_file} --compressed_out".split(" ")
+	py_cmdtabs.transpose_table(args)
+
+	CmdTabs.compressed_input = True
+	returned = CmdTabs.load_input_data(out_file)
+	assert expected_result == returned
+	CmdTabs.compressed_input = False
+	CmdTabs.compressed_output = False
+
+
+	###### TESTING WITH COMPRESSED INPUT AND COMPRESSED OUTPUT
 	input_file = os.path.join(DATA_TEST_PATH, 'mondo_genes.gz')
 	out_file = os.path.join(tmp_dir, 'mondo_genes_transposed.gz')
-	args = f"-i {input_file} -o {out_file} --compressed".split(" ")
+	args = f"-i {input_file} -o {out_file} --compressed_in --compressed_out".split(" ")
 	py_cmdtabs.transpose_table(args)
 	
-	CmdTabs.compressed = True
 	returned = CmdTabs.load_input_data(out_file)
-	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'mondo_genes_transposed.gz'))
-	CmdTabs.compressed = False
 	assert expected_result == returned
+	CmdTabs.compressed_input = False
+	CmdTabs.compressed_output = False

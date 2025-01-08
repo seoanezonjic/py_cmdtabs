@@ -11,13 +11,18 @@ import py_exp_calc.exp_calc as pxc
 
 class CmdTabs:
 	transposed = False
-	compressed = False
+	compressed_input = False
+	compressed_output = False
+
 	def load_input_data(input_path, sep="\t", limit=-1, first_only=False):
-		open_file = gzip.open if CmdTabs.compressed else open
+		open_file = gzip.open if CmdTabs.compressed_input else open
 		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
 			limit -= 1
 		if input_path == '-':
-			input_data = sys.stdin
+			if CmdTabs.compressed_input: 
+				input_data = gzip.decompress(sys.stdin.buffer.read()).decode().split('\n')
+			else: 
+				input_data = sys.stdin
 		else:
 			with open_file(input_path, "rt") as f:
 				input_data = f.readlines()
@@ -371,7 +376,7 @@ class CmdTabs:
 		return common, a_only, b_only
 
 	def write_output_data(output_data, output_path=None, sep="\t"):
-		open_file = gzip.open if CmdTabs.compressed else open
+		open_file = gzip.open if CmdTabs.compressed_output else open
 		if CmdTabs.transposed:
 			output_data = CmdTabs.transpose(output_data)
 			
@@ -381,7 +386,10 @@ class CmdTabs:
 					out_file.write(sep.join([str(l) for l in line]) + "\n")
 		else:
 			for line in output_data:
-				print(sep.join([str(l) for l in line]))
+				if CmdTabs.compressed_output:
+					sys.stdout.buffer.write(gzip.compress(bytes(sep.join([str(l) for l in line]) + "\n", 'utf-8')))
+				else:
+					print(sep.join([str(l) for l in line]))
 
 	def transpose(table):
 		transposed_table = list(map(list, zip(*table)))
