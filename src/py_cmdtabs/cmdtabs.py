@@ -14,7 +14,7 @@ class CmdTabs:
 	compressed_input = False
 	compressed_output = False
 
-	def load_input_data(input_path, sep="\t", limit=-1, first_only=False):
+	def load_input_data(input_path, sep="\t", limit=-1, first_only=False, add_empty_fields=True):
 		open_file = gzip.open if CmdTabs.compressed_input else open
 		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
 			limit -= 1
@@ -28,9 +28,12 @@ class CmdTabs:
 				input_data = f.readlines()
 		input_data_arr = []
 		for line in input_data:
+			fields_number = line.count(sep) + 1
 			#print('---', file=sys.stderr)
 			#print(repr(), file=sys.stderr)
-			input_data_arr.append(line.rstrip().split(sep, limit))
+			fields = line.rstrip().split(sep, limit)
+			if add_empty_fields: fields = fields + ( [""] * (fields_number - len(fields)) )
+			input_data_arr.append(fields)
 			if first_only:
 				break
 		if CmdTabs.transposed:
@@ -38,13 +41,14 @@ class CmdTabs:
 
 		return input_data_arr
 
-	def load_several_files(all_files, sep = "\t", limit=-1):
+	def load_several_files(all_files, sep = "\t", limit=-1, dict_keys_mapper = None, add_empty_fields=True):
 		loaded_files = {}
 		for file in all_files:
 			if os.path.isdir(file):
 				warnings.warn(file +" is not a valid file")
 				continue
-			loaded_files[file] = CmdTabs.load_input_data(file, sep, limit)
+			key_id = file if not dict_keys_mapper else dict_keys_mapper(file)
+			loaded_files[key_id] = CmdTabs.load_input_data(file, sep, limit, add_empty_fields=add_empty_fields)
 		return loaded_files
 
 	def load_files(files_path): #NO TEST # Cleaning an filling behaviour could be sent to load_input_data as options and use on load_several_files
