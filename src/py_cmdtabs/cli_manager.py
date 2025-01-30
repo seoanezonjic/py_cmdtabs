@@ -214,7 +214,7 @@ def standard_name_replacer(args=None):
       help="Column in index file to take the value that will be used in substitution. Default 2. Numeration is 1 based")
     parser.add_argument("-s", "--input_separator", dest="input_separator", default="\t",
       help="Character separator")
-    parser.add_argument("-c", "--columns", dest="columns", default=[1], type=list_based_0,
+    parser.add_argument("-c", "--columns", dest="columns", default=[0], type=list_based_0,
       help="Index of columns in base 1 to compare")
     parser.add_argument("-u", "--remove_untranslated", dest="remove_untranslated", default=False, action='store_true',
       help="Activate this flag for outputting the untranslated entries")
