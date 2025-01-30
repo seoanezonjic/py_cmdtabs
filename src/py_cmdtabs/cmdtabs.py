@@ -32,7 +32,9 @@ class CmdTabs:
 			#print('---', file=sys.stderr)
 			#print(repr(), file=sys.stderr)
 			fields = line.rstrip().split(sep, limit)
-			if add_empty_fields: fields = fields + ( [""] * (fields_number - len(fields)) )
+			if add_empty_fields:
+				limit_fields = 0 if limit <= 0 else limit 
+				fields = fields + ( [""] * (fields_number - len(fields) - limit_fields) )
 			input_data_arr.append(fields)
 			if first_only:
 				break

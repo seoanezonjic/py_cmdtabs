@@ -1,33 +1,33 @@
 import argparse
 import sys
 import os
-import glob
 
 from py_cmdtabs.cmdtabs import CmdTabs
+from py_cmdtabs.main_modules import *
 
 ## TYPES
 def based_0(string): return int(string) - 1
 def list_based_0(string): return CmdTabs.parse_column_indices(",", string)
 def list_str(values): return values.split(',')
 
-## CLASS ATTRIBUTES CONFIGURATION
-
-def set_class_attributes(options):
-    CmdTabs.compressed_input = options.compressed_in
-    CmdTabs.compressed_output = options.compressed_out
-    CmdTabs.transposed = options.transposed
-
 ## Common options
-def add_common_options(parser):
-    parser.add_argument("-i", "--input_file", dest="input_file",
-      help="Path to input file")
-    parser.add_argument("-x", "--column_index", dest="col_index",
-      help="Column index (1 based) to use as reference", type=list_based_0)
-    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
-      help="Indicate if files have header")
-    parser.add_argument("--transposed", default=False, action="store_true", help="To perform the operations in rows and not columns")
-    parser.add_argument("--compressed_in", default=False, action="store_true", help="To indicate that the input file is compressed")
-    parser.add_argument("--compressed_out", default=False, action="store_true", help="To indicate that the input file is compressed")
+def add_common_options(parser, flags_to_skip = [], help_replacer={}):
+    helps_dict = {
+        "--input_file": "Path to input file",
+        "--transposed": "To perform the operations in rows and not columns",
+        "--compressed_in": "To indicate that the input file is compressed",
+        "--compressed_out": "To indicate that the output file will be compressed"
+        }
+    helps_dict.update(help_replacer)
+
+    if "-i" not in flags_to_skip and "--input_file" not in flags_to_skip:
+      parser.add_argument("-i", "--input_file", dest="input_file", help=helps_dict["--input_file"])
+    if "--transposed" not in flags_to_skip:
+      parser.add_argument("--transposed", default=False, action="store_true", help=helps_dict["--transposed"])
+    if "--compressed_in" not in flags_to_skip:
+      parser.add_argument("--compressed_in", default=False, action="store_true", help=helps_dict["--compressed_in"])
+    if "--compressed_out" not in flags_to_skip:
+      parser.add_argument("--compressed_out", default=False, action="store_true", help=helps_dict["--compressed_out"])
 
 ##############################################
 def transpose_table(args=None):
@@ -43,6 +43,8 @@ def subset_table(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
     add_common_options(parser)
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+  	                   help="Indicate if files have header")
     parser.add_argument("-s", "--start_line", dest="start_line", default= 0, type= based_0,
                         help="Set the first line of subset. 0 based index")
     parser.add_argument("-l", "--lines_to_subset", dest="chunk_lines", default= 5, type= int,
@@ -57,6 +59,8 @@ def aggregate_column_data(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')
     add_common_options(parser)
+    parser.add_argument("-x", "--column_index", dest="col_index",
+	    help="Column index (1 based) to use as reference", type=list_based_0)
     parser.add_argument("-s", "--separator", dest="sep", default=",",
       help="Character separator when collapse data")
     parser.add_argument("-a", "--column_aggregate", dest="col_aggregate",
@@ -88,6 +92,8 @@ def column_filter(args=None):
       help="Select not matching")
     parser.add_argument("-u", "--uniq", dest="uniq", default=False, action='store_true',
       help="Delete redundant items")
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+  	  help="Indicate if files have header")
         
     opts = parser.parse_args(args)
     main_column_filter(opts)
@@ -95,7 +101,7 @@ def column_filter(args=None):
 def create_metric_table(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')
-    add_common_options(parser)
+    add_common_options(parser, flags_to_skip=["--input_file"])
     parser.add_argument("metric_file", metavar='M',
       help="File with tabulated metrics")
     parser.add_argument("attributes", metavar='A',
@@ -112,6 +118,8 @@ def desaggregate_column_data(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')
     add_common_options(parser)
+    parser.add_argument("-x", "--column_index", dest="col_index",
+  	  help="Column index (1 based) to use as reference", type=list_based_0)
     parser.add_argument("-s", "--sep_char", dest="sep", default=',',
       help="Character separator when collapse data")
 
@@ -121,7 +129,7 @@ def desaggregate_column_data(args=None):
 def excel_to_tabular(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Replace substring in a tabular file with the strings listed in a dictionary file')
-    add_common_options(parser)
+    add_common_options(parser, flags_to_skip=["--compressed_in"], help_replacer={"--input_file": "Input xlsx file"})
     parser.add_argument("-o", "--output_file", dest="output_file",
       help="Path to output file")
     parser.add_argument("-c", "--columns2extract", dest="columns2extract", default=[0], type=list_based_0,
@@ -135,7 +143,7 @@ def excel_to_tabular(args=None):
 def filter_by_list(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser()
-    add_common_options(parser)
+    add_common_options(parser, flags_to_skip=["--input_file"])
     parser.add_argument("-f", "--files2befiltered", default= None, type = lambda x: x.split(","), required=True, help="The root to the files that has to be filtered, separated by commas")
     parser.add_argument("-c", "--columns2befiltered", default = None, type = lambda	x: [list(map(lambda y: int(y) -1,r.split(","))) for r in x.split(";")],help="The columns (based 1) that need to be filtered for each file, separated by semicolons, with each set of columns separated by commas")
     parser.add_argument("-t", "--terms2befiltered", default= None, required=True, help="The PATH to the list of terms to be filtered")
@@ -150,7 +158,7 @@ def filter_by_list(args=None):
 def intersect_columns(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')
-    add_common_options(parser)
+    add_common_options(parser, flags_to_skip=["--input_file"])
     parser.add_argument("-a", "--a_file", dest="a_file",
       help="Path to input file")
     parser.add_argument("-b", "--b_file", dest="b_file",
@@ -174,7 +182,7 @@ def intersect_columns(args=None):
 def merge_tabular(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Merge several tabulated files in one single file.')
-    add_common_options(parser)
+    add_common_options(parser, flags_to_skip=["--input_file"])
     parser.add_argument("-f", "--fill_character", dest="fill_character", default="-",
       help="Character to fill when a field is empty")
     parser.add_argument("files", metavar='F', nargs='+',
@@ -187,6 +195,8 @@ def records_count(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Counting how many times a record is repeated in a column.')
     add_common_options(parser)
+    parser.add_argument("-x", "--column_index", dest="col_index",
+	    help="Column index (1 based) to count elements", type=list_based_0)
     opts = parser.parse_args(args)
     main_records_count(opts)
 
@@ -216,6 +226,8 @@ def table_linker(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Merge tabular files.')
     add_common_options(parser)
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+	    help="Indicate if input file has a header line. Header will not be printed in output")
     parser.add_argument("-o", "--output_file", dest="output_file",
       help="Path to output file")
     parser.add_argument("-l", "--linker_file", dest="linker_file",
@@ -234,6 +246,8 @@ def tag_table(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')
     add_common_options(parser)
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+	    help="Indicate if input file has a header line. Header will not be printed in output")
     parser.add_argument("-t", "--tags", dest="tags",
       help="Strings or files (only first line will be used) sepparated by commas", type=list_str)
     parser.add_argument("-s", "--sep_char", dest="sep", default="\t",
@@ -241,163 +255,3 @@ def tag_table(args=None):
 
     opts = parser.parse_args(args)
     main_tag_table(opts)
-
-def main_transpose_table(options):
-    set_class_attributes(options)
-    transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
-    CmdTabs.write_output_data(transposed_table, options.output_file)
-
-def main_subset_table(options):
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
-    CmdTabs.write_output_data(subset_table, options.output_file)
-
-def main_aggregate_column_data(options):
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    agg_data = CmdTabs.aggregate_column(input_table, options.col_index, options.col_aggregate, options.sep, options.agg_mode)
-    CmdTabs.write_output_data(agg_data)
-
-def main_column_filter(options):
-    table_file = options.input_file
-    if table_file == None: table_file = options.table_file # legacy option kept by compatibility
-    if table_file == None: sys.exit('Tabulated file not specified') 
-    set_class_attributes(options)
-    file_names = glob.glob(table_file)
-    input_files = CmdTabs.load_several_files(file_names, options.separator)
-    filtered_table = CmdTabs.merge_and_filter_tables(input_files, vars(options))
-    CmdTabs.write_output_data(filtered_table)
-
-def main_create_metric_table(options):
-    set_class_attributes(options)
-    metric_file = CmdTabs.load_input_data(options.metric_file)
-    attributes = options.attributes.split(',')
-    samples_tag = attributes.pop(0)
-    metric_names, indexed_metrics = CmdTabs.index_metrics(metric_file, attributes)
-    table_output, corrupted_records = CmdTabs.create_table(indexed_metrics, samples_tag, attributes, metric_names)
-    CmdTabs.write_output_data(table_output, options.output_file)
-
-    if options.corrupted != None and len(corrupted_records) > 0:
-        CmdTabs.write_output_data(corrupted_records, options.corrupted)
-
-def main_desaggregate_column_data(options):
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    desagg_data = CmdTabs.desaggregate_column(input_table, options.col_index, options.sep)
-    CmdTabs.write_output_data(desagg_data)
-
-def main_excel_to_tabular(options):
-    set_class_attributes(options)
-    sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
-    storage = CmdTabs.extract_columns(sheet, options.columns2extract)
-    CmdTabs.write_output_data(storage, options.output_file)
-
-def main_filter_by_list(options):
-    terms2befiltered = CmdTabs.load_input_data(options.terms2befiltered)
-    terms2befiltered = list(map(list, zip(*terms2befiltered )))[0]
-
-    set_class_attributes(options)
-    files2befiltered = options.files2befiltered
-    columns2befiltered = options.columns2befiltered
-    files_columns2befiltered = list(zip(files2befiltered,columns2befiltered))
-    loaded_files = CmdTabs.load_several_files(options.files2befiltered)
-
-    output_path = options.output_path
-
-    file_filteredfile = {}
-    for file_columns in files_columns2befiltered:
-        file = file_columns[0]
-        columns = file_columns[1]
-        table = loaded_files[file]
-        for column in columns:
-            if options.blacklist:
-              table = CmdTabs.filter_by_blacklist(table, terms2befiltered, column, options.not_exact_match)
-            else:
-              table = CmdTabs.filter_by_whitelist(table, terms2befiltered, column, options.not_exact_match)
-        file_filteredfile[file] = table
-
-    for file_path, filtered_table in file_filteredfile.items():
-        file_name = os.path.basename(file_path)
-        CmdTabs.write_output_data(filtered_table, output_path=os.path.join(output_path, options.prefix + file_name))
-
-    if options.metrics:
-        for file2befiltered in options.files2befiltered:
-            filtered_file = file_filteredfile.get(file2befiltered)
-            if filtered_file is None:
-                print(f"{file2befiltered}\tNot Filtered")
-            else:
-                ratio_lines_removed = round(100*(len(file_filteredfile[file2befiltered])/len(loaded_files[file2befiltered])),2)
-                print(f"{file2befiltered}\t{ratio_lines_removed}")
-
-def main_intersect_columns(options):
-    set_class_attributes(options)
-
-    input_data_a = CmdTabs.load_input_data(options.a_file, options.sep)
-    input_data_b = CmdTabs.load_input_data(options.b_file, options.sep)
-
-    a_records, full_a_rec = CmdTabs.load_records(input_data_a, options.a_cols, options.full)
-    b_records, full_b_rec = CmdTabs.load_records(input_data_b, options.b_cols, options.full)
-
-    common, a_only, b_only = CmdTabs.get_groups(a_records, b_records)
-
-    if options.count:
-      print("a: " + str(len(a_only)))
-      print("b: " + str(len(b_only)))
-      print("c: " + str(len(common)))
-    else:
-      # As the groups are list with nested list with only one element: [['str1'], ['str2']..] the full mode need to access to 0 element to be use as key in full_X_rec
-      if options.keep == 'c':
-        result = common
-        if options.full: result = [full_a_rec[r[0]] + full_b_rec[r[0]] for r in common]
-      elif options.keep == 'a':
-        result = a_only
-        if options.full: result = [full_a_rec[r[0]] for r in a_only]
-      elif options.keep == 'b':
-        result = b_only
-        if options.full: result = [full_b_rec[r[0]] for r in b_only]
-      elif options.keep == 'ab':
-        if options.full:
-          a_only = [full_a_rec[r[0]] for r in a_only]
-          b_only = [full_b_rec[r[0]] for r in b_only]
-        result = a_only + b_only
-      CmdTabs.write_output_data(result, None, options.sep)
-
-def main_merge_tabular(options):
-    set_class_attributes(options)
-    files = CmdTabs.load_files(options.files)
-    merged = CmdTabs.merge_files(files, options.fill_character)
-    CmdTabs.write_output_data(merged)
-
-def main_records_count(options):
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    counts = CmdTabs.records_count(input_table, options.col_index)
-    CmdTabs.write_output_data(counts)
-
-def main_standard_name_replacer(options):
-    input_index = CmdTabs.load_input_data(options.index_file)
-    translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
-
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file, options.input_separator)
-    tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, translation_index, options.remove_untranslated)
-    CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)
-
-def main_table_linker(options):
-    set_class_attributes(options)
-    input_linker = CmdTabs.load_input_data(options.linker_file)
-    indexed_linker = CmdTabs.index_array(input_linker, options.id_linker, options.columns2linker, options.header)
-    if CmdTabs.transposed:
-      input_table = CmdTabs.load_input_data(options.input_file, "\t")
-    else:
-      input_table = CmdTabs.load_input_data(options.input_file, "\t", 2)
-    linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep, options.header)
-    CmdTabs.write_output_data(linked_table, options.output_file)
-
-def main_tag_table(options):
-    tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    taged_table = CmdTabs.tag_file(input_table, tags, options.header)
-    CmdTabs.write_output_data(taged_table, None, options.sep)

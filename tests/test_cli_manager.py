@@ -262,7 +262,7 @@ def test_intersect_columns_transpose():
 	_, printed = script2test(args)
 	test_result = sort_table(strng2table(printed), sort_by=0, transposed=True)
 	CmdTabs.transposed = False
-	expected_result = sort_table(CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'transposed_intersect_columns_default')), sort_by=0, transposed=True)
+	expected_result = sort_table(CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'transposed_intersect_columns_default'), add_empty_fields=False), sort_by=0, transposed=True)
 	assert expected_result == test_result
 
 def test_table_linker(tmp_dir):
