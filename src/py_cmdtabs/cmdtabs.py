@@ -359,10 +359,10 @@ class CmdTabs:
 		sheets = x.sheetnames # list excel sheets by name
 		ws = x[sheets[sheet_number]] #select sheet by index (so, we select by sheet order)
 		sheet = []
-		for i in range(0, ws.max_row): # Convert sheet in nested list
+		
+		for xl_row in ws.iter_rows(min_row=1, min_col=1, max_col=ws.max_column, max_row=ws.max_row, values_only=True):
 			row = []
-			for col in ws.iter_cols(1, ws.max_column):
-				val = col[i].value
+			for val in xl_row:
 				if val == None: val = ''
 				row.append(val)
 			sheet.append(row)
