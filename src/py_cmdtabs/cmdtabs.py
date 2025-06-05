@@ -412,4 +412,21 @@ class CmdTabs:
 		subset_table = table[start_line:final_line]
 		if has_header: subset_table.insert(0, header)
 		return subset_table 
+	
+	def transform_to_latex(input_table, header, whole, name):
+		latex_table = []
+		if header: input_table[0] = [f'\\textbf{{{head_item}}}' for head_item in input_table[0]]
+	    
+		for idx, row in enumerate(input_table):
+			joined_row =  " & ".join(row) + " \\\\ \\hline"		
+			if idx == 0: joined_row = "\\hline \n" + joined_row
+			latex_table.append(joined_row)
 		
+		if whole: 
+			cols_type = "|"+ "|".join(['l'] * len(input_table[0])) + "|"
+			final_table = [[f'\\begin{{table}}[!htbp]\n\\centering\n\\caption{{}}\n\\begin{{tabular}}{{{cols_type}}}']]
+			final_table += latex_table
+			final_table += [f"\\end{{tabular}}\n\\label{{table:{name}}}\n\\end{{table}}"]
+		else:
+			final_table = latex_table
+		return final_table

@@ -30,6 +30,19 @@ def add_common_options(parser, flags_to_skip = [], help_replacer={}):
       parser.add_argument("--compressed_out", default=False, action="store_true", help=helps_dict["--compressed_out"])
 
 ##############################################
+def transform_to_latex(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+                     	  help="Indicate if files have header")
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    parser.add_argument("-w", "--whole", dest="whole", default=False, action='store_true',
+                        help="Indicate if you want the whole table and tabular environment to be returned with the table transformed")
+    opts = parser.parse_args(args)
+    main_transform_to_latex(opts)
+
 def transpose_table(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
