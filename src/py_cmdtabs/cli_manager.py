@@ -1,6 +1,7 @@
 import argparse
 import sys
 import os
+import codecs
 
 from py_cmdtabs.cmdtabs import CmdTabs
 from py_cmdtabs.main_modules import *
@@ -9,6 +10,7 @@ from py_cmdtabs.main_modules import *
 def based_0(string): return int(string) - 1
 def list_based_0(string): return CmdTabs.parse_column_indices(",", string)
 def list_str(values): return values.split(',')
+def unescaped_str(arg_str): return codecs.decode(str(arg_str), 'unicode_escape') 
 
 ## Common options
 def add_common_options(parser, flags_to_skip = [], help_replacer={}):
@@ -34,6 +36,8 @@ def transform_to_latex(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
     add_common_options(parser)
+    parser.add_argument("-s", "--separator", dest="separator", default="\t", type=unescaped_str,
+                        help="Input table column character separator")
     parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
                      	  help="Indicate if files have header")
     parser.add_argument("-o", "--output_file", dest="output_file", default=None, 

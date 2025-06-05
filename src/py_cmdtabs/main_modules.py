@@ -12,7 +12,7 @@ def set_class_attributes(options):
 ## MAIN MODULES
 def main_transform_to_latex(options):
     set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
+    input_table = CmdTabs.load_input_data(options.input_file, sep=options.separator)
     table_name = os.path.basename(options.input_file).split('.')[0] if options.input_file != '-' else 'tableX'
     latex_table = CmdTabs.transform_to_latex(input_table, options.header, options.whole, table_name)
     CmdTabs.write_output_data(latex_table, options.output_file, sep="")
