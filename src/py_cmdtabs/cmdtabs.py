@@ -117,7 +117,12 @@ class CmdTabs:
 	def parse_column_indices(sep, col_string):
 		cols = []
 		for col in col_string.split(sep):
-			cols.append(int(col) - 1)
+			if "-" in col: # Range of columns (both ends included)
+				start, end = col.split("-")
+				range_cols = [int(i) - 1 for i in range(int(start), int(end) + 1)]
+				cols.extend(range_cols)
+			else: # Single column
+				cols.append(int(col) - 1)
 		return cols
 
 	def load_and_parse_tags(tags, sep):
@@ -227,10 +232,9 @@ class CmdTabs:
 			if info_id:
 				if type(info_id) == list:
 					fields += info_id
-					linked_table.append(fields)
 				else:
 					fields.append(info_id)
-					linked_table.append(fields)
+				linked_table.append(fields)
 			else:
 				if not drop_line: linked_table.append(fields) 
 		return linked_table
