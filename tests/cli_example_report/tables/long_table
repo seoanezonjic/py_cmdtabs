@@ -1,0 +1,8 @@
+red1	HLC	genes	cl_num	1988
+red1	HLC	genes	cl_size_mean	10
+red2	CPM	genes	cl_num	2000
+red2	CPM	genes	cl_size_mean	15
+red3	HLC	phenotypes	cl_num	3000
+red3	HLC	phenotypes	cl_size_mean	20
+red4	CPM	phenotypes	cl_num	4000
+red4	CPM	phenotypes	cl_size_mean	25

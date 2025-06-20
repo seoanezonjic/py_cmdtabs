@@ -1,0 +1,5 @@
+red	metodo	tipo	cl_num	cl_size_mean
+red1	HLC	genes	1988	10
+red2	CPM	genes	2000	15
+red3	HLC	phenotypes	3000	20
+red4	CPM	phenotypes	4000	25

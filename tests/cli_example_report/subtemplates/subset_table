@@ -1,0 +1,14 @@
+<% 
+meth_name = getattr(lib, meth).__name__
+%>
+<p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
+<h4> Ejemplo básico </h4>
+<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
+y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
+header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
+<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
+<%
+	table_name = 'metrics_table'
+	args = f"-i tables/{table_name} -s 3 -l 4 -H"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}

@@ -1,0 +1,24 @@
+<% 
+meth_name = getattr(lib, meth).__name__
+%>
+<p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
+<h4> Ejemplo básico </h4>
+
+<p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
+<iframe src="./special_files/scRNAseq.htm" title="Single Cell excel" style="height:20vh;width:30vw;" ></iframe> 
+
+<%
+	table_name = 'scRNAseq.xlsx'
+	args = f"-i special_files/{table_name} -c 1,2,3 -s 1"
+%>
+
+<p> Vamos a sacar las 3 primeras columnas de la primera hoja del archivo ${f"special_files/{table_name}"} y convertirlo en formato plano tabular. 
+Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas a extraer y -s para la hoja a utilizar. <p>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+
+<h4> Sacando las dos primeras y dos últimas columnas de la segunda hoja </h4>
+<p> En este caso, sacamos las dos primeras y dos últimas columnas de la segunda hoja del mismo archivo </p>
+<%
+	args = f"-i special_files/{table_name} -c 1-2,4-5 -s 2"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}

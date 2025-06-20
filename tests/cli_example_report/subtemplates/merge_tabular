@@ -1,0 +1,19 @@
+<% 
+meth_name = getattr(lib, meth).__name__
+%>
+<p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
+<h4> Ejemplo básico </h4>
+<p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
+separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
+por defecto está a "-" </p>
+<p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+<%
+first_table = 'disease_cluster'
+second_table = 'disease_gene'
+third_table = 'mondo_to_orpha'
+second_table_tex = '<p><b>Segunda tabla</b></p>'
+third_table_tex = '<p><b>Tercera tabla</b></p>'
+args = f"tables/{first_table} tables/{second_table} tables/{third_table} --fill_character 'NA'"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=first_table, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                            supp_table=second_table, supp_table_text=second_table_tex, supp_table2=third_table, supp_table_text2=third_table_tex)}

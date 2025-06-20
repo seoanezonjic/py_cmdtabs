@@ -1,0 +1,86 @@
+<% 
+import py_cmdtabs
+%>
+
+<div style="width: 95%; padding:20px;">
+	<% plotter.set_header() %>
+	<ul>Pending Methods:</ul>
+	%for meth in ["column_filter","intersect_columns"]:
+		<li>${meth}</li>
+	%endfor
+	<h1> Operation with tables </h1>
+	<h3> Pautas generales </h3>	
+	${ plotter.create_title(f'Pautas generales', id=f'gen_from', hlevel=1, indexable=True, clickable=True, t_id=f'gen_to', clickable_text = '(Click me)') }
+	<% gen_cont = plotter.renderize_child_template(plotter.get_internal_template('general')) %>
+	${plotter.create_collapsable_container(f'gen_to', gen_cont, display="visible") }
+	
+	<h3> aggregate_column_data </h3>
+	${ plotter.create_title(f'aggregate_column_data', id=f'agg_from', hlevel=1, indexable=True, clickable=True, t_id=f'agg_to', clickable_text = '(Click me)') }
+	<% agg_cont = plotter.renderize_child_template(plotter.get_internal_template('aggregate_column_data'), lib=py_cmdtabs, meth="aggregate_column_data") %>
+	${plotter.create_collapsable_container(f'agg_to', agg_cont, display="visible") }
+
+	<h3> create_metric_table </h3>
+	${ plotter.create_title(f'create_metric_table', id=f'metr_from', hlevel=1, indexable=True, clickable=True, t_id=f'metr_to', clickable_text = '(Click me)') }
+	<% metr_cont = plotter.renderize_child_template(plotter.get_internal_template('create_metric_table'), lib=py_cmdtabs, meth="create_metric_table") %>
+	${plotter.create_collapsable_container(f'metr_to', metr_cont, display="visible") }
+
+	<h3> desaggregate_column_data </h3>
+	${ plotter.create_title(f'desaggregate_column_data', id=f'desagg_from', hlevel=1, indexable=True, clickable=True, t_id=f'desagg_to', clickable_text = '(Click me)') }
+	<% desagg_cont = plotter.renderize_child_template(plotter.get_internal_template('desaggregate_column_data'), lib=py_cmdtabs, meth="desaggregate_column_data") %>
+	${plotter.create_collapsable_container(f'desagg_to', desagg_cont, display="visible") }
+
+	<h3> excel_to_tabular </h3>
+	${ plotter.create_title(f'excel_to_tabular', id=f'excel_from', hlevel=1, indexable=True, clickable=True, t_id=f'excel_to', clickable_text = '(Click me)') }
+	<% excel_cont = plotter.renderize_child_template(plotter.get_internal_template('excel_to_tabular'), lib=py_cmdtabs, meth="excel_to_tabular") %>
+	${plotter.create_collapsable_container(f'excel_to', excel_cont, display="visible") }
+
+	<h3> filter_by_list </h3>
+	${ plotter.create_title(f'filter_by_list', id=f'filt_from', hlevel=1, indexable=True, clickable=True, t_id=f'filt_to', clickable_text = '(Click me)') }
+	<% filt_cont = plotter.renderize_child_template(plotter.get_internal_template('filter_by_list'), lib=py_cmdtabs, meth="filter_by_list") %>
+	${plotter.create_collapsable_container(f'filt_to', filt_cont, display="visible") }
+
+	<h3> intersect_columns </h3>
+	${ plotter.create_title(f'intersect_columns', id=f'inter_from', hlevel=1, indexable=True, clickable=True, t_id=f'inter_to', clickable_text = '(Click me)') }
+	<% inter_cont = plotter.renderize_child_template(plotter.get_internal_template('intersect_columns'), lib=py_cmdtabs, meth="intersect_columns") %>
+	${plotter.create_collapsable_container(f'inter_to', inter_cont, display="visible") }
+
+	<h3> merge_tabular </h3>
+	${ plotter.create_title(f'merge_tabular', id=f'merge_from', hlevel=1, indexable=True, clickable=True, t_id=f'merge_to', clickable_text = '(Click me)') }
+	<% merge_cont = plotter.renderize_child_template(plotter.get_internal_template('merge_tabular'), lib=py_cmdtabs, meth="merge_tabular") %>
+	${plotter.create_collapsable_container(f'merge_to', merge_cont, display="visible") }
+
+	<h3> records_count </h3>
+	${ plotter.create_title(f'records_count', id=f'recs_from', hlevel=1, indexable=True, clickable=True, t_id=f'recs_to', clickable_text = '(Click me)') }
+	<% recs_cont = plotter.renderize_child_template(plotter.get_internal_template('records_count'), lib=py_cmdtabs, meth="records_count") %>
+	${plotter.create_collapsable_container(f'recs_to', recs_cont, display="visible") }
+
+	<h3> standard_name_replacer </h3>
+	${ plotter.create_title(f'standard_name_replacer', id=f'repl_from', hlevel=1, indexable=True, clickable=True, t_id=f'repl_to', clickable_text = '(Click me)') }
+	<% repl_cont = plotter.renderize_child_template(plotter.get_internal_template('standard_name_replacer'), lib=py_cmdtabs, meth="standard_name_replacer") %>
+	${plotter.create_collapsable_container(f'repl_to', repl_cont, display="visible") }
+
+	<h3> subset_table </h3>
+	${ plotter.create_title(f'subset_table', id=f'subs_from', hlevel=1, indexable=True, clickable=True, t_id=f'subs_to', clickable_text = '(Click me)') }
+	<% subs_cont = plotter.renderize_child_template(plotter.get_internal_template('subset_table'), lib=py_cmdtabs, meth="subset_table") %>
+	${plotter.create_collapsable_container(f'subs_to', subs_cont, display="visible") }
+
+	<h3> table_linker </h3>
+	${ plotter.create_title(f'table_linker', id=f'link_from', hlevel=1, indexable=True, clickable=True, t_id=f'link_to', clickable_text = '(Click me)') }
+	<% link_cont = plotter.renderize_child_template(plotter.get_internal_template('table_linker'), lib=py_cmdtabs, meth="table_linker") %>
+	${plotter.create_collapsable_container(f'link_to', link_cont, display="visible") }
+
+	<h3> tag_table </h3>
+	${ plotter.create_title(f'tag_table', id=f'tag_from', hlevel=1, indexable=True, clickable=True, t_id=f'tag_to', clickable_text = '(Click me)') }
+	<% tag_cont = plotter.renderize_child_template(plotter.get_internal_template('tag_table'), lib=py_cmdtabs, meth="tag_table") %>
+	${plotter.create_collapsable_container(f'tag_to', tag_cont, display="visible") }
+
+	<h3> transform_to_latex </h3>
+	${ plotter.create_title(f'transform_to_latex', id=f'trnsf_from', hlevel=1, indexable=True, clickable=True, t_id=f'trnsf_to', clickable_text = '(Click me)') }
+	<% trnsf_cont = plotter.renderize_child_template(plotter.get_internal_template('transform_to_latex'), lib=py_cmdtabs, meth="transform_to_latex") %>
+	${plotter.create_collapsable_container(f'trnsf_to', trnsf_cont, display="visible") }
+
+	<h3> transpose_table </h3>
+	${ plotter.create_title(f'transpose_table', id=f'trnsp_from', hlevel=1, indexable=True, clickable=True, t_id=f'trnsp_to', clickable_text = '(Click me)') }
+	<% trnsp_cont = plotter.renderize_child_template(plotter.get_internal_template('transpose_table'), lib=py_cmdtabs, meth="transpose_table") %>
+	${plotter.create_collapsable_container(f'trnsp_to', trnsp_cont, display="visible") }
+</div>

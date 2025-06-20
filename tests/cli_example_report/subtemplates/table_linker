@@ -1,0 +1,41 @@
+<% 
+meth_name = getattr(lib, meth).__name__
+%>
+<p> Se utiliza para realizar un merge de dos tablas en base a una columna con identificadores compartidos.  </p>
+<h4> Ejemplo básico </h4>
+<p> Se utiliza como tabla base la que se da con el flag -i, y la que se va a mergear con el flag -l, la co. Esto sería equivalente a 
+un <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. Para obtener un 
+<a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>, tan solo tendríamos que alternar los flags que damos a 
+cada tabla (hacer un left join pero con la linker como input)</p>
+
+<p> Por defecto, se espera que el identificador en la tabla input esté en la primera columna, y todo el resto de columnas de esta 
+tabla se mantendrán. Con respecto a la tabla linker, podemos indicar la columna que contiene el identificador con el flag 
+--id_linker (por defecto a 0), y las columnas que queremos mantener en el merge, separadas por comas, con el 
+flag --columns2linker (por defecto a 1)</p>
+<p> Tambien tenemos el flag -s para indicar que separador queremos para la tabla resultante (por defecto tabulación)</p>
+<%
+table_name = 'disease_cluster'
+linker_table = 'disease_gene'
+linker_table_tex = '<p><b>Tabla a enlazar</b></p>'
+args = f"-i tables/{table_name} -l tables/{linker_table} -s \t"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                            supp_table=linker_table, supp_table_text=linker_table_tex)}
+
+<h4> Ejemplo utilizando los flags --id_linker y --columns2linker </h4>                                                                            
+<p> Utilizamos el flag --columns2linker para indicar que queremos las dos columnas de la tabla linker, no solo la primera. Usamos también
+el flag --id_linker para indicar qué columna contiene los identificadores para el merge en la tabla linker, aunque en este caso coincida
+con el valor por defecto</p>
+<%
+args = f"-i tables/{table_name} -l tables/{linker_table} --columns2linker 2,3 --id_linker 1"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                            supp_table=linker_table, supp_table_text=linker_table_tex)}
+
+<h4> Manteniendo solo registros comunes </h4>                                                                            
+<p> Para mantener solo los registros comunes a ambas tablas podemos usar el flag --drop. Esto sería equivalente a un <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a></p>
+<%
+args = f"-i tables/{table_name} -l tables/{linker_table} --columns2linker 2,3 --drop"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                            supp_table=linker_table, supp_table_text=linker_table_tex)}

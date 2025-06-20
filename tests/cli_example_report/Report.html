@@ -1,0 +1,2796 @@
+<HTML>
+	<title>Report</title>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="CACHE-CONTROL" CONTENT="NO-CACHE">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="en-us" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<style type="text/css">
+.py_accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+.active, .py_accordion:hover {
+  background-color: #ccc; 
+}
+
+#mynetwork {
+  width: 1000px;
+  height: 1000px;
+  background-color: #ffffff;
+  border: 1px solid lightgray;
+  position: relative;
+  float: left;
+}
+
+.resizable_img {  
+  width: 50vw; 
+  height: 50vh; 
+  overflow: hidden; 
+  resize: both; 
+  border: 1px solid black;
+}
+
+.resizable_img_regex {  
+  overflow: hidden; 
+  resize: both; 
+  border: 1px solid black;
+} 
+
+.fitting_img {
+  width: 100%;   
+  height: 100%;   
+  object-fit: contain;
+}
+
+#floating-menu {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+  z-index: 1000;
+  text-align: center;
+}
+
+#floating-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+#floating-menu li {
+  display: inline; 
+}
+#floating-menu li a {
+
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border: 1px solid grey; 
+  border-radius: 8px; 
+  margin: 4px; 
+}
+
+#floating-menu li a:visited {
+  color: black; /* Ensure visited links are also blue */
+}
+#floating-menu li a:hover {
+  box-shadow: 5px 5px 5px grey;
+
+  background-color: rgba(0, 0, 0, 0.1); 
+}
+
+#top_skip {
+    margin-top: 100px; 
+}
+
+details.rep_html_det {
+  display: block;
+}
+
+details.rep_html_det::before {
+  display: none;
+}
+
+details.rep_html_det summary {
+  display: none;
+}
+</style>
+
+<script src="data:application/javascript;base64,ZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigiRE9NQ29udGVudExvYWRlZCIsIGZ1bmN0aW9uKCkgewogIGNvbnN0IG1lbnVMaW5rcyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoJyNmbG9hdGluZy1tZW51IGEnKTsKICBjb25zdCBvZmZzZXQgPSA4MDsgLy8gQWRqdXN0IHRoaXMgdmFsdWUgdG8gbWF0Y2ggdGhlIGhlaWdodCBvZiB5b3VyIGZpeGVkIG1lbnUKCiAgbWVudUxpbmtzLmZvckVhY2gobGluayA9PiB7CiAgICAgIGxpbmsuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCBmdW5jdGlvbihldmVudCkgewogICAgICAgICAgZXZlbnQucHJldmVudERlZmF1bHQoKTsKICAgICAgICAgIGNvbnN0IHRhcmdldElkID0gdGhpcy5nZXRBdHRyaWJ1dGUoJ2hyZWYnKS5zdWJzdHJpbmcoMSk7CiAgICAgICAgICBjb25zdCB0YXJnZXRFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQodGFyZ2V0SWQpOwoKICAgICAgICAgIHdpbmRvdy5zY3JvbGxUbyh7CiAgICAgICAgICAgICAgdG9wOiB0YXJnZXRFbGVtZW50Lm9mZnNldFRvcCAtIG9mZnNldCwKICAgICAgICAgICAgICBiZWhhdmlvcjogJ3Ntb290aCcKICAgICAgICAgIH0pOwogICAgICB9KTsKICB9KTsKfSk7CgpmdW5jdGlvbiBoaWRlX3Nob3dfZWxlbWVudChlbGVtZW50X2lkKSB7CiAgdmFyIGRldGFpbHNFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoZWxlbWVudF9pZCk7CgogIGlmIChkZXRhaWxzRWxlbWVudC5oYXNBdHRyaWJ1dGUoIm9wZW4iKSkgewogICAgZGV0YWlsc0VsZW1lbnQucmVtb3ZlQXR0cmlidXRlKCJvcGVuIik7CiAgfSBlbHNlIHsKICAgIGRldGFpbHNFbGVtZW50LnNldEF0dHJpYnV0ZSgib3BlbiIsICIiKTsKICB9Cn0KCi8vIEFVVE9DT01QTEVURSBCT1ggQ09ERQpmdW5jdGlvbiBhdXRvY29tcGxldGUoaW5wLCBhcnIpIHsKICAgIC8qdGhlIGF1dG9jb21wbGV0ZSBmdW5jdGlvbiB0YWtlcyB0d28gYXJndW1lbnRzLAogICAgdGhlIHRleHQgZmllbGQgZWxlbWVudCBhbmQgYW4gYXJyYXkgb2YgcG9zc2libGUgYXV0b2NvbXBsZXRlZCB2YWx1ZXM6Ki8KICAgIHZhciBjdXJyZW50Rm9jdXM7CiAgICAvKmV4ZWN1dGUgYSBmdW5jdGlvbiB3aGVuIHNvbWVvbmUgd3JpdGVzIGluIHRoZSB0ZXh0IGZpZWxkOiovCiAgICBpbnAuYWRkRXZlbnRMaXN0ZW5lcigiaW5wdXQiLCBmdW5jdGlvbihlKSB7CiAgICAgICAgdmFyIGEsIGIsIGksIHZhbCA9IHRoaXMudmFsdWU7CiAgICAgICAgLypjbG9zZSBhbnkgYWxyZWFkeSBvcGVuIGxpc3RzIG9mIGF1dG9jb21wbGV0ZWQgdmFsdWVzKi8KICAgICAgICBjbG9zZUFsbExpc3RzKCk7CiAgICAgICAgaWYgKCF2YWwpIHsgcmV0dXJuIGZhbHNlO30KICAgICAgICBjdXJyZW50Rm9jdXMgPSAtMTsKICAgICAgICAvKmNyZWF0ZSBhIERJViBlbGVtZW50IHRoYXQgd2lsbCBjb250YWluIHRoZSBpdGVtcyAodmFsdWVzKToqLwogICAgICAgIGEgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCJESVYiKTsKICAgICAgICBhLnNldEF0dHJpYnV0ZSgiaWQiLCB0aGlzLmlkICsgImF1dG9jb21wbGV0ZS1saXN0Iik7CiAgICAgICAgYS5zZXRBdHRyaWJ1dGUoImNsYXNzIiwgImF1dG9jb21wbGV0ZS1pdGVtcyIpOwogICAgICAgIC8qYXBwZW5kIHRoZSBESVYgZWxlbWVudCBhcyBhIGNoaWxkIG9mIHRoZSBhdXRvY29tcGxldGUgY29udGFpbmVyOiovCiAgICAgICAgdGhpcy5wYXJlbnROb2RlLmFwcGVuZENoaWxkKGEpOwogICAgICAgIC8qZm9yIGVhY2ggaXRlbSBpbiB0aGUgYXJyYXkuLi4qLwogICAgICAgIGZvciAoaSA9IDA7IGkgPCBhcnIubGVuZ3RoOyBpKyspIHsKICAgICAgICAgIC8qY2hlY2sgaWYgdGhlIGl0ZW0gc3RhcnRzIHdpdGggdGhlIHNhbWUgbGV0dGVycyBhcyB0aGUgdGV4dCBmaWVsZCB2YWx1ZToqLwogICAgICAgICAgaWYgKGFycltpXS5zdWJzdHIoMCwgdmFsLmxlbmd0aCkudG9VcHBlckNhc2UoKSA9PSB2YWwudG9VcHBlckNhc2UoKSkgewogICAgICAgICAgICAvKmNyZWF0ZSBhIERJViBlbGVtZW50IGZvciBlYWNoIG1hdGNoaW5nIGVsZW1lbnQ6Ki8KICAgICAgICAgICAgYiA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoIkRJViIpOwogICAgICAgICAgICAvKm1ha2UgdGhlIG1hdGNoaW5nIGxldHRlcnMgYm9sZDoqLwogICAgICAgICAgICBiLmlubmVySFRNTCA9ICI8c3Ryb25nPiIgKyBhcnJbaV0uc3Vic3RyKDAsIHZhbC5sZW5ndGgpICsgIjwvc3Ryb25nPiI7CiAgICAgICAgICAgIGIuaW5uZXJIVE1MICs9IGFycltpXS5zdWJzdHIodmFsLmxlbmd0aCk7CiAgICAgICAgICAgIC8qaW5zZXJ0IGEgaW5wdXQgZmllbGQgdGhhdCB3aWxsIGhvbGQgdGhlIGN1cnJlbnQgYXJyYXkgaXRlbSdzIHZhbHVlOiovCiAgICAgICAgICAgIGIuaW5uZXJIVE1MICs9ICI8aW5wdXQgdHlwZT0naGlkZGVuJyB2YWx1ZT0nIiArIGFycltpXSArICInPiI7CiAgICAgICAgICAgIC8qZXhlY3V0ZSBhIGZ1bmN0aW9uIHdoZW4gc29tZW9uZSBjbGlja3Mgb24gdGhlIGl0ZW0gdmFsdWUgKERJViBlbGVtZW50KToqLwogICAgICAgICAgICAgICAgYi5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsIGZ1bmN0aW9uKGUpIHsKICAgICAgICAgICAgICAgIC8qaW5zZXJ0IHRoZSB2YWx1ZSBmb3IgdGhlIGF1dG9jb21wbGV0ZSB0ZXh0IGZpZWxkOiovCiAgICAgICAgICAgICAgICBpbnAudmFsdWUgPSB0aGlzLmdldEVsZW1lbnRzQnlUYWdOYW1lKCJpbnB1dCIpWzBdLnZhbHVlOwogICAgICAgICAgICAgICAgLypjbG9zZSB0aGUgbGlzdCBvZiBhdXRvY29tcGxldGVkIHZhbHVlcywKICAgICAgICAgICAgICAgIChvciBhbnkgb3RoZXIgb3BlbiBsaXN0cyBvZiBhdXRvY29tcGxldGVkIHZhbHVlczoqLwogICAgICAgICAgICAgICAgY2xvc2VBbGxMaXN0cygpOwogICAgICAgICAgICB9KTsKICAgICAgICAgICAgYS5hcHBlbmRDaGlsZChiKTsKICAgICAgICAgIH0KICAgICAgICB9CiAgICB9KTsKICAgIC8qZXhlY3V0ZSBhIGZ1bmN0aW9uIHByZXNzZXMgYSBrZXkgb24gdGhlIGtleWJvYXJkOiovCiAgICBpbnAuYWRkRXZlbnRMaXN0ZW5lcigia2V5ZG93biIsIGZ1bmN0aW9uKGUpIHsKICAgICAgICB2YXIgeCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKHRoaXMuaWQgKyAiYXV0b2NvbXBsZXRlLWxpc3QiKTsKICAgICAgICBpZiAoeCkgeCA9IHguZ2V0RWxlbWVudHNCeVRhZ05hbWUoImRpdiIpOwogICAgICAgIGlmIChlLmtleUNvZGUgPT0gNDApIHsKICAgICAgICAgIC8qSWYgdGhlIGFycm93IERPV04ga2V5IGlzIHByZXNzZWQsCiAgICAgICAgICBpbmNyZWFzZSB0aGUgY3VycmVudEZvY3VzIHZhcmlhYmxlOiovCiAgICAgICAgICBjdXJyZW50Rm9jdXMrKzsKICAgICAgICAgIC8qYW5kIGFuZCBtYWtlIHRoZSBjdXJyZW50IGl0ZW0gbW9yZSB2aXNpYmxlOiovCiAgICAgICAgICBhZGRBY3RpdmUoeCk7CiAgICAgICAgfSBlbHNlIGlmIChlLmtleUNvZGUgPT0gMzgpIHsgLy91cAogICAgICAgICAgLypJZiB0aGUgYXJyb3cgVVAga2V5IGlzIHByZXNzZWQsCiAgICAgICAgICBkZWNyZWFzZSB0aGUgY3VycmVudEZvY3VzIHZhcmlhYmxlOiovCiAgICAgICAgICBjdXJyZW50Rm9jdXMtLTsKICAgICAgICAgIC8qYW5kIGFuZCBtYWtlIHRoZSBjdXJyZW50IGl0ZW0gbW9yZSB2aXNpYmxlOiovCiAgICAgICAgICBhZGRBY3RpdmUoeCk7CiAgICAgICAgfSBlbHNlIGlmIChlLmtleUNvZGUgPT0gMTMpIHsKICAgICAgICAgIC8qSWYgdGhlIEVOVEVSIGtleSBpcyBwcmVzc2VkLCBwcmV2ZW50IHRoZSBmb3JtIGZyb20gYmVpbmcgc3VibWl0dGVkLCovCiAgICAgICAgICBlLnByZXZlbnREZWZhdWx0KCk7CiAgICAgICAgICBpZiAoY3VycmVudEZvY3VzID4gLTEpIHsKICAgICAgICAgICAgLyphbmQgc2ltdWxhdGUgYSBjbGljayBvbiB0aGUgImFjdGl2ZSIgaXRlbToqLwogICAgICAgICAgICBpZiAoeCkgeFtjdXJyZW50Rm9jdXNdLmNsaWNrKCk7CiAgICAgICAgICB9CiAgICAgICAgfQogICAgfSk7CiAgICBmdW5jdGlvbiBhZGRBY3RpdmUoeCkgewogICAgICAvKmEgZnVuY3Rpb24gdG8gY2xhc3NpZnkgYW4gaXRlbSBhcyAiYWN0aXZlIjoqLwogICAgICBpZiAoIXgpIHJldHVybiBmYWxzZTsKICAgICAgLypzdGFydCBieSByZW1vdmluZyB0aGUgImFjdGl2ZSIgY2xhc3Mgb24gYWxsIGl0ZW1zOiovCiAgICAgIHJlbW92ZUFjdGl2ZSh4KTsKICAgICAgaWYgKGN1cnJlbnRGb2N1cyA+PSB4Lmxlbmd0aCkgY3VycmVudEZvY3VzID0gMDsKICAgICAgaWYgKGN1cnJlbnRGb2N1cyA8IDApIGN1cnJlbnRGb2N1cyA9ICh4Lmxlbmd0aCAtIDEpOwogICAgICAvKmFkZCBjbGFzcyAiYXV0b2NvbXBsZXRlLWFjdGl2ZSI6Ki8KICAgICAgeFtjdXJyZW50Rm9jdXNdLmNsYXNzTGlzdC5hZGQoImF1dG9jb21wbGV0ZS1hY3RpdmUiKTsKICAgIH0KICAgIGZ1bmN0aW9uIHJlbW92ZUFjdGl2ZSh4KSB7CiAgICAgIC8qYSBmdW5jdGlvbiB0byByZW1vdmUgdGhlICJhY3RpdmUiIGNsYXNzIGZyb20gYWxsIGF1dG9jb21wbGV0ZSBpdGVtczoqLwogICAgICBmb3IgKHZhciBpID0gMDsgaSA8IHgubGVuZ3RoOyBpKyspIHsKICAgICAgICB4W2ldLmNsYXNzTGlzdC5yZW1vdmUoImF1dG9jb21wbGV0ZS1hY3RpdmUiKTsKICAgICAgfQogICAgfQogICAgZnVuY3Rpb24gY2xvc2VBbGxMaXN0cyhlbG1udCkgewogICAgICAvKmNsb3NlIGFsbCBhdXRvY29tcGxldGUgbGlzdHMgaW4gdGhlIGRvY3VtZW50LAogICAgICBleGNlcHQgdGhlIG9uZSBwYXNzZWQgYXMgYW4gYXJndW1lbnQ6Ki8KICAgICAgdmFyIHggPSBkb2N1bWVudC5nZXRFbGVtZW50c0J5Q2xhc3NOYW1lKCJhdXRvY29tcGxldGUtaXRlbXMiKTsKICAgICAgZm9yICh2YXIgaSA9IDA7IGkgPCB4Lmxlbmd0aDsgaSsrKSB7CiAgICAgICAgaWYgKGVsbW50ICE9IHhbaV0gJiYgZWxtbnQgIT0gaW5wKSB7CiAgICAgICAgeFtpXS5wYXJlbnROb2RlLnJlbW92ZUNoaWxkKHhbaV0pOwogICAgICB9CiAgICB9CiAgfQogIC8qZXhlY3V0ZSBhIGZ1bmN0aW9uIHdoZW4gc29tZW9uZSBjbGlja3MgaW4gdGhlIGRvY3VtZW50OiovCiAgZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLCBmdW5jdGlvbiAoZSkgewogICAgICBjbG9zZUFsbExpc3RzKGUudGFyZ2V0KTsKICB9KTsKfQ==" type="application/javascript"></script>
+
+<script>
+
+</script>
+</head>
+<body>
+<h1>Table of contents</h1>
+<div  >
+<ul>
+<li><a href=#gen_from>Pautas generales</a></li>
+<li><a href=#agg_from>aggregate_column_data</a></li>
+<li><a href=#metr_from>create_metric_table</a></li>
+<li><a href=#desagg_from>desaggregate_column_data</a></li>
+<li><a href=#excel_from>excel_to_tabular</a></li>
+<li><a href=#filt_from>filter_by_list</a></li>
+<li><a href=#inter_from>intersect_columns</a></li>
+<li><a href=#merge_from>merge_tabular</a></li>
+<li><a href=#recs_from>records_count</a></li>
+<li><a href=#repl_from>standard_name_replacer</a></li>
+<li><a href=#subs_from>subset_table</a></li>
+<li><a href=#link_from>table_linker</a></li>
+<li><a href=#tag_from>tag_table</a></li>
+<li><a href=#trnsf_from>transform_to_latex</a></li>
+<li><a href=#trnsp_from>transpose_table</a></li>
+</ul>
+</div>
+
+
+
+<div style="width: 95%; padding:20px;">
+	
+	<ul>Pending Methods:</ul>
+		<li>column_filter</li>
+		<li>intersect_columns</li>
+	<h1> Operation with tables </h1>
+	<h3> Pautas generales </h3>	
+	<h1 id="gen_from" class="py_accordion" onclick="hide_show_element('gen_to')">Pautas generales (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="gen_to">
+<summary style="display: none;"></summary><p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
+<p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
+pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
+pero también se pueden cargar comprimidas en gzip utilizando el flag '--compressed_in'. Por ejemplo:</p>
+
+<p><code>
+	desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in -o desaggregated.txt
+</p></code>
+
+<p> Además, para aquellos comandos que solo necesiten una tabla de entrada (como 'aggregate_column_data', 'desaggregate_column_data' o 'transpose_table',
+pero no 'intersect_columns'), se puede utilizar un guión '-' con el flag de input para indicar que el contenido de la tabla proviene por stdout (por ejemplo fruto de un pipe de un
+comando anterior), pudiendo venir también comprimido. Por ejemplo: </p>
+
+<p><code>
+	cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in
+</p></code>
+
+<p> En los scripts que devuelvan algún tipo de output (generalmente con el flag -o), de manera similar, también se puede utilizar el flag --compressed_out 
+para que el resultado se devuelva comprimido en gzip. Además, si no se indica un flag de output (omitiendo '-o archivo_salida') y el script solo devuelve una tabla,
+el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que puede aprovecharse para pipear en otro script.  Por ejemplo:</p>
+
+<p><code>
+	desaggregate_column_data -i patients_and_phens.txt -x 2 --compressed_out | script_que_utiliza_datos_comprimidos
+</p></code>
+
+<p>Se pueden usar ambos flags a la vez, de manera que se pueda recibir una tabla comprimida y devolverla también comprimida. Por ejemplo:</p>
+<p><code>
+    desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in --compressed_out -o desaggregated.gz
+</p></code>
+
+<p>O utilizando pipes: </p>
+<p><code>
+    cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
+</p></code>
+
+<p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
+tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
+</details>
+	
+	<h3> aggregate_column_data </h3>
+	<h1 id="agg_from" class="py_accordion" onclick="hide_show_element('agg_to')">aggregate_column_data (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="agg_to">
+<summary style="display: none;"></summary>
+
+<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
+
+<h4> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h4>
+<p> En este caso, se agregan los valores de la segunda columna en función de los valores de la primera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos usar de referencia (en base 1) y el flag -a la columna que queremos agregar (base 1). Además, con el flag -s podemos escoger el separador que se utilice para la agregación.</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_0" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -s , -a 2
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_1" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1,2 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3,4 </td>
+    </tr>
+</table>
+
+
+
+<h4> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores </h4>
+<p> En este caso, se agregan los valores de la segunda y tercera columnas en función de la primera columna.</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_2" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -s , -a 2,3
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_3" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1,2 </td>
+                    <td  >20,30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3,4 </td>
+                    <td  >100,110 </td>
+    </tr>
+</table>
+
+
+
+<h4> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores, y otra función de agregación </h4>
+<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_4" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2,3 -A mean
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_5" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1.5 </td>
+                    <td  >25.0 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3.5 </td>
+                    <td  >105.0 </td>
+    </tr>
+</table>
+
+
+
+<h4> Teniendo 2 columnas como referencia </h4>
+<p> Si se tuvieran dos columnas como referencia y no queremos agregarla, pero que tampoco se pierda, se puede utilizar el flag -x para pasar más de una columna 
+como referencia (además de más de una columna como agregación). Además del método de agregación deseado.
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_6" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >A </td>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >A </td>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >B </td>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >B </td>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	aggregate_column_data -i tables/cluster_genes_dis_desagg_4cols -x 1,2 -a 3,4
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_7" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >A </td>
+                    <td  >as </td>
+                    <td  >1,2 </td>
+                    <td  >20,30 </td>
+    </tr>
+   <tr>
+                    <td  >B </td>
+                    <td  >zz </td>
+                    <td  >3,4 </td>
+                    <td  >100,110 </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> create_metric_table </h3>
+	<h1 id="metr_from" class="py_accordion" onclick="hide_show_element('metr_to')">create_metric_table (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="metr_to">
+<summary style="display: none;"></summary>
+<p> Pasa una tabla del formato long al formato wide </p>
+
+<p> En ocasiones, al trabajar con flujos como el de autoflow, lanzamos tareas paralelizadas con distintas conmbinaciones de trabajo, por ejemplo:
+red (ORPHA y MONDO) y tipo de clustering (CPM y HLC) y volcamos distintas métricas en un archivo común, del estilo: </p>
+<table class="table table-striped">
+<tr><td>ORPHA</td><td>CPM</td><td>N_CLUSTERS</td><td>500</td></tr>
+<tr><td>ORPHA</td><td>CPM</td><td>CLUSTER_SIZE</td><td>10</td></tr>
+<tr><td>ORPHA</td><td>HLC</td><td>N_CLUSTERS</td><td>600</td></tr>
+<tr><td>ORPHA</td><td>HLC</td><td>CLUSTER_SIZE</td><td>12</td></tr>
+<tr><td>MONDO</td><td>CPM</td><td>N_CLUSTERS</td><td>550</td></tr>
+<tr><td>MONDO</td><td>CPM</td><td>CLUSTER_SIZE</td><td>11</td></tr>
+<tr><td>MONDO</td><td>HLC</td><td>N_CLUSTERS</td><td>650</td></tr>
+<tr><td>MONDO</td><td>HLC</td><td>CLUSTER_SIZE</td><td>13</td></tr>
+</table>
+<p>En lo que vemos que las dos primeras columnas son factores (red y tipo de clustering), la tercera es la métrica medida y la cuarta es el valor
+que toma la misma. Que es lo que se llamaría el formato "long" de una tabla <a href="https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/">(ejemplo de casos long y wide)</a>
+Sin embargo, para poder utilizar algunos métodos de graficado de CanvasXpress o para ver la tabla de métricas de una forma más sencilla,
+necesitamos transformar esta tabla a un formato "wide". Es en este caso cuando se utiliza el método <code>create_metric_table</code>.</p>
+
+<h4> Ejemplo básico </h4>
+<p>Este método es un tanto especial en cuanto a la mayoría de sus parámetros son posicionales. Por orden, los argumentos son: </p>
+<ol>
+    <li> tabla de entrada </li>
+    <li>nombres para las columnas de los factores en la tabla de salida (separados por comas)</li>
+    <li>nombre para la tabla de salida</li>
+</ol>
+<p>Siendo los tres obligatorios. </p>
+<p>Imaginando que tenemos una tabla de entrada con las columnas que representan "nombre de la red, tipo de clustering, tipo de red, métrica, valor" , 
+el comando sería algo como:</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_8" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >2000 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >15 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >3000 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >4000 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >25 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	create_metric_table tables/long_table red,metodo,tipo outputs/wide_table
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+
+
+<table id="table_9" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red </td>
+                    <td  >metodo </td>
+                    <td  >tipo </td>
+                    <td  >cl_num </td>
+                    <td  >cl_size_mean </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >1988 </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >2000 </td>
+                    <td  >15 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >3000 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >4000 </td>
+                    <td  >25 </td>
+    </tr>
+</table>
+
+<h4> Definir otra tabla para volcar los registros corruptos </h4>
+<p>Opcionalmente, se puede pasar un flag -c para devolver otra tabla con los valores corruptos, es decir, aquellos que no se han podido transformar 
+a formato wide porque falta algún valor de los factores. </p>
+</details>
+
+	<h3> desaggregate_column_data </h3>
+	<h1 id="desagg_from" class="py_accordion" onclick="hide_show_element('desagg_to')">desaggregate_column_data (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="desagg_to">
+<summary style="display: none;"></summary>
+
+<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
+
+<h4> Ejemplo básico con una tabla con tres columnas, donde hay dos sin agregar y otra agregada. </h4>
+<p> En este caso, se desagregan los valores de la tercera columna, amoldando el resto de columnas según la cantidad de valores en cada fila de la tercera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos desagregar (en base 1). Con el flag -s indicamos el separador que se ha utilizado en esa columna agregada.</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_10" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >483_ref,1039_ref,1071_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21143 </td>
+                    <td  >mRNA </td>
+                    <td  >211_ref,4705_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21457 </td>
+                    <td  >tRNA </td>
+                    <td  >305_ref,304_ref </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	desaggregate_column_data -i tables/cluster_genes_dis_agg -x 3 -s ,
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_11" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >483_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >1039_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >1071_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21143 </td>
+                    <td  >mRNA </td>
+                    <td  >211_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21143 </td>
+                    <td  >mRNA </td>
+                    <td  >4705_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21457 </td>
+                    <td  >tRNA </td>
+                    <td  >305_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21457 </td>
+                    <td  >tRNA </td>
+                    <td  >304_ref </td>
+    </tr>
+</table>
+
+
+
+<h4> Ejemplo básico con una tabla con cuatro columnas, donde hay dos sin agregar y dos agregada. </h4>
+<p> Si existe más de una columna agregada, se puede indicar con el flag -x, separándolas por comas. Se asume que todos las columnas agregadas van a tener la misma cantidad de elementos para una determinada fila (ejemplo 1 columna con pat1,pat2,pat y otra con male,male,female).</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_12" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >SNP1,SNP3,SNP4 </td>
+                    <td  >483_ref,1039_ref,1071_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21143 </td>
+                    <td  >mRNA </td>
+                    <td  >SNP5,SNP6 </td>
+                    <td  >211_ref,4705_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21457 </td>
+                    <td  >tRNA </td>
+                    <td  >SNP12,SNP13 </td>
+                    <td  >305_ref,304_ref </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	desaggregate_column_data -i tables/cluster_genes_dis_agg2 -x 3,4 -s ,
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_13" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >SNP1 </td>
+                    <td  >483_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >SNP3 </td>
+                    <td  >1039_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >SNP4 </td>
+                    <td  >1071_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21143 </td>
+                    <td  >mRNA </td>
+                    <td  >SNP5 </td>
+                    <td  >211_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21143 </td>
+                    <td  >mRNA </td>
+                    <td  >SNP6 </td>
+                    <td  >4705_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21457 </td>
+                    <td  >tRNA </td>
+                    <td  >SNP12 </td>
+                    <td  >305_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21457 </td>
+                    <td  >tRNA </td>
+                    <td  >SNP13 </td>
+                    <td  >304_ref </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> excel_to_tabular </h3>
+	<h1 id="excel_from" class="py_accordion" onclick="hide_show_element('excel_to')">excel_to_tabular (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="excel_to">
+<summary style="display: none;"></summary>
+<p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
+<h4> Ejemplo básico </h4>
+
+<p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
+<iframe src="./special_files/scRNAseq.htm" title="Single Cell excel" style="height:20vh;width:30vw;" ></iframe> 
+
+
+
+<p> Vamos a sacar las 3 primeras columnas de la primera hoja del archivo special_files/scRNAseq.xlsx y convertirlo en formato plano tabular. 
+Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas a extraer y -s para la hoja a utilizar. <p>
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	excel_to_tabular -i special_files/scRNAseq.xlsx -c 1,2,3 -s 1
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_14" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >genes </td>
+                    <td  >cell1 </td>
+                    <td  >cell2 </td>
+    </tr>
+   <tr>
+                    <td  >gene1 </td>
+                    <td  >3 </td>
+                    <td  >0 </td>
+    </tr>
+   <tr>
+                    <td  >gene2 </td>
+                    <td  >0 </td>
+                    <td  >4 </td>
+    </tr>
+   <tr>
+                    <td  >gene3 </td>
+                    <td  >0 </td>
+                    <td  >0 </td>
+    </tr>
+   <tr>
+                    <td  >gene25000 </td>
+                    <td  >0 </td>
+                    <td  >3 </td>
+    </tr>
+</table>
+
+
+<h4> Sacando las dos primeras y dos últimas columnas de la segunda hoja </h4>
+<p> En este caso, sacamos las dos primeras y dos últimas columnas de la segunda hoja del mismo archivo </p>
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	excel_to_tabular -i special_files/scRNAseq.xlsx -c 1-2,4-5 -s 2
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_15" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >genes </td>
+                    <td  >cell5 </td>
+                    <td  >cell7 </td>
+                    <td  >cell15000 </td>
+    </tr>
+   <tr>
+                    <td  >gene5 </td>
+                    <td  >36 </td>
+                    <td  >3 </td>
+                    <td  >54 </td>
+    </tr>
+   <tr>
+                    <td  >gene6 </td>
+                    <td  >0 </td>
+                    <td  >67 </td>
+                    <td  >5 </td>
+    </tr>
+   <tr>
+                    <td  >gene8 </td>
+                    <td  >50 </td>
+                    <td  >3 </td>
+                    <td  >9 </td>
+    </tr>
+   <tr>
+                    <td  >gene25000 </td>
+                    <td  >6 </td>
+                    <td  >87 </td>
+                    <td  >8 </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> filter_by_list </h3>
+	<h1 id="filt_from" class="py_accordion" onclick="hide_show_element('filt_to')">filter_by_list (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="filt_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza para filtrar las filas que nos interesan de una o más tablas en función a una serie de valores que se pasan  </p>
+<h4> Ejemplo básico </h4>
+<p> Tenemos nuestra tabla con la primera columna teniendo el identificador de una red (la que nos interesa para poder filtrar), y las otras columnas 
+siendo factores y metrica-valor. Tenemos otro archivo en el que tenemos los identificadores de las redes que queremos filtrar (red1 y red3). </p>
+
+<p> Pasamos la tabla de interés tabla como input al flag -i y la columna en la que están los valores que filtrarán las filas con el flag -c.  El archivo de una columna 
+con los IDs de redes que queremos filtrar se pasan al flag -t. Pasamos el path a la carpeta (si, a una carpeta, ya que el flag de input -f puede aceptar más de una tabla, 
+separada por comas, para ser filtrada) en el que queremos que se escriba la/s tabla/s filtrada/s con el flag -o y podemos
+añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este caso usamos "filtered_" en este caso) con el flag --prefix</p>  
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_16" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >2000 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >15 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >3000 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >4000 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >25 </td>
+    </tr>
+</table>
+
+    <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
+    <table id="table_17" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red1 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+    </tr>
+</table>
+
+
+<p><code>
+	filter_by_list -f tables/long_table -c 1 -t tables/nets_to_filter --prefix filtered_ -o outputs
+</p></code>
+
+<p> <b>Output</b> </p>
+
+<table id="table_18" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >3000 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >20 </td>
+    </tr>
+</table>
+
+<h4> Usar un match complementario (usar los términos como blacklist en vez de whitelist) </h4>
+<p> Si en vez de querer quedarnos con todas las filas que tengan los términos de la tabla que pasamos con el flag -t, queremos quedarnos con todas las filas que no tengan esos términos,
+podemos activar el flag booleano --blacklist. </p>
+
+<p> Repitiendo el mismo ejemplo anterior, pero activando ese flag, tenemos: </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_19" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >HLC </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >2000 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >15 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >3000 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+                    <td  >HLC </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >4000 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >25 </td>
+    </tr>
+</table>
+
+    <p><b>Archivo de 1 columna con los registros que queremos omitir</b></p>
+    <table id="table_20" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red1 </td>
+    </tr>
+   <tr>
+                    <td  >red3 </td>
+    </tr>
+</table>
+
+
+<p><code>
+	filter_by_list -f tables/long_table -c 1 -t tables/nets_to_filter --prefix blackfiltered_ -o outputs --blacklist
+</p></code>
+
+<p> <b>Output</b> </p>
+
+<table id="table_21" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_num </td>
+                    <td  >2000 </td>
+    </tr>
+   <tr>
+                    <td  >red2 </td>
+                    <td  >CPM </td>
+                    <td  >genes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >15 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_num </td>
+                    <td  >4000 </td>
+    </tr>
+   <tr>
+                    <td  >red4 </td>
+                    <td  >CPM </td>
+                    <td  >phenotypes </td>
+                    <td  >cl_size_mean </td>
+                    <td  >25 </td>
+    </tr>
+</table>
+
+<h4> Match parcial (vale tanto para whitelist como para blacklist) </h4>
+<p> Si en vez de querer filtrar los elementos de la tabla por un match exacto, queremos que sea por un match parcial, podemos activar el flag booleano --not_exact_match</p>
+
+<p> En la tabla siguiente, vamos a quedarnos con todos los clústeres de referencia y descartar los random, indicando que los valores que queremos filtrar en nuestra tabla de entrada
+dada con el flag -i están en la segunda columna (-c 2) y el archivo que pasamos para filtrar con el flag -t solo tiene el valor 'ref', que será usado para hacer un match parcial al
+haber usado el flag --not_exact_match</p>  
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_22" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+    <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
+    <table id="table_23" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >ref </td>
+    </tr>
+</table>
+
+
+<p><code>
+	filter_by_list -f tables/disease_cluster_ref_rnd -c 2 -t tables/clusts_to_filter --prefix ref_filtered_ -o outputs --not_exact_match
+</p></code>
+
+<p> <b>Output</b> </p>
+
+<table id="table_24" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+</table>
+
+<h4> Filtrar múltiples tablas </h4>
+
+<p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
+Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar el flag --prefix para que no se escriban con el mismo nombre y nos reemplacen las tablas de entrada. </p>
+<p> Por lo tanto, podemos filtrar varias tablas a la vez utilizando el mismo archivo de filtrado. Esto es util si tenemos distintos archivos de métricas con los mismos identificadores y queremos filtrar todos ellos por los mismos términos. </p>
+</details>
+
+	<h3> intersect_columns </h3>
+	<h1 id="inter_from" class="py_accordion" onclick="hide_show_element('inter_to')">intersect_columns (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="inter_to">
+<summary style="display: none;"></summary>
+<p> Un script muy versatil en torno a la unión de dos tablas</p>
+
+<h4> Ejemplo básico </h4>
+<p> El caso más básico será obtener los registros comunes de dos columnas de dos tablas distintas. Para este caso (además de todos los siguientes) el funcionamiento es simple:
+tenemos los flag -a y -b para indicar las dos tablas de interés, y los flags -A y -B para indicar las columnas de interés en las respectivas tablas. El flag -s nos servirá para 
+indicar el separador (tabulador por defecto). Por defecto se obtienen los identificadores que estén en las dos tablas (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), que es el valor por defecto del flag --keep, 
+aunque luego veremos otros casos de uso</p>
+<p> Vamos a ver un ejemplo con dos tablas , ambas con una columna que tienen identificadores de enfermedad de MONDO, para encontrar los registros comunes entre ambas tablas.</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_25" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla B</b></p>
+    <table id="table_26" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_27" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+    </tr>
+</table>
+
+
+
+<h4> Obtener el resto de columnas para los registros comunes encontrados </h4>
+<p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
+usar el flag -full</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_28" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla B</b></p>
+    <table id="table_29" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t --keep c --full
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_30" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+ 
+
+
+<h4> Obtener registros específicos de tabla </h4>
+<p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
+Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
+ y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
+
+<p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
+Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
+con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full.</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_31" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla B</b></p>
+    <table id="table_32" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep a
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_33" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0007172 </td>
+    </tr>
+</table>
+
+
+<p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
+específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
+los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_34" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla B</b></p>
+    <table id="table_35" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep ab --full
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_36" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+                                                                            
+
+</details>
+
+	<h3> merge_tabular </h3>
+	<h1 id="merge_from" class="py_accordion" onclick="hide_show_element('merge_to')">merge_tabular (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="merge_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
+<h4> Ejemplo básico </h4>
+<p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
+separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
+por defecto está a "-" </p>
+<p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_37" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Segunda tabla</b></p>
+    <table id="table_38" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+    <p><b>Tercera tabla</b></p>
+    <table id="table_39" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >ORPHA:3472 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >ORPHA:171629 </td>
+    </tr>
+</table>
+
+<p><code>
+	merge_tabular tables/disease_cluster tables/disease_gene tables/mondo_to_orpha --fill_character 'NA'
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_40" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+                    <td  >ORPHA:3472 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+                    <td  >'NA' </td>
+                    <td  >'NA' </td>
+                    <td  >'NA' </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+                    <td  >'NA' </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >'NA' </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >ORPHA:171629 </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> records_count </h3>
+	<h1 id="recs_from" class="py_accordion" onclick="hide_show_element('recs_to')">records_count (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="recs_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza para obtener el número de ocurrencias de todos los términos en una columna de una tabla </p>
+<h4> Ejemplo básico </h4>
+<p> Se indica la tabla a utilizar con el flag -i y la columna (indice basado en 1) en la que queremos obtener los conteos con el flag -x </p>
+<p>Vamos a ver la cantidad de ocurrencias de los distintos términos en la columna 2 de la tabla 'cluster_genes_dis_agg'</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_41" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+                    <td  >483_ref,1039_ref,1071_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21143 </td>
+                    <td  >mRNA </td>
+                    <td  >211_ref,4705_ref </td>
+    </tr>
+   <tr>
+                    <td  >HGNC:21457 </td>
+                    <td  >tRNA </td>
+                    <td  >305_ref,304_ref </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	records_count -i tables/cluster_genes_dis_agg -x 2
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_42" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >mRNA </td>
+                    <td  >2 </td>
+    </tr>
+   <tr>
+                    <td  >tRNA </td>
+                    <td  >1 </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> standard_name_replacer </h3>
+	<h1 id="repl_from" class="py_accordion" onclick="hide_show_element('repl_to')">standard_name_replacer (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="repl_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
+ y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>
+<h4> Ejemplo básico </h4>
+<p> Tenemos nuestra tabla con datos de Identificadores de MONDO y cluster/es donde se ha encontrado esa enfermedad de MONDO. Luego tenemos otro archivo
+que nos relaciona cada identificador de MONDO con su identificador de ORPHA correspondiente. Utilizamos ese archivo para traducir los identificadores de MONDO
+por los de ORPHA en la primera tabla</p>
+
+<p> Pasamos la primera tabla como input al flag -i y el diccionario al flag -I. Luego indicamos que queremos reemplazar los términos de la columna 1 de la tabla de entrada
+con el flag -c, y que queremos utilizar la columna 1 del diccionario como clave de búsqueda con el flag -f (from). Finalmente, indicamos que queremos reemplazar los términos
+de la columna 1 por los términos de la columna 2 del diccionario con el flag -t (to). </p>  
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_43" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla diccionario para reemplazar</b></p>
+    <table id="table_44" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >ORPHA:3472 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >ORPHA:171629 </td>
+    </tr>
+</table>
+
+
+<p><code>
+	standard_name_replacer -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 -f 1 -t 2
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_45" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >ORPHA:3472 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+
+
+<h4> Eliminar los registros no traducidos </h4>
+<p> Como hemos podido comprobar en el ejemplo anterior, si no hay un término en el diccionario para un identificador de la tabla de entrada, ese identificador se queda sin traducir.
+Si queremos eliminar esos registros que no se han podido traducir, podemos añadir el flag -u al comando. </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_46" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla diccionario para reemplazar</b></p>
+    <table id="table_47" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >ORPHA:3472 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >ORPHA:171629 </td>
+    </tr>
+</table>
+
+
+<p><code>
+	standard_name_replacer -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 -f 1 -t 2 -u
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_48" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >ORPHA:3472 </td>
+                    <td  >19_ref </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> subset_table </h3>
+	<h1 id="subs_from" class="py_accordion" onclick="hide_show_element('subs_to')">subset_table (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="subs_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
+<h4> Ejemplo básico </h4>
+<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
+y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
+header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
+<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_49" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >sample </td>
+                    <td  >initial_total_sequences </td>
+                    <td  >initial_read_max_length </td>
+                    <td  >initial_read_min_length </td>
+                    <td  >initial_%gc </td>
+    </tr>
+   <tr>
+                    <td  >CTL_1_cell </td>
+                    <td  >11437331.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >45.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_1_exo </td>
+                    <td  >10668412.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >48.0 </td>
+                    <td  > </td>
+    </tr>
+   <tr>
+                    <td  >CTL_2_cell </td>
+                    <td  >20503996.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >44.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_2_exo </td>
+                    <td  >9322480.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >47.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_3_cell </td>
+                    <td  >20342853.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >46.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_3_exo </td>
+                    <td  >18394272.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >48.0 </td>
+                    <td  > </td>
+    </tr>
+   <tr>
+                    <td  >CTL_4_cell </td>
+                    <td  >15729473.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >45.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_4_exo </td>
+                    <td  >12505200.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >49.0 </td>
+                    <td  > </td>
+    </tr>
+   <tr>
+                    <td  >CTL_5_cell </td>
+                    <td  >12829784.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >45.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_5_exo </td>
+                    <td  >9072750.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >49.0 </td>
+    </tr>
+   <tr>
+                    <td  >DOX_1_cell </td>
+                    <td  >37629252.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >45.0 </td>
+    </tr>
+   <tr>
+                    <td  >DOX_1_exo </td>
+                    <td  >21945299.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >46.0 </td>
+    </tr>
+   <tr>
+                    <td  >DOX_2_cell </td>
+                    <td  >17915632.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >44.0 </td>
+    </tr>
+   <tr>
+                    <td  >DOX_2_exo </td>
+                    <td  >5919977.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >50.0 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	subset_table -i tables/metrics_table -s 3 -l 4 -H
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_50" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >sample </td>
+                    <td  >initial_total_sequences </td>
+                    <td  >initial_read_max_length </td>
+                    <td  >initial_read_min_length </td>
+                    <td  >initial_%gc </td>
+    </tr>
+   <tr>
+                    <td  >CTL_2_cell </td>
+                    <td  >20503996.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >44.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_2_exo </td>
+                    <td  >9322480.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >47.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_3_cell </td>
+                    <td  >20342853.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >46.0 </td>
+    </tr>
+   <tr>
+                    <td  >CTL_3_exo </td>
+                    <td  >18394272.0 </td>
+                    <td  >76.0 </td>
+                    <td  >35.0 </td>
+                    <td  >48.0 </td>
+                    <td  > </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> table_linker </h3>
+	<h1 id="link_from" class="py_accordion" onclick="hide_show_element('link_to')">table_linker (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="link_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza para realizar un merge de dos tablas en base a una columna con identificadores compartidos.  </p>
+<h4> Ejemplo básico </h4>
+<p> Se utiliza como tabla base la que se da con el flag -i, y la que se va a mergear con el flag -l, la co. Esto sería equivalente a 
+un <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. Para obtener un 
+<a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>, tan solo tendríamos que alternar los flags que damos a 
+cada tabla (hacer un left join pero con la linker como input)</p>
+
+<p> Por defecto, se espera que el identificador en la tabla input esté en la primera columna, y todo el resto de columnas de esta 
+tabla se mantendrán. Con respecto a la tabla linker, podemos indicar la columna que contiene el identificador con el flag 
+--id_linker (por defecto a 0), y las columnas que queremos mantener en el merge, separadas por comas, con el 
+flag --columns2linker (por defecto a 1)</p>
+<p> Tambien tenemos el flag -s para indicar que separador queremos para la tabla resultante (por defecto tabulación)</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_51" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla a enlazar</b></p>
+    <table id="table_52" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	table_linker -i tables/disease_cluster -l tables/disease_gene -s 	
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_53" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >HGNC:16873 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >HGNC:3527 </td>
+    </tr>
+</table>
+
+
+<h4> Ejemplo utilizando los flags --id_linker y --columns2linker </h4>                                                                            
+<p> Utilizamos el flag --columns2linker para indicar que queremos las dos columnas de la tabla linker, no solo la primera. Usamos también
+el flag --id_linker para indicar qué columna contiene los identificadores para el merge en la tabla linker, aunque en este caso coincida
+con el valor por defecto</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_54" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla a enlazar</b></p>
+    <table id="table_55" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --id_linker 1
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_56" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+</table>
+
+
+<h4> Manteniendo solo registros comunes </h4>                                                                            
+<p> Para mantener solo los registros comunes a ambas tablas podemos usar el flag --drop. Esto sería equivalente a un <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a></p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_57" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla a enlazar</b></p>
+    <table id="table_58" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --drop
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_59" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> tag_table </h3>
+	<h1 id="tag_from" class="py_accordion" onclick="hide_show_element('tag_to')">tag_table (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="tag_to">
+<summary style="display: none;"></summary>
+<p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
+
+<h4> Ejemplo básico utilizando un string con tags separador por comas</h4>
+<p> Se pasa la tabla a la que se quiere añadir los tags con el flag -i y un string con los tags separados por comas al flag -t </p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_60" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_min </td>
+                    <td  >1 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_max </td>
+                    <td  >296 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_median </td>
+                    <td  >3.0 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_mean </td>
+                    <td  >4.667505030181086 </td>
+    </tr>
+   <tr>
+                    <td  >cl_nodes_mean </td>
+                    <td  >1.0 </td>
+    </tr>
+   <tr>
+                    <td  >cl_nodes </td>
+                    <td  >9279 </td>
+    </tr>
+   <tr>
+                    <td  >cl_pairs </td>
+                    <td  >147578 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	tag_table -i tables/cluster_stats -t red1,colapsada,traducida
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_61" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_size_min </td>
+                    <td  >1 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_size_max </td>
+                    <td  >296 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_size_median </td>
+                    <td  >3.0 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_size_mean </td>
+                    <td  >4.667505030181086 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_nodes_mean </td>
+                    <td  >1.0 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_nodes </td>
+                    <td  >9279 </td>
+    </tr>
+   <tr>
+                    <td  >red1 </td>
+                    <td  >colapsada </td>
+                    <td  >traducida </td>
+                    <td  >cl_pairs </td>
+                    <td  >147578 </td>
+    </tr>
+</table>
+
+
+
+<h4> Ejemplo pasando el nombre de un archivo como tag al flag -t </h4>
+<p> Si en vez de pasarle un string separado por comas con los tags, se le pasa el nombre de un archivo, cmdtabs puede reconocerlo y en ese
+caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en este caso con el flag -s cual es el separador en ese archvio</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_62" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_min </td>
+                    <td  >1 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_max </td>
+                    <td  >296 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_median </td>
+                    <td  >3.0 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_mean </td>
+                    <td  >4.667505030181086 </td>
+    </tr>
+   <tr>
+                    <td  >cl_nodes_mean </td>
+                    <td  >1.0 </td>
+    </tr>
+   <tr>
+                    <td  >cl_nodes </td>
+                    <td  >9279 </td>
+    </tr>
+   <tr>
+                    <td  >cl_pairs </td>
+                    <td  >147578 </td>
+    </tr>
+</table>
+
+    <p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
+    <table id="table_63" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+    </tr>
+</table>
+
+
+<p><code>
+	tag_table -i tables/cluster_stats -t tables/tracker -s 	
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_64" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_min </td>
+                    <td  >1 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_max </td>
+                    <td  >296 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_median </td>
+                    <td  >3.0 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_mean </td>
+                    <td  >4.667505030181086 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_nodes_mean </td>
+                    <td  >1.0 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_nodes </td>
+                    <td  >9279 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_pairs </td>
+                    <td  >147578 </td>
+    </tr>
+</table>
+
+
+
+<h4> Pasar más de un archivo separado por comas al flag -t </h4>
+<p> Si le pasamos varios archivos separados por comas, leerá y utilizará cada uno de ellos para añadir los tags</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_65" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_min </td>
+                    <td  >1 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_max </td>
+                    <td  >296 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_median </td>
+                    <td  >3.0 </td>
+    </tr>
+   <tr>
+                    <td  >cl_size_mean </td>
+                    <td  >4.667505030181086 </td>
+    </tr>
+   <tr>
+                    <td  >cl_nodes_mean </td>
+                    <td  >1.0 </td>
+    </tr>
+   <tr>
+                    <td  >cl_nodes </td>
+                    <td  >9279 </td>
+    </tr>
+   <tr>
+                    <td  >cl_pairs </td>
+                    <td  >147578 </td>
+    </tr>
+</table>
+
+    <p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
+    <table id="table_66" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+    </tr>
+</table>
+
+
+<p><code>
+	tag_table -i tables/cluster_stats -t tables/tracker,tables/tracker -s 	
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_67" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_num </td>
+                    <td  >1988 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_min </td>
+                    <td  >1 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_max </td>
+                    <td  >296 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_median </td>
+                    <td  >3.0 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_size_mean </td>
+                    <td  >4.667505030181086 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_nodes_mean </td>
+                    <td  >1.0 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_nodes </td>
+                    <td  >9279 </td>
+    </tr>
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
+                    <td  >cl_pairs </td>
+                    <td  >147578 </td>
+    </tr>
+</table>
+
+
+</details>
+
+	<h3> transform_to_latex </h3>
+	<h1 id="trnsf_from" class="py_accordion" onclick="hide_show_element('trnsf_to')">transform_to_latex (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="trnsf_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
+<h4> Ejemplo básico </h4>
+<p> Se da la tabla con el flag -i </p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_68" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	transform_to_latex -i tables/cluster_genes_dis_desagg_3cols
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_69" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >\hline  </td>
+    </tr>
+   <tr>
+                    <td  >as & 1 & 20 \\ \hline </td>
+    </tr>
+   <tr>
+                    <td  >as & 2 & 30 \\ \hline </td>
+    </tr>
+   <tr>
+                    <td  >zz & 3 & 100 \\ \hline </td>
+    </tr>
+   <tr>
+                    <td  >zz & 4 & 110 \\ \hline </td>
+    </tr>
+</table>
+
+
+<h4> Añadiendo el backbone </h4>
+<p> Si se quiere obtener un backbone algo más detallado con el que luego rellenar los campos restantes, se puede utilizar el parámetro --whole o -w </p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_70" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	transform_to_latex -i tables/cluster_genes_dis_desagg_3cols --whole
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_71" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >\begin{table}[!htbp] </td>
+    </tr>
+   <tr>
+                    <td  >\centering </td>
+    </tr>
+   <tr>
+                    <td  >\caption{} </td>
+    </tr>
+   <tr>
+                    <td  >\begin{tabular}{|l|l|l|} </td>
+    </tr>
+   <tr>
+                    <td  >\hline  </td>
+    </tr>
+   <tr>
+                    <td  >as & 1 & 20 \\ \hline </td>
+    </tr>
+   <tr>
+                    <td  >as & 2 & 30 \\ \hline </td>
+    </tr>
+   <tr>
+                    <td  >zz & 3 & 100 \\ \hline </td>
+    </tr>
+   <tr>
+                    <td  >zz & 4 & 110 \\ \hline </td>
+    </tr>
+   <tr>
+                    <td  >\end{tabular} </td>
+    </tr>
+   <tr>
+                    <td  >\label{table:cluster_genes_dis_desagg_3cols} </td>
+    </tr>
+   <tr>
+                    <td  >\end{table} </td>
+    </tr>
+</table>
+
+</details>
+
+	<h3> transpose_table </h3>
+	<h1 id="trnsp_from" class="py_accordion" onclick="hide_show_element('trnsp_to')">transpose_table (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="trnsp_to">
+<summary style="display: none;"></summary>
+<p> Se utiliza para transponer una tabla  </p>
+<h4> Ejemplo básico </h4>
+<p> Se transpone la tabla que se da con el flag -i </p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_72" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	transpose_table -i tables/cluster_genes_dis_desagg_3cols
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_73" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >as </td>
+                    <td  >zz </td>
+                    <td  >zz </td>
+    </tr>
+   <tr>
+                    <td  >1 </td>
+                    <td  >2 </td>
+                    <td  >3 </td>
+                    <td  >4 </td>
+    </tr>
+   <tr>
+                    <td  >20 </td>
+                    <td  >30 </td>
+                    <td  >100 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+</details>
+</div>
+</body>
+
+</HTML>

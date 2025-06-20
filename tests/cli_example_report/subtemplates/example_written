@@ -1,0 +1,63 @@
+<%
+import sys, os
+from io import StringIO
+from mako.runtime import Undefined
+
+def capture_stdout(func):
+    def wrapper(*args, **kwargs):
+        original_stdout = sys.stdout
+        tmpfile = StringIO()
+        sys.stdout = tmpfile
+        returned = func(*args, **kwargs)
+        printed = sys.stdout.getvalue()
+        sys.stdout = original_stdout
+        return returned, printed
+    return wrapper
+
+def strng2table(strng, fs="\t", rs="\n"):
+        table = [row.split(fs) for row in strng.split(rs)][0:-1]
+        return table
+
+def execute_command(library, script, args, name='results'):
+        @capture_stdout
+        def script2test(lsargs):
+                func = getattr(library, script)
+                return func(lsargs)
+        _, printed = script2test(args.split(" "))
+        test_result = strng2table(printed)
+        plotter.hash_vars[name] = test_result
+
+try:
+    is_supp_table = True if supp_table else False
+except NameError:
+    is_supp_table = False
+%>
+
+<p> <b>Input</b> </p>
+
+% if isinstance(skip_input, Undefined) or not skip_input:
+    ${ plotter.table(id=table_name, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'})}
+%endif
+
+%if not isinstance(supp_table, Undefined) and supp_table:
+    ${supp_table_text}
+    ${ plotter.table(id=supp_table, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'})}
+%endif
+
+%if not isinstance(supp_table2, Undefined) and supp_table2:
+    ${supp_table_text2}
+    ${ plotter.table(id=supp_table2, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'})}
+%endif
+
+<p><code>
+	${f"{method_name} {args}"}
+</p></code>
+
+<p> <b>Output</b> </p>
+<%
+execute_command(library, method, args, '_')
+output = lib.CmdTabs.load_input_data(output_table)
+output_name = os.path.basename(output_table)
+plotter.hash_vars[output_name] = output
+%>
+${ plotter.table(id=output_name, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'} )}

@@ -1,0 +1,4 @@
+red2	CPM	genes	cl_num	2000
+red2	CPM	genes	cl_size_mean	15
+red4	CPM	phenotypes	cl_num	4000
+red4	CPM	phenotypes	cl_size_mean	25
