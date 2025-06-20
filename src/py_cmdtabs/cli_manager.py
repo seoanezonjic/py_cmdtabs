@@ -32,45 +32,6 @@ def add_common_options(parser, flags_to_skip = [], help_replacer={}):
       parser.add_argument("--compressed_out", default=False, action="store_true", help=helps_dict["--compressed_out"])
 
 ##############################################
-def transform_to_latex(args=None):
-    if args == None: args = sys.argv[1:]
-    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
-    add_common_options(parser)
-    parser.add_argument("-s", "--separator", dest="separator", default="\t", type=unescaped_str,
-                        help="Input table column character separator")
-    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
-                     	  help="Indicate if files have header")
-    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
-                        help="Path to output file")
-    parser.add_argument("-w", "--whole", dest="whole", default=False, action='store_true',
-                        help="Indicate if you want the whole table and tabular environment to be returned with the table transformed")
-    opts = parser.parse_args(args)
-    main_transform_to_latex(opts)
-
-def transpose_table(args=None):
-    if args == None: args = sys.argv[1:]
-    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
-    add_common_options(parser)
-    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
-                        help="Path to output file")
-    opts = parser.parse_args(args)
-    main_transpose_table(opts)
-
-def subset_table(args=None):
-    if args == None: args = sys.argv[1:]
-    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
-    add_common_options(parser)
-    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
-  	                   help="Indicate if files have header")
-    parser.add_argument("-s", "--start_line", dest="start_line", default= 0, type= based_0,
-                        help="Set the first line of subset. 0 based index")
-    parser.add_argument("-l", "--lines_to_subset", dest="chunk_lines", default= 5, type= int,
-                        help="Set the number of lines to extract from --start_line")
-    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
-                        help="Path to output file")
-    opts = parser.parse_args(args)
-    main_subset_table(opts)
-
 
 def aggregate_column_data(args=None):
     if args == None: args = sys.argv[1:]
@@ -184,7 +145,7 @@ def intersect_columns(args=None):
       help="Index of columns in base 1 to compare")
     parser.add_argument("-B", "--b_cols", dest="b_cols", default=[0], type=list_based_0,
       help="Index of columns in base 1 to compare")
-    parser.add_argument("-s", "--separator", dest="sep", default="\t",
+    parser.add_argument("-s", "--separator", dest="sep", default="\t", type=unescaped_str,
       help="Column character separator")
     parser.add_argument("-c", "--count", dest="count", default=False, action='store_true',
       help="Only compute number of matches")
@@ -239,6 +200,21 @@ def standard_name_replacer(args=None):
     opts = parser.parse_args(args)
     main_standard_name_replacer(opts)
 
+def subset_table(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+  	                   help="Indicate if files have header")
+    parser.add_argument("-s", "--start_line", dest="start_line", default= 0, type= based_0,
+                        help="Set the first line of subset. 0 based index")
+    parser.add_argument("-l", "--lines_to_subset", dest="chunk_lines", default= 5, type= int,
+                        help="Set the number of lines to extract from --start_line")
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    opts = parser.parse_args(args)
+    main_subset_table(opts)
+
 def table_linker(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Merge tabular files.')
@@ -272,3 +248,27 @@ def tag_table(args=None):
 
     opts = parser.parse_args(args)
     main_tag_table(opts)
+
+def transform_to_latex(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-s", "--separator", dest="separator", default="\t", type=unescaped_str,
+                        help="Input table column character separator")
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+                     	  help="Indicate if files have header")
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    parser.add_argument("-w", "--whole", dest="whole", default=False, action='store_true',
+                        help="Indicate if you want the whole table and tabular environment to be returned with the table transformed")
+    opts = parser.parse_args(args)
+    main_transform_to_latex(opts)
+
+def transpose_table(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    opts = parser.parse_args(args)
+    main_transpose_table(opts)
