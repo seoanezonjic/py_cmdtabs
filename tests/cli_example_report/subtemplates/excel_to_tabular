@@ -1,6 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divPar">
 <p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
 <h4> Ejemplo básico </h4>
 
@@ -22,3 +23,4 @@ ${plotter.renderize_child_template(plotter.get_internal_template('example'), tab
 	args = f"-i special_files/{table_name} -c 1-2,4-5 -s 2"
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+</div>

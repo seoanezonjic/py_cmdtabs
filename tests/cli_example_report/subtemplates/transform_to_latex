@@ -1,6 +1,8 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divImpar">
+
 <p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
 <h4> Ejemplo básico </h4>
 <p> Se da la tabla con el flag -i </p>
@@ -19,3 +21,5 @@ ${plotter.renderize_child_template(plotter.get_internal_template('example'), tab
 	args = f"-i tables/{table_name} --whole"
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+
+</div>

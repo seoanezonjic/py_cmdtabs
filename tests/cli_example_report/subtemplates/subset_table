@@ -1,6 +1,8 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divPar">
+
 <p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
 <h4> Ejemplo básico </h4>
 <p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
@@ -12,3 +14,5 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 	args = f"-i tables/{table_name} -s 3 -l 4 -H"
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+
+</div>

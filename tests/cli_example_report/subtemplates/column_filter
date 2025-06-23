@@ -1,0 +1,88 @@
+<% 
+meth_name = getattr(lib, meth).__name__
+%>
+<div class="divImpar">
+
+<p> Se utiliza para filtrar registros de una o más tablas en funcion a una o varias keywords en una o más columnas  </p>
+
+<h4> Ejemplo básico </h4>
+<p> Este script permite filtrar registros de una o varias tablas (si se usa el wildcard * en un path a archivo del flag -i se pueden cargar varias tablas y aplicar todo lo de este apartado para varias tablas,
+aunque en estos ejemplos se mostrará el caso solo para una tabla) en función de una o varias keywords aplicada a una o más columnas, por lo que es un script
+bastante versatil y completo, aunque pueda parecer complejo. Se enseñarán varios ejemplos aumentando la complejidad del caso para entender mejor su funcionamiento. </p>
+
+<p> Los argumentos más básicos que se usarán siempre serán la tabla de entrada (flag -i), las columnas que se devolverán (flag -c), 
+la columna que contiene las keywords (flag -f), la keyword/s a buscar (flag -k),  -m o --match_mode para indicar si queremos que la keyword esté incluida (opción "i") en la columna
+(es decir match parcial) o que esté al completo (opción "c"), es decir, match completo. Finalmente con el flag -s o --search se indica (cuando queremos match en varias columnas)
+si queremos que el match sea completo (opción "c"), es decir, que se cumpla la keyword buscada en cada columna, o algún (some) match en alguna columna (opción "s") </p>.
+
+<p> Lo más esencial es entender como se construye el string de keywords de búsqueda. El patrón es el siguiente:
+<code>key1_col1&key2_col1%key1_col2&key2_col2</code> donde cada keyword se separa por un "&" (quieres un keyword u otro en una determinada columna) y cada columna por un "%"</p>
+
+<p> Vamos empezar con un caso básico en el que vamos a quedarnos con aquellos registros que contengan la keyword <code>MONDO:0017999</code> (en flag -k) en la columna 1 (flag -f) de 
+la tabla <code>long_disease_cluster</code> (flag -i). Además queremos que sea el match completo de la palabra (-m c) y nos retorne las columnas 1 y 2 de los registros resultantes (flag -c)</p>
+<%
+table_name = 'long_disease_cluster'
+args= f"-i tables/{table_name} -c 1,2 -f 1 -k MONDO:0017999 -s c -m c"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+
+<h4> Match completo en TODAS las columnas indicadas (dos keys, una en cada columna) </h4>
+<p>Como vemos visto, el ejemplo anterior nos devuelve varios MONDOs que cumplen la condición de match completo en la columna 1. Vamos a ampliar el caso anterior para que solo nos 
+devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'</p>
+
+<%
+args= f"-i tables/{table_name} -c 1,2 -f 1,2 -k MONDO:0017999%53_ref -s c -m c"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+
+<h4> Buscar dos (o más registros) en una misma columna (match exacto) </h4>
+<p>Vamos a obtener las filas que contienen o bien "MONDO:0008995" o bien "MONDO:0013969".</p>
+
+<%
+args= f"-i tables/{table_name} -c 1,2 -f 1 -k MONDO:0008995&MONDO:0013969 -s c -m c"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+
+<h4> Match parcial en la segunda columna </h4>
+<p>Vamos a obtener las filas que contengan el substring "ref" en la segunda columna (cambiando el flag -m o --mode a i (de include)).</p>
+
+<%
+args= f"-i tables/{table_name} -c 1,2 -f 2 -k ref -s c -m i"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+
+<h4> Match parcial reverso en la segunda columna </h4>
+<p>Si lo que nos interesa no es obtener los registros que cumplen el patrón, sino los que no lo cumplen, podemos usar el flag -r o --reverse. 
+Esto es válido tanto para un match completo como parcial. En este caso vamos a enseñar el mismo ejemplo que el anterior, pero con el caso reverso, por lo que en vez
+de obtener los registros que contienen "ref", obtendremos los que no lo contienen ("rand")</p>
+<%
+args= f"-i tables/{table_name} -c 1,2 -f 2 -k ref -s c -m i --reverse"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+
+<h4> Match parcial en TODAS las columnas especificadas (dos columnas) </h4>
+<p> En el caso que filtrabamos por MONDO:0017999 en la primera columna, vimos que encontrabamos 3 clústeres, 36_rand, 53_ref y 53_rand. 
+En este caso, para quedarnos con distintos subsets, podemos utilizar el match parcial. Por ejemplo, para quedarnos con los MONDO:0017999 del cluster 53 </p> 
+<%
+args= f"-i tables/{table_name} -c 1,2 -f 1,2 -k MONDO:0017999%53 -s c -m i"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+<p> Y para quedarnos con los MONDO:0017999 de clusteres random </p> 
+<%
+args= f"-i tables/{table_name} -c 1,2 -f 1,2 -k MONDO:0017999%rand -s c -m i"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+
+
+<h4> Match exacto en ALGUNA de las columnas especificadas (dos columnas) </h4>
+<p>Hasta ahora hemos estado viendo como hacer matches que se cumplan en todas las columnas. Si queremos buscar keywords en varias columnas pero que el patrón se cumpla solo en 
+ALGUNA de las columnas, podemos cambiar el -s o --search a "s" (some)</p>
+
+<p>Por ejemplo, si queremos quedarnos con los registros que contengan MONDO:0008995 o MONDO:0013969 en la primera columna o 22_rand o 66_ref en la segunda columna,
+podemos hacer lo siguiente:</p>
+
+<%
+args= f"-i tables/{table_name} -c 1,2 -f 1,2 -k MONDO:0008995&MONDO:0013969%22_rand&66_ref -s s -m c"
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+</div>

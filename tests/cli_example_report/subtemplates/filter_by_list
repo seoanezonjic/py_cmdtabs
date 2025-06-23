@@ -1,6 +1,11 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divImpar">
+
+
+<div class="alert alert-warning" role="alert"><p>Este binario presenta cierto solapamiento con el el binario "column_filter", si bien el solapamiento no 100% 
+ya que column_filter acepta los keywords mediante una string y este binario acepta un archivo de una columna con los términos a filtrar. </p></div>
 <p> Se utiliza para filtrar las filas que nos interesan de una o más tablas en función a una serie de valores que se pasan  </p>
 <h4> Ejemplo básico </h4>
 <p> Tenemos nuestra tabla con la primera columna teniendo el identificador de una red (la que nos interesa para poder filtrar), y las otras columnas 
@@ -54,3 +59,6 @@ ${plotter.renderize_child_template(plotter.get_internal_template('example_writte
 <p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
 Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar el flag --prefix para que no se escriban con el mismo nombre y nos reemplacen las tablas de entrada. </p>
 <p> Por lo tanto, podemos filtrar varias tablas a la vez utilizando el mismo archivo de filtrado. Esto es util si tenemos distintos archivos de métricas con los mismos identificadores y queremos filtrar todos ellos por los mismos términos. </p>
+
+
+</div>

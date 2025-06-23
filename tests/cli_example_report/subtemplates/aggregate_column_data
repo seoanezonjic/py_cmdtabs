@@ -2,6 +2,7 @@
 meth_name = getattr(lib, meth).__name__
 %>
 
+<div class="divPar">
 <p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
 <h4> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h4>
@@ -39,3 +40,5 @@ como referencia (además de más de una columna como agregación). Además del m
 	args = f"-i tables/{table_name} -x 1,2 -a 3,4"
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+
+</div>

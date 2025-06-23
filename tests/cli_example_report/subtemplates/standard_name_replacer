@@ -1,6 +1,8 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divImpar">
+
 <p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
  y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>
 <h4> Ejemplo básico </h4>
@@ -29,3 +31,5 @@ args = f"-i tables/{table_name} -I tables/{dicctionary} -c 1 -f 1 -t 2 -u"
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
                                                                             supp_table=dicctionary, supp_table_text=dict_table_tex)}
+
+</div>                                                                            

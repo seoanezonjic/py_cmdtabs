@@ -1,3 +1,5 @@
+<div class="divImpar">
+
 <p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
 <p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
 pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
@@ -35,3 +37,5 @@ el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que 
 
 <p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
 tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
+
+</div>

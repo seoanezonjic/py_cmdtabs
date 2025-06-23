@@ -1,6 +1,10 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divImpar">
+
+<div class="alert alert-warning" role="alert"><p>Parte del comportamiento de este binario se puede emular usando el 
+binario "intersect_columns" con los flags adecuados, pero no sé si hay algo que no sea redudante entre los dos binarios </p></div>
 <p> Se utiliza para realizar un merge de dos tablas en base a una columna con identificadores compartidos.  </p>
 <h4> Ejemplo básico </h4>
 <p> Se utiliza como tabla base la que se da con el flag -i, y la que se va a mergear con el flag -l, la co. Esto sería equivalente a 
@@ -39,3 +43,5 @@ args = f"-i tables/{table_name} -l tables/{linker_table} --columns2linker 2,3 --
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
                                                                             supp_table=linker_table, supp_table_text=linker_table_tex)}
+
+</div>                                                                            

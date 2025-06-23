@@ -1,6 +1,8 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divPar">
+
 <p> Se utiliza para transponer una tabla  </p>
 <h4> Ejemplo básico </h4>
 <p> Se transpone la tabla que se da con el flag -i </p>
@@ -10,3 +12,5 @@ meth_name = getattr(lib, meth).__name__
 	args = f"-i tables/{table_name}"
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+
+</div>

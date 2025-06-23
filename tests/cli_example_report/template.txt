@@ -1,13 +1,20 @@
 <% 
 import py_cmdtabs
 %>
+<style>
+table {
+	background-color: #f9f9f9;
+}
+.divPar {
+	background-color: rgba(173, 216, 230, 0.3);
+}
+.divImpar {
+	background-color: rgba(47, 180, 80, 0.21);
+}
+</style>
 
 <div style="width: 95%; padding:20px;">
 	<% plotter.set_header() %>
-	<ul>Pending Methods:</ul>
-	%for meth in ["column_filter","intersect_columns"]:
-		<li>${meth}</li>
-	%endfor
 	<h1> Operation with tables </h1>
 	<h3> Pautas generales </h3>	
 	${ plotter.create_title(f'Pautas generales', id=f'gen_from', hlevel=1, indexable=True, clickable=True, t_id=f'gen_to', clickable_text = '(Click me)') }
@@ -18,6 +25,11 @@ import py_cmdtabs
 	${ plotter.create_title(f'aggregate_column_data', id=f'agg_from', hlevel=1, indexable=True, clickable=True, t_id=f'agg_to', clickable_text = '(Click me)') }
 	<% agg_cont = plotter.renderize_child_template(plotter.get_internal_template('aggregate_column_data'), lib=py_cmdtabs, meth="aggregate_column_data") %>
 	${plotter.create_collapsable_container(f'agg_to', agg_cont, display="visible") }
+
+	<h3> column_filter </h3>
+	${ plotter.create_title(f'column_filter', id=f'colfil_from', hlevel=1, indexable=True, clickable=True, t_id=f'colfil_to', clickable_text = '(Click me)') }
+	<% colfil_cont = plotter.renderize_child_template(plotter.get_internal_template('column_filter'), lib=py_cmdtabs, meth="column_filter") %>
+	${plotter.create_collapsable_container(f'colfil_to', colfil_cont, display="visible") }
 
 	<h3> create_metric_table </h3>
 	${ plotter.create_title(f'create_metric_table', id=f'metr_from', hlevel=1, indexable=True, clickable=True, t_id=f'metr_to', clickable_text = '(Click me)') }

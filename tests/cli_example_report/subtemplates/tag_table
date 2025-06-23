@@ -1,6 +1,8 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divPar">
+
 <p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
 
 <h4> Ejemplo básico utilizando un string con tags separador por comas</h4>
@@ -43,3 +45,5 @@ args = f"-i tables/{table_name} -t tables/{tag_file},tables/{tag_file} -s \t"
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
                                                                              supp_table=tag_file, supp_table_text=supp_table_text)}
+
+</div>

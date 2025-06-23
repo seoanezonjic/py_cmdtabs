@@ -126,6 +126,7 @@ details.rep_html_det summary {
 <ul>
 <li><a href=#gen_from>Pautas generales</a></li>
 <li><a href=#agg_from>aggregate_column_data</a></li>
+<li><a href=#colfil_from>column_filter</a></li>
 <li><a href=#metr_from>create_metric_table</a></li>
 <li><a href=#desagg_from>desaggregate_column_data</a></li>
 <li><a href=#excel_from>excel_to_tabular</a></li>
@@ -143,18 +144,28 @@ details.rep_html_det summary {
 </div>
 
 
+<style>
+table {
+	background-color: #f9f9f9;
+}
+.divPar {
+	background-color: rgba(173, 216, 230, 0.3);
+}
+.divImpar {
+	background-color: rgba(47, 180, 80, 0.21);
+}
+</style>
 
 <div style="width: 95%; padding:20px;">
 	
-	<ul>Pending Methods:</ul>
-		<li>column_filter</li>
-		<li>intersect_columns</li>
 	<h1> Operation with tables </h1>
 	<h3> Pautas generales </h3>	
 	<h1 id="gen_from" class="py_accordion" onclick="hide_show_element('gen_to')">Pautas generales (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="gen_to">
-<summary style="display: none;"></summary><p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
+<summary style="display: none;"></summary><div class="divImpar">
+
+<p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
 <p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
 pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
 pero también se pueden cargar comprimidas en gzip utilizando el flag '--compressed_in'. Por ejemplo:</p>
@@ -191,6 +202,8 @@ el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que 
 
 <p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
 tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
+
+</div>
 </details>
 	
 	<h3> aggregate_column_data </h3>
@@ -199,6 +212,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 	<details class='rep_html_det' open='' id="agg_to">
 <summary style="display: none;"></summary>
 
+<div class="divPar">
 <p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
 <h4> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h4>
@@ -420,6 +434,373 @@ como referencia (además de más de una columna como agregación). Además del m
     </tr>
 </table>
 
+
+</div>
+</details>
+
+	<h3> column_filter </h3>
+	<h1 id="colfil_from" class="py_accordion" onclick="hide_show_element('colfil_to')">column_filter (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="colfil_to">
+<summary style="display: none;"></summary>
+<div class="divImpar">
+
+<p> Se utiliza para filtrar registros de una o más tablas en funcion a una o varias keywords en una o más columnas  </p>
+
+<h4> Ejemplo básico </h4>
+<p> Este script permite filtrar registros de una o varias tablas (si se usa el wildcard * en un path a archivo del flag -i se pueden cargar varias tablas y aplicar todo lo de este apartado para varias tablas,
+aunque en estos ejemplos se mostrará el caso solo para una tabla) en función de una o varias keywords aplicada a una o más columnas, por lo que es un script
+bastante versatil y completo, aunque pueda parecer complejo. Se enseñarán varios ejemplos aumentando la complejidad del caso para entender mejor su funcionamiento. </p>
+
+<p> Los argumentos más básicos que se usarán siempre serán la tabla de entrada (flag -i), las columnas que se devolverán (flag -c), 
+la columna que contiene las keywords (flag -f), la keyword/s a buscar (flag -k),  -m o --match_mode para indicar si queremos que la keyword esté incluida (opción "i") en la columna
+(es decir match parcial) o que esté al completo (opción "c"), es decir, match completo. Finalmente con el flag -s o --search se indica (cuando queremos match en varias columnas)
+si queremos que el match sea completo (opción "c"), es decir, que se cumpla la keyword buscada en cada columna, o algún (some) match en alguna columna (opción "s") </p>.
+
+<p> Lo más esencial es entender como se construye el string de keywords de búsqueda. El patrón es el siguiente:
+<code>key1_col1&key2_col1%key1_col2&key2_col2</code> donde cada keyword se separa por un "&" (quieres un keyword u otro en una determinada columna) y cada columna por un "%"</p>
+
+<p> Vamos empezar con un caso básico en el que vamos a quedarnos con aquellos registros que contengan la keyword <code>MONDO:0017999</code> (en flag -k) en la columna 1 (flag -f) de 
+la tabla <code>long_disease_cluster</code> (flag -i). Además queremos que sea el match completo de la palabra (-m c) y nos retorne las columnas 1 y 2 de los registros resultantes (flag -c)</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_8" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >36_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 1 -k MONDO:0017999 -s c -m c
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_9" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >36_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+</table>
+
+
+<h4> Match completo en TODAS las columnas indicadas (dos keys, una en cada columna) </h4>
+<p>Como vemos visto, el ejemplo anterior nos devuelve varios MONDOs que cumplen la condición de match completo en la columna 1. Vamos a ampliar el caso anterior para que solo nos 
+devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%53_ref -s c -m c
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_10" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_ref </td>
+    </tr>
+</table>
+
+
+<h4> Buscar dos (o más registros) en una misma columna (match exacto) </h4>
+<p>Vamos a obtener las filas que contienen o bien "MONDO:0008995" o bien "MONDO:0013969".</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 1 -k MONDO:0008995&MONDO:0013969 -s c -m c
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_11" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+
+<h4> Match parcial en la segunda columna </h4>
+<p>Vamos a obtener las filas que contengan el substring "ref" en la segunda columna (cambiando el flag -m o --mode a i (de include)).</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 2 -k ref -s c -m i
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_12" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+</table>
+
+
+<h4> Match parcial reverso en la segunda columna </h4>
+<p>Si lo que nos interesa no es obtener los registros que cumplen el patrón, sino los que no lo cumplen, podemos usar el flag -r o --reverse. 
+Esto es válido tanto para un match completo como parcial. En este caso vamos a enseñar el mismo ejemplo que el anterior, pero con el caso reverso, por lo que en vez
+de obtener los registros que contienen "ref", obtendremos los que no lo contienen ("rand")</p>
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 2 -k ref -s c -m i --reverse
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_13" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >36_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+
+<h4> Match parcial en TODAS las columnas especificadas (dos columnas) </h4>
+<p> En el caso que filtrabamos por MONDO:0017999 en la primera columna, vimos que encontrabamos 3 clústeres, 36_rand, 53_ref y 53_rand. 
+En este caso, para quedarnos con distintos subsets, podemos utilizar el match parcial. Por ejemplo, para quedarnos con los MONDO:0017999 del cluster 53 </p> 
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%53 -s c -m i
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_14" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+</table>
+
+<p> Y para quedarnos con los MONDO:0017999 de clusteres random </p> 
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%rand -s c -m i
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_15" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >36_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+</table>
+
+
+
+<h4> Match exacto en ALGUNA de las columnas especificadas (dos columnas) </h4>
+<p>Hasta ahora hemos estado viendo como hacer matches que se cumplan en todas las columnas. Si queremos buscar keywords en varias columnas pero que el patrón se cumpla solo en 
+ALGUNA de las columnas, podemos cambiar el -s o --search a "s" (some)</p>
+
+<p>Por ejemplo, si queremos quedarnos con los registros que contengan MONDO:0008995 o MONDO:0013969 en la primera columna o 22_rand o 66_ref en la segunda columna,
+podemos hacer lo siguiente:</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+
+
+
+<p><code>
+	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0008995&MONDO:0013969%22_rand&66_ref -s s -m c
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_16" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+</div>
 </details>
 
 	<h3> create_metric_table </h3>
@@ -427,6 +808,7 @@ como referencia (además de más de una columna como agregación). Además del m
 	
 	<details class='rep_html_det' open='' id="metr_to">
 <summary style="display: none;"></summary>
+<div class="divPar">
 <p> Pasa una tabla del formato long al formato wide </p>
 
 <p> En ocasiones, al trabajar con flujos como el de autoflow, lanzamos tareas paralelizadas con distintas conmbinaciones de trabajo, por ejemplo:
@@ -461,7 +843,7 @@ el comando sería algo como:</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_8" border="1" class= "table table-striped" >
+    <table id="table_17" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -531,7 +913,7 @@ el comando sería algo como:</p>
 
 
 
-<table id="table_9" border="1" class= "table table-striped" >
+<table id="table_18" border="1" class= "table table-striped" >
    <tr>
                     <td  >red </td>
                     <td  >metodo </td>
@@ -572,6 +954,7 @@ el comando sería algo como:</p>
 <h4> Definir otra tabla para volcar los registros corruptos </h4>
 <p>Opcionalmente, se puede pasar un flag -c para devolver otra tabla con los valores corruptos, es decir, aquellos que no se han podido transformar 
 a formato wide porque falta algún valor de los factores. </p>
+</div>
 </details>
 
 	<h3> desaggregate_column_data </h3>
@@ -579,6 +962,7 @@ a formato wide porque falta algún valor de los factores. </p>
 	
 	<details class='rep_html_det' open='' id="desagg_to">
 <summary style="display: none;"></summary>
+<div class="divImpar">
 
 <p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
@@ -589,7 +973,7 @@ a formato wide porque falta algún valor de los factores. </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_10" border="1" class= "table table-striped" >
+    <table id="table_19" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -616,7 +1000,7 @@ a formato wide porque falta algún valor de los factores. </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_11" border="1" class= "table table-striped" >
+    <table id="table_20" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -663,7 +1047,7 @@ a formato wide porque falta algún valor de los factores. </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_12" border="1" class= "table table-striped" >
+    <table id="table_21" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -693,7 +1077,7 @@ a formato wide porque falta algún valor de los factores. </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_13" border="1" class= "table table-striped" >
+    <table id="table_22" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -738,6 +1122,8 @@ a formato wide porque falta algún valor de los factores. </p>
     </tr>
 </table>
 
+
+</div>
 </details>
 
 	<h3> excel_to_tabular </h3>
@@ -745,6 +1131,7 @@ a formato wide porque falta algún valor de los factores. </p>
 	
 	<details class='rep_html_det' open='' id="excel_to">
 <summary style="display: none;"></summary>
+<div class="divPar">
 <p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
 <h4> Ejemplo básico </h4>
 
@@ -769,7 +1156,7 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 <p> <b>Output</b> </p>
 
 
-    <table id="table_14" border="1" class= "table table-striped" >
+    <table id="table_23" border="1" class= "table table-striped" >
    <tr>
                     <td  >genes </td>
                     <td  >cell1 </td>
@@ -815,7 +1202,7 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 <p> <b>Output</b> </p>
 
 
-    <table id="table_15" border="1" class= "table table-striped" >
+    <table id="table_24" border="1" class= "table table-striped" >
    <tr>
                     <td  >genes </td>
                     <td  >cell5 </td>
@@ -848,6 +1235,7 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
     </tr>
 </table>
 
+</div>
 </details>
 
 	<h3> filter_by_list </h3>
@@ -855,6 +1243,11 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 	
 	<details class='rep_html_det' open='' id="filt_to">
 <summary style="display: none;"></summary>
+<div class="divImpar">
+
+
+<div class="alert alert-warning" role="alert"><p>Este binario presenta cierto solapamiento con el el binario "column_filter", si bien el solapamiento no 100% 
+ya que column_filter acepta los keywords mediante una string y este binario acepta un archivo de una columna con los términos a filtrar. </p></div>
 <p> Se utiliza para filtrar las filas que nos interesan de una o más tablas en función a una serie de valores que se pasan  </p>
 <h4> Ejemplo básico </h4>
 <p> Tenemos nuestra tabla con la primera columna teniendo el identificador de una red (la que nos interesa para poder filtrar), y las otras columnas 
@@ -869,7 +1262,7 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
 
 <p> <b>Input</b> </p>
 
-    <table id="table_16" border="1" class= "table table-striped" >
+    <table id="table_25" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -929,7 +1322,7 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
 </table>
 
     <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
-    <table id="table_17" border="1" class= "table table-striped" >
+    <table id="table_26" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
     </tr>
@@ -945,7 +1338,7 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
 
 <p> <b>Output</b> </p>
 
-<table id="table_18" border="1" class= "table table-striped" >
+<table id="table_27" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -986,7 +1379,7 @@ podemos activar el flag booleano --blacklist. </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_19" border="1" class= "table table-striped" >
+    <table id="table_28" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1046,7 +1439,7 @@ podemos activar el flag booleano --blacklist. </p>
 </table>
 
     <p><b>Archivo de 1 columna con los registros que queremos omitir</b></p>
-    <table id="table_20" border="1" class= "table table-striped" >
+    <table id="table_29" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
     </tr>
@@ -1062,7 +1455,7 @@ podemos activar el flag booleano --blacklist. </p>
 
 <p> <b>Output</b> </p>
 
-<table id="table_21" border="1" class= "table table-striped" >
+<table id="table_30" border="1" class= "table table-striped" >
    <tr>
                     <td  >red2 </td>
                     <td  >CPM </td>
@@ -1104,7 +1497,7 @@ haber usado el flag --not_exact_match</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_22" border="1" class= "table table-striped" >
+    <table id="table_31" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1148,7 +1541,7 @@ haber usado el flag --not_exact_match</p>
 </table>
 
     <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
-    <table id="table_23" border="1" class= "table table-striped" >
+    <table id="table_32" border="1" class= "table table-striped" >
    <tr>
                     <td  >ref </td>
     </tr>
@@ -1161,7 +1554,7 @@ haber usado el flag --not_exact_match</p>
 
 <p> <b>Output</b> </p>
 
-<table id="table_24" border="1" class= "table table-striped" >
+<table id="table_33" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1189,6 +1582,9 @@ haber usado el flag --not_exact_match</p>
 <p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
 Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar el flag --prefix para que no se escriban con el mismo nombre y nos reemplacen las tablas de entrada. </p>
 <p> Por lo tanto, podemos filtrar varias tablas a la vez utilizando el mismo archivo de filtrado. Esto es util si tenemos distintos archivos de métricas con los mismos identificadores y queremos filtrar todos ellos por los mismos términos. </p>
+
+
+</div>
 </details>
 
 	<h3> intersect_columns </h3>
@@ -1196,6 +1592,8 @@ Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar 
 	
 	<details class='rep_html_det' open='' id="inter_to">
 <summary style="display: none;"></summary>
+<div class="divPar">
+
 <p> Un script muy versatil en torno a la unión de dos tablas</p>
 
 <h4> Ejemplo básico </h4>
@@ -1204,199 +1602,6 @@ tenemos los flag -a y -b para indicar las dos tablas de interés, y los flags -A
 indicar el separador (tabulador por defecto). Por defecto se obtienen los identificadores que estén en las dos tablas (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), que es el valor por defecto del flag --keep, 
 aunque luego veremos otros casos de uso</p>
 <p> Vamos a ver un ejemplo con dos tablas , ambas con una columna que tienen identificadores de enfermedad de MONDO, para encontrar los registros comunes entre ambas tablas.</p>
-
-
-
-<p> <b>Input</b> </p>
-
-    <table id="table_25" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0007172 </td>
-                    <td  >22_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-    </tr>
-</table>
-
-    <p><b>Tabla B</b></p>
-    <table id="table_26" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0012866 </td>
-                    <td  >HGNC:21197 </td>
-                    <td  >mRNA </td>
-    </tr>
-</table>
-
-
-<p><code>
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t
-</p></code>
-
-<p> <b>Output</b> </p>
-
-
-    <table id="table_27" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0008995 </td>
-    </tr>
-</table>
-
-
-
-<h4> Obtener el resto de columnas para los registros comunes encontrados </h4>
-<p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
-usar el flag -full</p>
-
-
-
-<p> <b>Input</b> </p>
-
-    <table id="table_28" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0007172 </td>
-                    <td  >22_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-    </tr>
-</table>
-
-    <p><b>Tabla B</b></p>
-    <table id="table_29" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0012866 </td>
-                    <td  >HGNC:21197 </td>
-                    <td  >mRNA </td>
-    </tr>
-</table>
-
-
-<p><code>
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t --keep c --full
-</p></code>
-
-<p> <b>Output</b> </p>
-
-
-    <table id="table_30" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-                    <td  >MONDO:0008995 </td>
-                    <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
-    </tr>
-</table>
- 
-
-
-<h4> Obtener registros específicos de tabla </h4>
-<p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
-Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
- y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
-
-<p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
-Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
-con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full.</p>
-
-
-
-
-<p> <b>Input</b> </p>
-
-    <table id="table_31" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0007172 </td>
-                    <td  >22_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-    </tr>
-</table>
-
-    <p><b>Tabla B</b></p>
-    <table id="table_32" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0012866 </td>
-                    <td  >HGNC:21197 </td>
-                    <td  >mRNA </td>
-    </tr>
-</table>
-
-
-<p><code>
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep a
-</p></code>
-
-<p> <b>Output</b> </p>
-
-
-    <table id="table_33" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0007172 </td>
-    </tr>
-</table>
-
-
-<p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
-específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
-los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
 
 
 
@@ -1438,7 +1643,7 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 
 
 <p><code>
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep ab --full
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t
 </p></code>
 
 <p> <b>Output</b> </p>
@@ -1446,31 +1651,18 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 
     <table id="table_36" border="1" class= "table table-striped" >
    <tr>
-                    <td  >MONDO:0007172 </td>
-                    <td  >22_ref </td>
+                    <td  >MONDO:0010193 </td>
     </tr>
    <tr>
-                    <td  >MONDO:0012866 </td>
-                    <td  >HGNC:21197 </td>
-                    <td  >mRNA </td>
+                    <td  >MONDO:0008995 </td>
     </tr>
 </table>
 
-                                                                            
 
-</details>
 
-	<h3> merge_tabular </h3>
-	<h1 id="merge_from" class="py_accordion" onclick="hide_show_element('merge_to')">merge_tabular (Click me)</h1>
-	
-	<details class='rep_html_det' open='' id="merge_to">
-<summary style="display: none;"></summary>
-<p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
-<h4> Ejemplo básico </h4>
-<p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
-separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
-por defecto está a "-" </p>
-<p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+<h4> Obtener el resto de columnas para los registros comunes encontrados </h4>
+<p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
+usar el flag -full</p>
 
 
 
@@ -1491,7 +1683,7 @@ por defecto está a "-" </p>
     </tr>
 </table>
 
-    <p><b>Segunda tabla</b></p>
+    <p><b>Tabla B</b></p>
     <table id="table_38" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
@@ -1510,8 +1702,219 @@ por defecto está a "-" </p>
     </tr>
 </table>
 
-    <p><b>Tercera tabla</b></p>
+
+<p><code>
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t --keep c --full
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
     <table id="table_39" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+ 
+
+
+<h4> Obtener registros específicos de tabla </h4>
+<p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
+Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
+ y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
+
+<p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
+Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
+con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full. En el próximo ejemplo, enseñamos como devolver
+los registros específicos de la tabla A , pero sin devolver el resto de columnas (que podríamos hacer con el flag --full)</p>
+
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_40" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla B</b></p>
+    <table id="table_41" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep a
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_42" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0007172 </td>
+    </tr>
+</table>
+
+
+<p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
+específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
+los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_43" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla B</b></p>
+    <table id="table_44" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep ab --full
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_45" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+                                                                            
+</div>
+</details>
+
+	<h3> merge_tabular </h3>
+	<h1 id="merge_from" class="py_accordion" onclick="hide_show_element('merge_to')">merge_tabular (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="merge_to">
+<summary style="display: none;"></summary>
+<div class="divImpar">
+
+<div class="alert alert-warning" role="alert"><p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
+    es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p></div>
+<p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
+<h4> Ejemplo básico </h4>
+<p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
+separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
+por defecto está a "-" </p>
+<p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_46" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Segunda tabla</b></p>
+    <table id="table_47" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+    <p><b>Tercera tabla</b></p>
+    <table id="table_48" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -1529,7 +1932,7 @@ por defecto está a "-" </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_40" border="1" class= "table table-striped" >
+    <table id="table_49" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1560,6 +1963,8 @@ por defecto está a "-" </p>
     </tr>
 </table>
 
+
+</div>                                                                        
 </details>
 
 	<h3> records_count </h3>
@@ -1567,6 +1972,8 @@ por defecto está a "-" </p>
 	
 	<details class='rep_html_det' open='' id="recs_to">
 <summary style="display: none;"></summary>
+<div class="divPar">
+
 <p> Se utiliza para obtener el número de ocurrencias de todos los términos en una columna de una tabla </p>
 <h4> Ejemplo básico </h4>
 <p> Se indica la tabla a utilizar con el flag -i y la columna (indice basado en 1) en la que queremos obtener los conteos con el flag -x </p>
@@ -1576,7 +1983,7 @@ por defecto está a "-" </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_41" border="1" class= "table table-striped" >
+    <table id="table_50" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1603,7 +2010,7 @@ por defecto está a "-" </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_42" border="1" class= "table table-striped" >
+    <table id="table_51" border="1" class= "table table-striped" >
    <tr>
                     <td  >mRNA </td>
                     <td  >2 </td>
@@ -1614,6 +2021,8 @@ por defecto está a "-" </p>
     </tr>
 </table>
 
+
+</div>
 </details>
 
 	<h3> standard_name_replacer </h3>
@@ -1621,6 +2030,8 @@ por defecto está a "-" </p>
 	
 	<details class='rep_html_det' open='' id="repl_to">
 <summary style="display: none;"></summary>
+<div class="divImpar">
+
 <p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
  y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>
 <h4> Ejemplo básico </h4>
@@ -1636,7 +2047,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 
 <p> <b>Input</b> </p>
 
-    <table id="table_43" border="1" class= "table table-striped" >
+    <table id="table_52" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1652,7 +2063,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 </table>
 
     <p><b>Tabla diccionario para reemplazar</b></p>
-    <table id="table_44" border="1" class= "table table-striped" >
+    <table id="table_53" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -1671,7 +2082,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 <p> <b>Output</b> </p>
 
 
-    <table id="table_45" border="1" class= "table table-striped" >
+    <table id="table_54" border="1" class= "table table-striped" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
@@ -1696,7 +2107,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 
 <p> <b>Input</b> </p>
 
-    <table id="table_46" border="1" class= "table table-striped" >
+    <table id="table_55" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1712,7 +2123,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 </table>
 
     <p><b>Tabla diccionario para reemplazar</b></p>
-    <table id="table_47" border="1" class= "table table-striped" >
+    <table id="table_56" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -1731,13 +2142,15 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 <p> <b>Output</b> </p>
 
 
-    <table id="table_48" border="1" class= "table table-striped" >
+    <table id="table_57" border="1" class= "table table-striped" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
     </tr>
 </table>
 
+
+</div>                                                                            
 </details>
 
 	<h3> subset_table </h3>
@@ -1745,6 +2158,8 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 	
 	<details class='rep_html_det' open='' id="subs_to">
 <summary style="display: none;"></summary>
+<div class="divPar">
+
 <p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
 <h4> Ejemplo básico </h4>
 <p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
@@ -1756,7 +2171,7 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 
 <p> <b>Input</b> </p>
 
-    <table id="table_49" border="1" class= "table table-striped" >
+    <table id="table_58" border="1" class= "table table-striped" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -1876,7 +2291,7 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 <p> <b>Output</b> </p>
 
 
-    <table id="table_50" border="1" class= "table table-striped" >
+    <table id="table_59" border="1" class= "table table-striped" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -1915,6 +2330,8 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
     </tr>
 </table>
 
+
+</div>
 </details>
 
 	<h3> table_linker </h3>
@@ -1922,6 +2339,10 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 	
 	<details class='rep_html_det' open='' id="link_to">
 <summary style="display: none;"></summary>
+<div class="divImpar">
+
+<div class="alert alert-warning" role="alert"><p>Parte del comportamiento de este binario se puede emular usando el 
+binario "intersect_columns" con los flags adecuados, pero no sé si hay algo que no sea redudante entre los dos binarios </p></div>
 <p> Se utiliza para realizar un merge de dos tablas en base a una columna con identificadores compartidos.  </p>
 <h4> Ejemplo básico </h4>
 <p> Se utiliza como tabla base la que se da con el flag -i, y la que se va a mergear con el flag -l, la co. Esto sería equivalente a 
@@ -1939,7 +2360,7 @@ flag --columns2linker (por defecto a 1)</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_51" border="1" class= "table table-striped" >
+    <table id="table_60" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1955,7 +2376,7 @@ flag --columns2linker (por defecto a 1)</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_52" border="1" class= "table table-striped" >
+    <table id="table_61" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1981,7 +2402,7 @@ flag --columns2linker (por defecto a 1)</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_53" border="1" class= "table table-striped" >
+    <table id="table_62" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2008,7 +2429,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_54" border="1" class= "table table-striped" >
+    <table id="table_63" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2024,7 +2445,7 @@ con el valor por defecto</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_55" border="1" class= "table table-striped" >
+    <table id="table_64" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2050,7 +2471,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_56" border="1" class= "table table-striped" >
+    <table id="table_65" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2077,7 +2498,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_57" border="1" class= "table table-striped" >
+    <table id="table_66" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2093,7 +2514,7 @@ con el valor por defecto</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_58" border="1" class= "table table-striped" >
+    <table id="table_67" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2119,7 +2540,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_59" border="1" class= "table table-striped" >
+    <table id="table_68" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2134,6 +2555,8 @@ con el valor por defecto</p>
     </tr>
 </table>
 
+
+</div>                                                                            
 </details>
 
 	<h3> tag_table </h3>
@@ -2141,6 +2564,8 @@ con el valor por defecto</p>
 	
 	<details class='rep_html_det' open='' id="tag_to">
 <summary style="display: none;"></summary>
+<div class="divPar">
+
 <p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
 
 <h4> Ejemplo básico utilizando un string con tags separador por comas</h4>
@@ -2151,7 +2576,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_60" border="1" class= "table table-striped" >
+    <table id="table_69" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -2195,7 +2620,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_61" border="1" class= "table table-striped" >
+    <table id="table_70" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >colapsada </td>
@@ -2265,7 +2690,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_62" border="1" class= "table table-striped" >
+    <table id="table_71" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -2301,7 +2726,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_63" border="1" class= "table table-striped" >
+    <table id="table_72" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -2319,7 +2744,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_64" border="1" class= "table table-striped" >
+    <table id="table_73" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -2404,7 +2829,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_65" border="1" class= "table table-striped" >
+    <table id="table_74" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -2440,7 +2865,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_66" border="1" class= "table table-striped" >
+    <table id="table_75" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -2458,7 +2883,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_67" border="1" class= "table table-striped" >
+    <table id="table_76" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -2574,6 +2999,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
 
+</div>
 </details>
 
 	<h3> transform_to_latex </h3>
@@ -2581,6 +3007,8 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 	
 	<details class='rep_html_det' open='' id="trnsf_to">
 <summary style="display: none;"></summary>
+<div class="divImpar">
+
 <p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
 <h4> Ejemplo básico </h4>
 <p> Se da la tabla con el flag -i </p>
@@ -2590,7 +3018,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_68" border="1" class= "table table-striped" >
+    <table id="table_77" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -2622,7 +3050,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_69" border="1" class= "table table-striped" >
+    <table id="table_78" border="1" class= "table table-striped" >
    <tr>
                     <td  >\hline  </td>
     </tr>
@@ -2649,7 +3077,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_70" border="1" class= "table table-striped" >
+    <table id="table_79" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -2681,7 +3109,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_71" border="1" class= "table table-striped" >
+    <table id="table_80" border="1" class= "table table-striped" >
    <tr>
                     <td  >\begin{table}[!htbp] </td>
     </tr>
@@ -2720,6 +3148,8 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
     </tr>
 </table>
 
+
+</div>
 </details>
 
 	<h3> transpose_table </h3>
@@ -2727,6 +3157,8 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 	
 	<details class='rep_html_det' open='' id="trnsp_to">
 <summary style="display: none;"></summary>
+<div class="divPar">
+
 <p> Se utiliza para transponer una tabla  </p>
 <h4> Ejemplo básico </h4>
 <p> Se transpone la tabla que se da con el flag -i </p>
@@ -2736,7 +3168,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_72" border="1" class= "table table-striped" >
+    <table id="table_81" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -2768,7 +3200,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_73" border="1" class= "table table-striped" >
+    <table id="table_82" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >as </td>
@@ -2789,6 +3221,8 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
     </tr>
 </table>
 
+
+</div>
 </details>
 </div>
 </body>

@@ -1,6 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
+<div class="divPar">
 <p> Pasa una tabla del formato long al formato wide </p>
 
 <p> En ocasiones, al trabajar con flujos como el de autoflow, lanzamos tareas paralelizadas con distintas conmbinaciones de trabajo, por ejemplo:
@@ -46,3 +47,4 @@ ${ plotter.table(id='metric_table', text=True, header=False, row_names=False, st
 <h4> Definir otra tabla para volcar los registros corruptos </h4>
 <p>Opcionalmente, se puede pasar un flag -c para devolver otra tabla con los valores corruptos, es decir, aquellos que no se han podido transformar 
 a formato wide porque falta algún valor de los factores. </p>
+</div>
