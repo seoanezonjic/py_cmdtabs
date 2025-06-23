@@ -6,7 +6,14 @@ meth_name = getattr(lib, meth).__name__
 <h4> Ejemplo básico </h4>
 
 <p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
-<iframe src="./special_files/scRNAseq.htm" title="Single Cell excel" style="height:20vh;width:30vw;" ></iframe> 
+<div class="row">
+	<div class="col-md-6">
+		${plotter.embed_img("./special_files/hoja1.png")}
+	</div>
+	<div class="col-md-6">
+		${plotter.embed_img("./special_files/hoja2.png")}
+	</div>
+</div>
 
 <%
 	table_name = 'scRNAseq.xlsx'
