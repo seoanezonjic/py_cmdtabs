@@ -235,6 +235,20 @@ def table_linker(args=None):
     opts = parser.parse_args(args)
     main_table_linker(opts)	
 
+def table_splitter(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description='Split a table in several files by a given chunk size')
+    add_common_options(parser)
+    parser.add_argument("-k", "--chunk_size", dest="chunk_size", default= 1000, type=int,
+      help="Column character separator")
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+      help="Indicate if input file has a header line. Header will be printed in output if true")
+    parser.add_argument("-O", "--output_folder", dest="output_folder",
+      help="Path to output files")
+    
+    opts = parser.parse_args(args)
+    main_table_splitter(opts)
+
 def tag_table(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')

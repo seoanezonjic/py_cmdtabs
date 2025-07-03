@@ -170,6 +170,22 @@ def main_table_linker(options):
     linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep, options.header)
     CmdTabs.write_output_data(linked_table, options.output_file)
 
+def main_table_splitter(options):
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file)
+    file_basename = os.path.basename(options.input_file).split('.')[0]
+    os.makedirs(options.output_folder, exist_ok=True)
+    lines_to_write = []
+    chunk_counter = 0
+    for idx, row in enumerate(input_table):
+        lines_to_write.append(row)
+        if (idx+1) % options.chunk_size == 0:
+          CmdTabs.write_output_data(lines_to_write, os.path.join(options.output_folder, f"{file_basename}_chunk{chunk_counter}"))
+          lines_to_write = []
+          chunk_counter += 1
+    if len(lines_to_write) > 0:
+        CmdTabs.write_output_data(lines_to_write, os.path.join(options.output_folder, f"{file_basename}_chunk{chunk_counter}"))
+
 def main_tag_table(options):
     tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
     set_class_attributes(options)
