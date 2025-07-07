@@ -10,24 +10,6 @@ def set_class_attributes(options):
     CmdTabs.transposed = opts["transposed"] if opts.get("transposed") else False
 
 ## MAIN MODULES
-def main_transform_to_latex(options):
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file, sep=options.separator)
-    table_name = os.path.basename(options.input_file).split('.')[0] if options.input_file != '-' else 'tableX'
-    latex_table = CmdTabs.transform_to_latex(input_table, options.header, options.whole, table_name)
-    CmdTabs.write_output_data(latex_table, options.output_file, sep="")
-
-def main_transpose_table(options):
-    set_class_attributes(options)
-    transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
-    CmdTabs.write_output_data(transposed_table, options.output_file)
-
-def main_subset_table(options):
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
-    CmdTabs.write_output_data(subset_table, options.output_file)
-
 def main_aggregate_column_data(options):
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
@@ -159,6 +141,12 @@ def main_standard_name_replacer(options):
     tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, translation_index, options.remove_untranslated)
     CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)
 
+def main_subset_table(options):
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file)
+    subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
+    CmdTabs.write_output_data(subset_table, options.output_file)
+
 def main_table_linker(options):
     set_class_attributes(options)
     input_linker = CmdTabs.load_input_data(options.linker_file)
@@ -192,3 +180,15 @@ def main_tag_table(options):
     input_table = CmdTabs.load_input_data(options.input_file)
     taged_table = CmdTabs.tag_file(input_table, tags, options.header)
     CmdTabs.write_output_data(taged_table, None, options.sep)
+
+def main_transform_to_latex(options):
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file, sep=options.separator)
+    table_name = os.path.basename(options.input_file).split('.')[0] if options.input_file != '-' else 'tableX'
+    latex_table = CmdTabs.transform_to_latex(input_table, options.header, options.whole, table_name)
+    CmdTabs.write_output_data(latex_table, options.output_file, sep="")
+
+def main_transpose_table(options):
+    set_class_attributes(options)
+    transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
+    CmdTabs.write_output_data(transposed_table, options.output_file)
