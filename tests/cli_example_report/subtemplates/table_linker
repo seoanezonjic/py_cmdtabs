@@ -1,7 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
-<div class="divImpar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 
 <div class="alert alert-warning" role="alert"><p>Parte del comportamiento de este binario se puede emular usando el 
 binario "intersect_columns" con los flags adecuados, pero no sé si hay algo que no sea redudante entre los dos binarios </p></div>

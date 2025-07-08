@@ -1,7 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
-<div class="divPar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 <p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
 <h4> Ejemplo básico </h4>
 

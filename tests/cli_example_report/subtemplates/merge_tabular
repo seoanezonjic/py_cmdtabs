@@ -1,7 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
-<div class="divImpar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 
 <div class="alert alert-warning" role="alert"><p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
     es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p></div>

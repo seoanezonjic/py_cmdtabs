@@ -1,4 +1,4 @@
-<div class="divImpar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 
 <p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
 <p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 

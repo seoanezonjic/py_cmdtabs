@@ -1,7 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
-<div class="divImpar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 
 <p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
  y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>

@@ -1,7 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
-<div class="divPar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 
 <p> Un script muy versatil en torno a la unión de dos tablas</p>
 

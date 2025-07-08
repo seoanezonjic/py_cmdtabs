@@ -1,7 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
-<div class="divPar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 
 <p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
 <h4> Ejemplo básico </h4>
@@ -15,4 +15,17 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 %>
 ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
+
+<h4> Partiendo toda la tabla en distintos archivos con K líneas cada uno</h4>
+<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
+	el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
+<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
+ya que la tabla inicial tiene 10 registros) </p>
+<%
+	table_name = 'disease_cluster_ref_rnd'
+	args = f"-i tables/{table_name} -k 4 -o outputs/subset_table"
+	output_table = 'outputs/subset_table/*'
+%>
+${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+                                    output_table=output_table)}
 </div>

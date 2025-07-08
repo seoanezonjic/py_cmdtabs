@@ -131,6 +131,7 @@ details.rep_html_det summary {
 <li><a href=#desagg_from>desaggregate_column_data</a></li>
 <li><a href=#excel_from>excel_to_tabular</a></li>
 <li><a href=#filt_from>filter_by_list</a></li>
+<li><a href=#getcol_from>get_columns</a></li>
 <li><a href=#inter_from>intersect_columns</a></li>
 <li><a href=#merge_from>merge_tabular</a></li>
 <li><a href=#recs_from>records_count</a></li>
@@ -160,10 +161,10 @@ table {
 	
 	<h1> Operation with tables </h1>
 	<h3> Pautas generales </h3>	
-	<h1 id="gen_from" class="py_accordion" onclick="hide_show_element('gen_to')">Pautas generales (Click me)</h1>
+	<h1 id="gen_from"  class="py_accordion" onclick="hide_show_element('gen_to')">Pautas generales (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="gen_to">
-<summary style="display: none;"></summary><div class="divImpar">
+<summary style="display: none;"></summary><div class=divImpar>
 
 <p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
 <p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
@@ -207,12 +208,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </details>
 	
 	<h3> aggregate_column_data </h3>
-	<h1 id="agg_from" class="py_accordion" onclick="hide_show_element('agg_to')">aggregate_column_data (Click me)</h1>
+	<h1 id="agg_from"  class="py_accordion" onclick="hide_show_element('agg_to')">aggregate_column_data (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="agg_to">
 <summary style="display: none;"></summary>
 
-<div class="divPar">
+<div class=divPar>
 <p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
 <h4> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h4>
@@ -439,11 +440,11 @@ como referencia (además de más de una columna como agregación). Además del m
 </details>
 
 	<h3> column_filter </h3>
-	<h1 id="colfil_from" class="py_accordion" onclick="hide_show_element('colfil_to')">column_filter (Click me)</h1>
+	<h1 id="colfil_from"  class="py_accordion" onclick="hide_show_element('colfil_to')">column_filter (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="colfil_to">
 <summary style="display: none;"></summary>
-<div class="divImpar">
+<div class=divImpar>
 
 <p> Se utiliza para filtrar registros de una o más tablas en funcion a una o varias keywords en una o más columnas  </p>
 
@@ -804,11 +805,11 @@ podemos hacer lo siguiente:</p>
 </details>
 
 	<h3> create_metric_table </h3>
-	<h1 id="metr_from" class="py_accordion" onclick="hide_show_element('metr_to')">create_metric_table (Click me)</h1>
+	<h1 id="metr_from"  class="py_accordion" onclick="hide_show_element('metr_to')">create_metric_table (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="metr_to">
 <summary style="display: none;"></summary>
-<div class="divPar">
+<div class=divPar>
 <p> Pasa una tabla del formato long al formato wide </p>
 
 <p> En ocasiones, al trabajar con flujos como el de autoflow, lanzamos tareas paralelizadas con distintas conmbinaciones de trabajo, por ejemplo:
@@ -958,11 +959,11 @@ a formato wide porque falta algún valor de los factores. </p>
 </details>
 
 	<h3> desaggregate_column_data </h3>
-	<h1 id="desagg_from" class="py_accordion" onclick="hide_show_element('desagg_to')">desaggregate_column_data (Click me)</h1>
+	<h1 id="desagg_from"  class="py_accordion" onclick="hide_show_element('desagg_to')">desaggregate_column_data (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="desagg_to">
 <summary style="display: none;"></summary>
-<div class="divImpar">
+<div class=divImpar>
 
 <p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
@@ -1127,11 +1128,11 @@ a formato wide porque falta algún valor de los factores. </p>
 </details>
 
 	<h3> excel_to_tabular </h3>
-	<h1 id="excel_from" class="py_accordion" onclick="hide_show_element('excel_to')">excel_to_tabular (Click me)</h1>
+	<h1 id="excel_from"  class="py_accordion" onclick="hide_show_element('excel_to')">excel_to_tabular (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="excel_to">
 <summary style="display: none;"></summary>
-<div class="divPar">
+<div class=divPar>
 <p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
 <h4> Ejemplo básico </h4>
 
@@ -1246,11 +1247,11 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 </details>
 
 	<h3> filter_by_list </h3>
-	<h1 id="filt_from" class="py_accordion" onclick="hide_show_element('filt_to')">filter_by_list (Click me)</h1>
+	<h1 id="filt_from"  class="py_accordion" onclick="hide_show_element('filt_to')">filter_by_list (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="filt_to">
 <summary style="display: none;"></summary>
-<div class="divImpar">
+<div class=divImpar>
 
 
 <div class="alert alert-warning" role="alert"><p>Este binario presenta cierto solapamiento con el el binario "column_filter", si bien el solapamiento no 100% 
@@ -1345,7 +1346,10 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
 
 <p> <b>Output</b> </p>
 
-<table id="table_27" border="1" class= "table table-striped" >
+
+    
+    <p>outputs/filtered_long_table</p>
+    <table id="table_27" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1375,6 +1379,7 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
                     <td  >20 </td>
     </tr>
 </table>
+
 
 <h4> Usar un match complementario (usar los términos como blacklist en vez de whitelist) </h4>
 <p> Si en vez de querer quedarnos con todas las filas que tengan los términos de la tabla que pasamos con el flag -t, queremos quedarnos con todas las filas que no tengan esos términos,
@@ -1462,7 +1467,10 @@ podemos activar el flag booleano --blacklist. </p>
 
 <p> <b>Output</b> </p>
 
-<table id="table_30" border="1" class= "table table-striped" >
+
+    
+    <p>outputs/blackfiltered_long_table</p>
+    <table id="table_30" border="1" class= "table table-striped" >
    <tr>
                     <td  >red2 </td>
                     <td  >CPM </td>
@@ -1492,6 +1500,7 @@ podemos activar el flag booleano --blacklist. </p>
                     <td  >25 </td>
     </tr>
 </table>
+
 
 <h4> Match parcial (vale tanto para whitelist como para blacklist) </h4>
 <p> Si en vez de querer filtrar los elementos de la tabla por un match exacto, queremos que sea por un match parcial, podemos activar el flag booleano --not_exact_match</p>
@@ -1561,7 +1570,10 @@ haber usado el flag --not_exact_match</p>
 
 <p> <b>Output</b> </p>
 
-<table id="table_33" border="1" class= "table table-striped" >
+
+    
+    <p>outputs/ref_filtered_disease_cluster_ref_rnd</p>
+    <table id="table_33" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1584,6 +1596,7 @@ haber usado el flag --not_exact_match</p>
     </tr>
 </table>
 
+
 <h4> Filtrar múltiples tablas </h4>
 
 <p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
@@ -1594,12 +1607,179 @@ Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar 
 </div>
 </details>
 
+	<h3> get_columns </h3>
+	<h1 id="getcol_from"  class="py_accordion" onclick="hide_show_element('getcol_to')">get_columns (Click me)</h1>
+	
+	<details class='rep_html_det' open='' id="getcol_to">
+<summary style="display: none;"></summary>
+<div class=divPar>
+
+<p> Se utiliza para obtener un subset de la tabla original, con las columnas pedidas por el usuario </p>
+<h4> Ejemplo básico usando índices numéricos para seleccionar las columnas de interés</h4>
+<p> La tabla de entrada se indica con el flag -i. Las columnas a obtener se indican con el flag -c, siendo índices numéricos en base 1, separados por comas, 
+y pudiendo utilizar un guión para seleccionar rango de columnas. </p>
+<p> En este caso, vamos a coger las columnas 1,3,4 y 5 , que como veremos, para mostrar la funcionalidad, lo hacemos pidiendo la columna 1 y luego las columnas 3-5.</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_34" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >col-1 </td>
+                    <td  >col-2 </td>
+                    <td  >col-3 </td>
+                    <td  >col-4 </td>
+                    <td  >col-5 </td>
+    </tr>
+   <tr>
+                    <td  >1 </td>
+                    <td  >2 </td>
+                    <td  >3 </td>
+                    <td  >4 </td>
+                    <td  >5 </td>
+    </tr>
+   <tr>
+                    <td  >6 </td>
+                    <td  >7 </td>
+                    <td  >8 </td>
+                    <td  >9 </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >11 </td>
+                    <td  >12 </td>
+                    <td  >13 </td>
+                    <td  >14 </td>
+                    <td  >15 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	get_columns -i tables/simple_table -c 1,3-5
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_35" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >col-1 </td>
+                    <td  >col-3 </td>
+                    <td  >col-4 </td>
+                    <td  >col-5 </td>
+    </tr>
+   <tr>
+                    <td  >1 </td>
+                    <td  >3 </td>
+                    <td  >4 </td>
+                    <td  >5 </td>
+    </tr>
+   <tr>
+                    <td  >6 </td>
+                    <td  >8 </td>
+                    <td  >9 </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >11 </td>
+                    <td  >13 </td>
+                    <td  >14 </td>
+                    <td  >15 </td>
+    </tr>
+</table>
+
+
+<h4> Utilizando los nombres de las columnas si se utiliza el flag header</h4>
+<p> Si se activa el flag -H para indicar que la tabla tiene header, podemos pedir entonces también las columnas que nos interesan dando sus nombres separados por comas.
+(OJO: la tabla puede tener header igualmente, que si nos interesa indicar las columnas por índices numéricos, podemos utilizar el script igualmente sin activar el flag -H,
+tal y como hemos hecho en el ejemplo anterior)</p>
+<p> En este caso, vamos a coger las columnas col-1,col-3,col-4 y col-5, las mismas del ejemplo anterior, pero esta vez utilizando el nombre del cabecero de cada columna. 
+Como veremos, en el caso de indicar columnas por nombres, también podemos utilizar el guión si nos interesa obtener un rango de columnas entre esas 2, pero en este caso 
+utilizando "%-%" para separar las dos columnas (para evitar problemas con el guión como parte de nombre de la columna, tal y como se está viendo en este ejemplo, escogido
+a propósito)</p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_36" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >col-1 </td>
+                    <td  >col-2 </td>
+                    <td  >col-3 </td>
+                    <td  >col-4 </td>
+                    <td  >col-5 </td>
+    </tr>
+   <tr>
+                    <td  >1 </td>
+                    <td  >2 </td>
+                    <td  >3 </td>
+                    <td  >4 </td>
+                    <td  >5 </td>
+    </tr>
+   <tr>
+                    <td  >6 </td>
+                    <td  >7 </td>
+                    <td  >8 </td>
+                    <td  >9 </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >11 </td>
+                    <td  >12 </td>
+                    <td  >13 </td>
+                    <td  >14 </td>
+                    <td  >15 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	get_columns -i tables/simple_table -H -c col-1,col-3%-%col-5
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_37" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >col-1 </td>
+                    <td  >col-3 </td>
+                    <td  >col-4 </td>
+                    <td  >col-5 </td>
+    </tr>
+   <tr>
+                    <td  >1 </td>
+                    <td  >3 </td>
+                    <td  >4 </td>
+                    <td  >5 </td>
+    </tr>
+   <tr>
+                    <td  >6 </td>
+                    <td  >8 </td>
+                    <td  >9 </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >11 </td>
+                    <td  >13 </td>
+                    <td  >14 </td>
+                    <td  >15 </td>
+    </tr>
+</table>
+
+</details>
+
 	<h3> intersect_columns </h3>
-	<h1 id="inter_from" class="py_accordion" onclick="hide_show_element('inter_to')">intersect_columns (Click me)</h1>
+	<h1 id="inter_from"  class="py_accordion" onclick="hide_show_element('inter_to')">intersect_columns (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="inter_to">
 <summary style="display: none;"></summary>
-<div class="divPar">
+<div class=divImpar>
 
 <p> Un script muy versatil en torno a la unión de dos tablas</p>
 
@@ -1614,7 +1794,7 @@ aunque luego veremos otros casos de uso</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_34" border="1" class= "table table-striped" >
+    <table id="table_38" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1630,7 +1810,7 @@ aunque luego veremos otros casos de uso</p>
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_35" border="1" class= "table table-striped" >
+    <table id="table_39" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1656,7 +1836,7 @@ aunque luego veremos otros casos de uso</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_36" border="1" class= "table table-striped" >
+    <table id="table_40" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
     </tr>
@@ -1675,7 +1855,7 @@ usar el flag -full</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_37" border="1" class= "table table-striped" >
+    <table id="table_41" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1691,7 +1871,7 @@ usar el flag -full</p>
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_38" border="1" class= "table table-striped" >
+    <table id="table_42" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1717,7 +1897,7 @@ usar el flag -full</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_39" border="1" class= "table table-striped" >
+    <table id="table_43" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >54_ref </td>
@@ -1751,7 +1931,7 @@ los registros específicos de la tabla A , pero sin devolver el resto de columna
 
 <p> <b>Input</b> </p>
 
-    <table id="table_40" border="1" class= "table table-striped" >
+    <table id="table_44" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1767,7 +1947,7 @@ los registros específicos de la tabla A , pero sin devolver el resto de columna
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_41" border="1" class= "table table-striped" >
+    <table id="table_45" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1793,7 +1973,7 @@ los registros específicos de la tabla A , pero sin devolver el resto de columna
 <p> <b>Output</b> </p>
 
 
-    <table id="table_42" border="1" class= "table table-striped" >
+    <table id="table_46" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0007172 </td>
     </tr>
@@ -1808,7 +1988,7 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 
 <p> <b>Input</b> </p>
 
-    <table id="table_43" border="1" class= "table table-striped" >
+    <table id="table_47" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1824,7 +2004,7 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_44" border="1" class= "table table-striped" >
+    <table id="table_48" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1850,7 +2030,7 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 <p> <b>Output</b> </p>
 
 
-    <table id="table_45" border="1" class= "table table-striped" >
+    <table id="table_49" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0007172 </td>
                     <td  >22_ref </td>
@@ -1867,11 +2047,11 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 </details>
 
 	<h3> merge_tabular </h3>
-	<h1 id="merge_from" class="py_accordion" onclick="hide_show_element('merge_to')">merge_tabular (Click me)</h1>
+	<h1 id="merge_from"  class="py_accordion" onclick="hide_show_element('merge_to')">merge_tabular (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="merge_to">
 <summary style="display: none;"></summary>
-<div class="divImpar">
+<div class=divPar>
 
 <div class="alert alert-warning" role="alert"><p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
     es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p></div>
@@ -1886,7 +2066,7 @@ por defecto está a "-" </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_46" border="1" class= "table table-striped" >
+    <table id="table_50" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1902,7 +2082,7 @@ por defecto está a "-" </p>
 </table>
 
     <p><b>Segunda tabla</b></p>
-    <table id="table_47" border="1" class= "table table-striped" >
+    <table id="table_51" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1921,7 +2101,7 @@ por defecto está a "-" </p>
 </table>
 
     <p><b>Tercera tabla</b></p>
-    <table id="table_48" border="1" class= "table table-striped" >
+    <table id="table_52" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -1939,7 +2119,7 @@ por defecto está a "-" </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_49" border="1" class= "table table-striped" >
+    <table id="table_53" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1975,11 +2155,11 @@ por defecto está a "-" </p>
 </details>
 
 	<h3> records_count </h3>
-	<h1 id="recs_from" class="py_accordion" onclick="hide_show_element('recs_to')">records_count (Click me)</h1>
+	<h1 id="recs_from"  class="py_accordion" onclick="hide_show_element('recs_to')">records_count (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="recs_to">
 <summary style="display: none;"></summary>
-<div class="divPar">
+<div class=divImpar>
 
 <p> Se utiliza para obtener el número de ocurrencias de todos los términos en una columna de una tabla </p>
 <h4> Ejemplo básico </h4>
@@ -1990,7 +2170,7 @@ por defecto está a "-" </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_50" border="1" class= "table table-striped" >
+    <table id="table_54" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -2017,7 +2197,7 @@ por defecto está a "-" </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_51" border="1" class= "table table-striped" >
+    <table id="table_55" border="1" class= "table table-striped" >
    <tr>
                     <td  >mRNA </td>
                     <td  >2 </td>
@@ -2033,11 +2213,11 @@ por defecto está a "-" </p>
 </details>
 
 	<h3> standard_name_replacer </h3>
-	<h1 id="repl_from" class="py_accordion" onclick="hide_show_element('repl_to')">standard_name_replacer (Click me)</h1>
+	<h1 id="repl_from"  class="py_accordion" onclick="hide_show_element('repl_to')">standard_name_replacer (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="repl_to">
 <summary style="display: none;"></summary>
-<div class="divImpar">
+<div class=divPar>
 
 <p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
  y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>
@@ -2054,7 +2234,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 
 <p> <b>Input</b> </p>
 
-    <table id="table_52" border="1" class= "table table-striped" >
+    <table id="table_56" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2070,7 +2250,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 </table>
 
     <p><b>Tabla diccionario para reemplazar</b></p>
-    <table id="table_53" border="1" class= "table table-striped" >
+    <table id="table_57" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2089,7 +2269,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 <p> <b>Output</b> </p>
 
 
-    <table id="table_54" border="1" class= "table table-striped" >
+    <table id="table_58" border="1" class= "table table-striped" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
@@ -2114,7 +2294,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 
 <p> <b>Input</b> </p>
 
-    <table id="table_55" border="1" class= "table table-striped" >
+    <table id="table_59" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2130,7 +2310,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 </table>
 
     <p><b>Tabla diccionario para reemplazar</b></p>
-    <table id="table_56" border="1" class= "table table-striped" >
+    <table id="table_60" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2149,7 +2329,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 <p> <b>Output</b> </p>
 
 
-    <table id="table_57" border="1" class= "table table-striped" >
+    <table id="table_61" border="1" class= "table table-striped" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
@@ -2161,11 +2341,11 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 </details>
 
 	<h3> subset_table </h3>
-	<h1 id="subs_from" class="py_accordion" onclick="hide_show_element('subs_to')">subset_table (Click me)</h1>
+	<h1 id="subs_from"  class="py_accordion" onclick="hide_show_element('subs_to')">subset_table (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="subs_to">
 <summary style="display: none;"></summary>
-<div class="divPar">
+<div class=divImpar>
 
 <p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
 <h4> Ejemplo básico </h4>
@@ -2178,7 +2358,7 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 
 <p> <b>Input</b> </p>
 
-    <table id="table_58" border="1" class= "table table-striped" >
+    <table id="table_62" border="1" class= "table table-striped" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -2298,7 +2478,7 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 <p> <b>Output</b> </p>
 
 
-    <table id="table_59" border="1" class= "table table-striped" >
+    <table id="table_63" border="1" class= "table table-striped" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -2338,15 +2518,131 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 </table>
 
 
+
+<h4> Partiendo toda la tabla en distintos archivos con K líneas cada uno</h4>
+<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
+	el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
+<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
+ya que la tabla inicial tiene 10 registros) </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_64" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	subset_table -i tables/disease_cluster_ref_rnd -k 4 -o outputs/subset_table
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    
+    <p>outputs/subset_table/disease_cluster_ref_rnd_chunk0</p>
+    <table id="table_65" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+</table>
+    
+    <p>outputs/subset_table/disease_cluster_ref_rnd_chunk1</p>
+    <table id="table_66" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+</table>
+    
+    <p>outputs/subset_table/disease_cluster_ref_rnd_chunk2</p>
+    <table id="table_67" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
 </div>
 </details>
 
 	<h3> table_linker </h3>
-	<h1 id="link_from" class="py_accordion" onclick="hide_show_element('link_to')">table_linker (Click me)</h1>
+	<h1 id="link_from"  class="py_accordion" onclick="hide_show_element('link_to')">table_linker (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="link_to">
 <summary style="display: none;"></summary>
-<div class="divImpar">
+<div class=divPar>
 
 <div class="alert alert-warning" role="alert"><p>Parte del comportamiento de este binario se puede emular usando el 
 binario "intersect_columns" con los flags adecuados, pero no sé si hay algo que no sea redudante entre los dos binarios </p></div>
@@ -2367,7 +2663,7 @@ flag --columns2linker (por defecto a 1)</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_60" border="1" class= "table table-striped" >
+    <table id="table_68" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2383,7 +2679,7 @@ flag --columns2linker (por defecto a 1)</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_61" border="1" class= "table table-striped" >
+    <table id="table_69" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2409,7 +2705,7 @@ flag --columns2linker (por defecto a 1)</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_62" border="1" class= "table table-striped" >
+    <table id="table_70" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2436,7 +2732,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_63" border="1" class= "table table-striped" >
+    <table id="table_71" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2452,7 +2748,7 @@ con el valor por defecto</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_64" border="1" class= "table table-striped" >
+    <table id="table_72" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2478,7 +2774,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_65" border="1" class= "table table-striped" >
+    <table id="table_73" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2505,7 +2801,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_66" border="1" class= "table table-striped" >
+    <table id="table_74" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2521,7 +2817,7 @@ con el valor por defecto</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_67" border="1" class= "table table-striped" >
+    <table id="table_75" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2547,7 +2843,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_68" border="1" class= "table table-striped" >
+    <table id="table_76" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2567,11 +2863,11 @@ con el valor por defecto</p>
 </details>
 
 	<h3> tag_table </h3>
-	<h1 id="tag_from" class="py_accordion" onclick="hide_show_element('tag_to')">tag_table (Click me)</h1>
+	<h1 id="tag_from"  class="py_accordion" onclick="hide_show_element('tag_to')">tag_table (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="tag_to">
 <summary style="display: none;"></summary>
-<div class="divPar">
+<div class=divImpar>
 
 <p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
 
@@ -2583,7 +2879,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_69" border="1" class= "table table-striped" >
+    <table id="table_77" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -2627,7 +2923,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_70" border="1" class= "table table-striped" >
+    <table id="table_78" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >colapsada </td>
@@ -2697,7 +2993,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_71" border="1" class= "table table-striped" >
+    <table id="table_79" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -2733,7 +3029,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_72" border="1" class= "table table-striped" >
+    <table id="table_80" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -2751,7 +3047,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_73" border="1" class= "table table-striped" >
+    <table id="table_81" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -2836,7 +3132,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_74" border="1" class= "table table-striped" >
+    <table id="table_82" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -2872,7 +3168,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_75" border="1" class= "table table-striped" >
+    <table id="table_83" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -2890,7 +3186,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_76" border="1" class= "table table-striped" >
+    <table id="table_84" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3010,11 +3306,11 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </details>
 
 	<h3> transform_to_latex </h3>
-	<h1 id="trnsf_from" class="py_accordion" onclick="hide_show_element('trnsf_to')">transform_to_latex (Click me)</h1>
+	<h1 id="trnsf_from"  class="py_accordion" onclick="hide_show_element('trnsf_to')">transform_to_latex (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="trnsf_to">
 <summary style="display: none;"></summary>
-<div class="divImpar">
+<div class=divPar>
 
 <p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
 <h4> Ejemplo básico </h4>
@@ -3025,7 +3321,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_77" border="1" class= "table table-striped" >
+    <table id="table_85" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3057,7 +3353,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_78" border="1" class= "table table-striped" >
+    <table id="table_86" border="1" class= "table table-striped" >
    <tr>
                     <td  >\hline  </td>
     </tr>
@@ -3084,7 +3380,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_79" border="1" class= "table table-striped" >
+    <table id="table_87" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3116,7 +3412,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_80" border="1" class= "table table-striped" >
+    <table id="table_88" border="1" class= "table table-striped" >
    <tr>
                     <td  >\begin{table}[!htbp] </td>
     </tr>
@@ -3160,11 +3456,11 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </details>
 
 	<h3> transpose_table </h3>
-	<h1 id="trnsp_from" class="py_accordion" onclick="hide_show_element('trnsp_to')">transpose_table (Click me)</h1>
+	<h1 id="trnsp_from"  class="py_accordion" onclick="hide_show_element('trnsp_to')">transpose_table (Click me)</h1>
 	
 	<details class='rep_html_det' open='' id="trnsp_to">
 <summary style="display: none;"></summary>
-<div class="divPar">
+<div class=divImpar>
 
 <p> Se utiliza para transponer una tabla  </p>
 <h4> Ejemplo básico </h4>
@@ -3175,7 +3471,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_81" border="1" class= "table table-striped" >
+    <table id="table_89" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3207,7 +3503,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_82" border="1" class= "table table-striped" >
+    <table id="table_90" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >as </td>

@@ -2,6 +2,7 @@
 import sys, os
 from io import StringIO
 from mako.runtime import Undefined
+import glob
 
 def capture_stdout(func):
     def wrapper(*args, **kwargs):
@@ -26,11 +27,6 @@ def execute_command(library, script, args, name='results'):
         _, printed = script2test(args.split(" "))
         test_result = strng2table(printed)
         plotter.hash_vars[name] = test_result
-
-try:
-    is_supp_table = True if supp_table else False
-except NameError:
-    is_supp_table = False
 %>
 
 <p> <b>Input</b> </p>
@@ -56,8 +52,20 @@ except NameError:
 <p> <b>Output</b> </p>
 <%
 execute_command(library, method, args, '_')
-output = lib.CmdTabs.load_input_data(output_table)
-output_name = os.path.basename(output_table)
-plotter.hash_vars[output_name] = output
+
+outputs = output_table.split(",")
+all_outputs = []
+for output in outputs: 
+    all_outputs += glob.glob(output.strip())
+all_outputs.sort()
 %>
-${ plotter.table(id=output_name, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'} )}
+
+% for out_table in all_outputs:
+    <%
+    output = library.CmdTabs.load_input_data(out_table)
+    output_name = os.path.basename(out_table)
+    plotter.hash_vars[output_name] = output
+    %>
+    <p>${out_table}</p>
+    ${ plotter.table(id=output_name, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'} )}
+% endfor

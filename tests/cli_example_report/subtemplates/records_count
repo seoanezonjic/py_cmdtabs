@@ -1,7 +1,7 @@
 <% 
 meth_name = getattr(lib, meth).__name__
 %>
-<div class="divPar">
+${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 
 <p> Se utiliza para obtener el número de ocurrencias de todos los términos en una columna de una tabla </p>
 <h4> Ejemplo básico </h4>
