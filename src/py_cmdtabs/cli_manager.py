@@ -228,7 +228,9 @@ def subset_table(args=None):
     parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
                         help="Path to output file (or the folder where the chunks will be stored if --chunk_size is set)")
     parser.add_argument("-k", "--chunk_size", dest="chunk_size", default= 0, type=int,
-                        help="Use it instead of start_line and lines_to_subset if you want to split the table in chunks on K lines in different files.")    
+                        help="Use it instead of start_line and lines_to_subset if you want to split the table in chunks on K lines in different files.")
+    parser.add_argument("-n", "--number_of_files", dest="number_of_files", default= 0, type=int,
+                        help="Use it instead of start_line and lines_to_subset if you want to split the table in N files with the same number of lines.")          
     opts = parser.parse_args(args)
     main_subset_table(opts)
 

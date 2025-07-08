@@ -574,10 +574,18 @@ def test_subset_table(tmp_dir):
 	for idx, file in enumerate(sorted(os.listdir(out_folder))):
 
 		returned = CmdTabs.load_input_data(os.path.join(out_folder, file))
-		#print(returned)
-		#print(expected_results[chunk_size*idx:chunk_size*(idx+1)])
 		assert returned == expected_results[chunk_size*idx:chunk_size*(idx+1)]
 
+	# Testing with the --number_of_files option
+	n_files = 3
+	out_folder2 = os.path.join(tmp_dir, 'subset_table_chunks2')	
+	args = f"-i {input_file} -n {n_files} -o {out_folder2}".split(" ")
+	py_cmdtabs.subset_table(args)
+	
+	for idx, file in enumerate(sorted(os.listdir(out_folder2))):
+		returned = CmdTabs.load_input_data(os.path.join(out_folder2, file))
+		expected = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, "subset_table_fold", file))
+		assert returned == expected	
 
 def test_transpose_table(tmp_dir):
 	input_file = os.path.join(DATA_TEST_PATH, 'mondo_genes')

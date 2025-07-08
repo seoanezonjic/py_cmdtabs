@@ -1698,8 +1698,8 @@ y pudiendo utilizar un guión para seleccionar rango de columnas. </p>
 tal y como hemos hecho en el ejemplo anterior)</p>
 <p> En este caso, vamos a coger las columnas col-1,col-3,col-4 y col-5, las mismas del ejemplo anterior, pero esta vez utilizando el nombre del cabecero de cada columna. 
 Como veremos, en el caso de indicar columnas por nombres, también podemos utilizar el guión si nos interesa obtener un rango de columnas entre esas 2, pero en este caso 
-utilizando "%-%" para separar las dos columnas (para evitar problemas con el guión como parte de nombre de la columna, tal y como se está viendo en este ejemplo, escogido
-a propósito)</p>
+utilizando "%-%" como separador del rango de las dos columnas (para evitar problemas con el guión como parte de nombre de la columna, tal y como se está viendo en este 
+ejemplo, escogido a propósito)</p>
 
 
 
@@ -1838,10 +1838,10 @@ aunque luego veremos otros casos de uso</p>
 
     <table id="table_40" border="1" class= "table table-striped" >
    <tr>
-                    <td  >MONDO:0010193 </td>
+                    <td  >MONDO:0008995 </td>
     </tr>
    <tr>
-                    <td  >MONDO:0008995 </td>
+                    <td  >MONDO:0010193 </td>
     </tr>
 </table>
 
@@ -1899,18 +1899,18 @@ usar el flag -full</p>
 
     <table id="table_43" border="1" class= "table table-striped" >
    <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
-   <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
                     <td  >MONDO:0008995 </td>
                     <td  >HGNC:16873 </td>
                     <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
     </tr>
 </table>
  
@@ -2634,6 +2634,119 @@ ya que la tabla inicial tiene 10 registros) </p>
     </tr>
 </table>
 
+
+
+<h4> Partiendo toda la tabla en N archivos diferentes con la misma cantidad de registros cada uno</h4>
+<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files 
+en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
+<p> En este caso, vamos a partir la tabla de clusters de enfermedades en 2 archivos </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_68" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	subset_table -i tables/disease_cluster_ref_rnd -n 2 -o outputs/subset_table2
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    
+    <p>outputs/subset_table2/disease_cluster_ref_rnd_chunk0</p>
+    <table id="table_69" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+</table>
+    
+    <p>outputs/subset_table2/disease_cluster_ref_rnd_chunk1</p>
+    <table id="table_70" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+
+
 </div>
 </details>
 
@@ -2658,75 +2771,6 @@ tabla se mantendrán. Con respecto a la tabla linker, podemos indicar la columna
 --id_linker (por defecto a 0), y las columnas que queremos mantener en el merge, separadas por comas, con el 
 flag --columns2linker (por defecto a 1)</p>
 <p> Tambien tenemos el flag -s para indicar que separador queremos para la tabla resultante (por defecto tabulación)</p>
-
-
-
-<p> <b>Input</b> </p>
-
-    <table id="table_68" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0007172 </td>
-                    <td  >22_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-    </tr>
-</table>
-
-    <p><b>Tabla a enlazar</b></p>
-    <table id="table_69" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0012866 </td>
-                    <td  >HGNC:21197 </td>
-                    <td  >mRNA </td>
-    </tr>
-</table>
-
-
-<p><code>
-	table_linker -i tables/disease_cluster -l tables/disease_gene -s 	
-</p></code>
-
-<p> <b>Output</b> </p>
-
-
-    <table id="table_70" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-                    <td  >HGNC:16873 </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0007172 </td>
-                    <td  >22_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-                    <td  >HGNC:3527 </td>
-    </tr>
-</table>
-
-
-<h4> Ejemplo utilizando los flags --id_linker y --columns2linker </h4>                                                                            
-<p> Utilizamos el flag --columns2linker para indicar que queremos las dos columnas de la tabla linker, no solo la primera. Usamos también
-el flag --id_linker para indicar qué columna contiene los identificadores para el merge en la tabla linker, aunque en este caso coincida
-con el valor por defecto</p>
 
 
 
@@ -2768,7 +2812,7 @@ con el valor por defecto</p>
 
 
 <p><code>
-	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --id_linker 1
+	table_linker -i tables/disease_cluster -l tables/disease_gene -s 	
 </p></code>
 
 <p> <b>Output</b> </p>
@@ -2779,7 +2823,6 @@ con el valor por defecto</p>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
                     <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
     </tr>
    <tr>
                     <td  >MONDO:0007172 </td>
@@ -2789,13 +2832,14 @@ con el valor por defecto</p>
                     <td  >MONDO:0010193 </td>
                     <td  >54_ref </td>
                     <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
     </tr>
 </table>
 
 
-<h4> Manteniendo solo registros comunes </h4>                                                                            
-<p> Para mantener solo los registros comunes a ambas tablas podemos usar el flag --drop. Esto sería equivalente a un <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a></p>
+<h4> Ejemplo utilizando los flags --id_linker y --columns2linker </h4>                                                                            
+<p> Utilizamos el flag --columns2linker para indicar que queremos las dos columnas de la tabla linker, no solo la primera. Usamos también
+el flag --id_linker para indicar qué columna contiene los identificadores para el merge en la tabla linker, aunque en este caso coincida
+con el valor por defecto</p>
 
 
 
@@ -2837,13 +2881,82 @@ con el valor por defecto</p>
 
 
 <p><code>
-	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --drop
+	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --id_linker 1
 </p></code>
 
 <p> <b>Output</b> </p>
 
 
     <table id="table_76" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+</table>
+
+
+<h4> Manteniendo solo registros comunes </h4>                                                                            
+<p> Para mantener solo los registros comunes a ambas tablas podemos usar el flag --drop. Esto sería equivalente a un <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a></p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_77" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+</table>
+
+    <p><b>Tabla a enlazar</b></p>
+    <table id="table_78" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012866 </td>
+                    <td  >HGNC:21197 </td>
+                    <td  >mRNA </td>
+    </tr>
+</table>
+
+
+<p><code>
+	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --drop
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_79" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2879,7 +2992,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_77" border="1" class= "table table-striped" >
+    <table id="table_80" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -2923,7 +3036,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_78" border="1" class= "table table-striped" >
+    <table id="table_81" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >colapsada </td>
@@ -2993,7 +3106,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_79" border="1" class= "table table-striped" >
+    <table id="table_82" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3029,7 +3142,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_80" border="1" class= "table table-striped" >
+    <table id="table_83" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3047,7 +3160,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_81" border="1" class= "table table-striped" >
+    <table id="table_84" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3132,7 +3245,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_82" border="1" class= "table table-striped" >
+    <table id="table_85" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3168,7 +3281,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_83" border="1" class= "table table-striped" >
+    <table id="table_86" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3186,7 +3299,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_84" border="1" class= "table table-striped" >
+    <table id="table_87" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3321,7 +3434,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_85" border="1" class= "table table-striped" >
+    <table id="table_88" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3353,7 +3466,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_86" border="1" class= "table table-striped" >
+    <table id="table_89" border="1" class= "table table-striped" >
    <tr>
                     <td  >\hline  </td>
     </tr>
@@ -3380,7 +3493,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_87" border="1" class= "table table-striped" >
+    <table id="table_90" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3412,7 +3525,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_88" border="1" class= "table table-striped" >
+    <table id="table_91" border="1" class= "table table-striped" >
    <tr>
                     <td  >\begin{table}[!htbp] </td>
     </tr>
@@ -3471,7 +3584,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_89" border="1" class= "table table-striped" >
+    <table id="table_92" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3503,7 +3616,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_90" border="1" class= "table table-striped" >
+    <table id="table_93" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >as </td>

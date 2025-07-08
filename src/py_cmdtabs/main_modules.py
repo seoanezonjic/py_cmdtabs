@@ -169,19 +169,33 @@ def main_standard_name_replacer(options):
 def main_subset_table(options):
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
-    if options.chunk_size == 0:
-      subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
-      CmdTabs.write_output_data(subset_table, options.output_file)
-    elif options.chunk_size > 0:
+    if options.number_of_files > 0: # split the table in N files with the same number of lines
+      file_basename = os.path.basename(options.input_file).split('.')[0]
+      os.makedirs(options.output_file, exist_ok=True)
+      chunk_size = len(input_table) // options.number_of_files
+      if len(input_table) % options.number_of_files > 0:
+          chunk_size += 1
+      chunk_counter = 0
+      header = [input_table[0]] if options.header else []
+      init_line = 1 if options.header else 0
+      for idx in range(init_line, len(input_table), chunk_size):
+          CmdTabs.write_output_data(header+input_table[idx:idx+chunk_size], os.path.join(options.output_file, f"{file_basename}_chunk{chunk_counter}"))
+          chunk_counter += 1
+
+    elif options.chunk_size > 0: # split the table in chunks of K lines in different files
       file_basename = os.path.basename(options.input_file).split('.')[0]
       os.makedirs(options.output_file, exist_ok=True)
       chunk_counter = 0
       header = [input_table[0]] if options.header else []
       init_line = 1 if options.header else 0
       for idx in range(init_line, len(input_table), options.chunk_size):
-          print(input_table[idx:idx+options.chunk_size])
           CmdTabs.write_output_data(header+input_table[idx:idx+options.chunk_size], os.path.join(options.output_file, f"{file_basename}_chunk{chunk_counter}"))
-          chunk_counter += 1
+          chunk_counter += 1 
+
+    elif options.chunk_size == 0: # subset the table from start_line to chunk_lines
+      subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
+      CmdTabs.write_output_data(subset_table, options.output_file)
+
 
 def main_table_linker(options):
     set_class_attributes(options)
