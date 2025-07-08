@@ -87,6 +87,31 @@ def main_filter_by_list(options):
                 ratio_lines_removed = round(100*(len(file_filteredfile[file2befiltered])/len(loaded_files[file2befiltered])),2)
                 print(f"{file2befiltered}\t{ratio_lines_removed}")
 
+def main_get_columns(options):
+    set_class_attributes(options)
+    input_data = CmdTabs.load_input_data(options.input_file, options.sep)
+    columns = options.columns2extract
+    if options.header: 
+        cols_header_dict = dict([(col_name, str(idx+1)) for idx, col_name in enumerate(input_data[0])])
+        cols_to_get = columns.split(",")
+        cols_to_get_processed = []
+        try:
+          for col in cols_to_get:
+              if "%-%" not in col:
+                  cols_to_get_processed.append(cols_header_dict[col])
+              else:
+                  start_col, end_col = col.split("%-%")
+                  start_col = cols_header_dict[start_col]
+                  end_col = cols_header_dict[end_col]
+                  cols_to_get_processed.append(f"{start_col}-{end_col}")
+        except KeyError as e:
+          raise KeyError(f"Column '{e.args[0]}' not found in header. Available columns: {', '.join(cols_header_dict.keys())}")
+        columns = ",".join(cols_to_get_processed)
+  
+    columns = CmdTabs.parse_column_indices(",", columns)
+    output_table = [[row[column] for column in columns] for row in input_data]
+    CmdTabs.write_output_data(output_table, options.output_file, options.sep)
+
 def main_intersect_columns(options):
     set_class_attributes(options)
 
@@ -144,8 +169,19 @@ def main_standard_name_replacer(options):
 def main_subset_table(options):
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
-    subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
-    CmdTabs.write_output_data(subset_table, options.output_file)
+    if options.chunk_size == 0:
+      subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
+      CmdTabs.write_output_data(subset_table, options.output_file)
+    elif options.chunk_size > 0:
+      file_basename = os.path.basename(options.input_file).split('.')[0]
+      os.makedirs(options.output_file, exist_ok=True)
+      chunk_counter = 0
+      header = [input_table[0]] if options.header else []
+      init_line = 1 if options.header else 0
+      for idx in range(init_line, len(input_table), options.chunk_size):
+          print(input_table[idx:idx+options.chunk_size])
+          CmdTabs.write_output_data(header+input_table[idx:idx+options.chunk_size], os.path.join(options.output_file, f"{file_basename}_chunk{chunk_counter}"))
+          chunk_counter += 1
 
 def main_table_linker(options):
     set_class_attributes(options)

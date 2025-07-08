@@ -133,6 +133,21 @@ def filter_by_list(args=None):
     opts = parser.parse_args(args)
     main_filter_by_list(opts)
 
+def get_columns(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description='Extract desired columns from a table.')
+    add_common_options(parser)
+    parser.add_argument("-s", "--separator", dest="sep", default="\t", type=unescaped_str,
+      help="Column character separator")    
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+      help="Indicate if files have header")
+    parser.add_argument("-o", "--output_file", dest="output_file",
+      help="Path to output file")
+    parser.add_argument("-c", "--columns2extract", dest="columns2extract", default="1",
+      help="Comma separated values of columns positions to extract (1 based) or column names if header is present. Default 1")
+    opts = parser.parse_args(args)
+    main_get_columns(opts)
+
 def intersect_columns(args=None):
     if args == None: args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Collapse table rows aggregatting one field in the table.')
@@ -211,7 +226,9 @@ def subset_table(args=None):
     parser.add_argument("-l", "--lines_to_subset", dest="chunk_lines", default= 5, type= int,
                         help="Set the number of lines to extract from --start_line")
     parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
-                        help="Path to output file")
+                        help="Path to output file (or the folder where the chunks will be stored if --chunk_size is set)")
+    parser.add_argument("-k", "--chunk_size", dest="chunk_size", default= 0, type=int,
+                        help="Use it instead of start_line and lines_to_subset if you want to split the table in chunks on K lines in different files.")    
     opts = parser.parse_args(args)
     main_subset_table(opts)
 
@@ -234,20 +251,6 @@ def table_linker(args=None):
     
     opts = parser.parse_args(args)
     main_table_linker(opts)	
-
-def table_splitter(args=None):
-    if args == None: args = sys.argv[1:]
-    parser = argparse.ArgumentParser(description='Split a table in several files by a given chunk size')
-    add_common_options(parser)
-    parser.add_argument("-k", "--chunk_size", dest="chunk_size", default= 1000, type=int,
-      help="Column character separator")
-    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
-      help="Indicate if input file has a header line. Header will be printed in output if true")
-    parser.add_argument("-O", "--output_folder", dest="output_folder",
-      help="Path to output files")
-    
-    opts = parser.parse_args(args)
-    main_table_splitter(opts)
 
 def tag_table(args=None):
     if args == None: args = sys.argv[1:]

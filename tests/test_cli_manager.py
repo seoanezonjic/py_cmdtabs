@@ -167,6 +167,29 @@ def test_create_metric_table_transpose(tmp_dir):
 	assert expected_result_file1 == test_result_file1
 	assert expected_result_file2 == test_result_file2
 
+def test_get_columns():
+	#Testing with a table with header flag, using column names to subset
+	input_file = os.path.join(DATA_TEST_PATH, 'simple_table')
+
+	reference = [["col-1", "col-3", "col-4", "col-5"],
+				 ["1",		"3", 	"4", 		"5"],
+				 ["6",		"8", 	"9", 		"10"],
+				 ["11",		"13", 	"14", 		"15"]]
+	
+	args = f"-i {input_file} -H -c col-1,col-3%-%col-5".split(" ")
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.get_columns(lsargs)
+	_, printed = script2test(args)
+	test_result = strng2table(printed)
+	assert test_result == reference
+
+	#Testing with a table without using header flag, then indicating columns by indexes to subset the same column of the table
+	args = f"-i {input_file} -c 1,3-5".split(" ")
+	_, printed = script2test(args)
+	test_result = strng2table(printed)
+	assert test_result == reference
+	
 
 def test_merge_tabular():
 	input_file1 = os.path.join(DATA_TEST_PATH, 'disease_gene')
@@ -539,6 +562,21 @@ def test_subset_table(tmp_dir):
 	py_cmdtabs.subset_table(args)
 	returned = CmdTabs.load_input_data(out_file)
 	assert expected_result == returned
+
+	# Testing with the --chunk_size option
+	chunk_size = 2
+	input_file = os.path.join(DATA_TEST_PATH, 'mondo_genes')
+	out_folder = os.path.join(tmp_dir, 'subset_table_chunks')	
+	args = f"-i {input_file} -k {chunk_size} -o {out_folder}".split(" ")
+	py_cmdtabs.subset_table(args)
+	
+	expected_results = CmdTabs.load_input_data(input_file)
+	for idx, file in enumerate(sorted(os.listdir(out_folder))):
+
+		returned = CmdTabs.load_input_data(os.path.join(out_folder, file))
+		#print(returned)
+		#print(expected_results[chunk_size*idx:chunk_size*(idx+1)])
+		assert returned == expected_results[chunk_size*idx:chunk_size*(idx+1)]
 
 
 def test_transpose_table(tmp_dir):
