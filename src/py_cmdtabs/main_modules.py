@@ -48,6 +48,7 @@ def main_excel_to_tabular(options):
     set_class_attributes(options)
     sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
     storage = CmdTabs.extract_columns(sheet, options.columns2extract)
+    storage = CmdTabs.extract_rows(storage, options.rows2extract)
     CmdTabs.write_output_data(storage, options.output_file)
 
 def main_filter_by_list(options):

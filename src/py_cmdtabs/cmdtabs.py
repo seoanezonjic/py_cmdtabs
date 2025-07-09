@@ -285,7 +285,10 @@ class CmdTabs:
 		return filtered_table
 
 	def extract_fields(arr_sub, indexes):
-		return [ str(arr_sub[idx]) for idx in indexes] # The str instruction is used to ensure that always we have string data (i.e: when this function is used with excel objecb it could extrac numerical data)
+		if indexes == [-1]:
+			return arr_sub
+		else:
+			return [ str(arr_sub[idx]) for idx in indexes] # The str instruction is used to ensure that always we have string data (i.e: when this function is used with excel objecb it could extrac numerical data)
 
 	def merge_files(files, fill_character='-'): #NO TEST
 		parent_table = {}
@@ -357,6 +360,12 @@ class CmdTabs:
 		for row in table:
 			storage.append(CmdTabs.extract_fields(row, columns2extract))
 		return storage
+	
+	def extract_rows(table, rows2extract):
+		if rows2extract == [-1]:
+			return table
+		else:
+			return [ row for idx, row in enumerate(table) if idx in rows2extract ]
 
 	def get_table_from_excel(file, sheet_number):
 		x = openpyxl.load_workbook(file)

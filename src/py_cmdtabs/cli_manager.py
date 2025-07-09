@@ -111,7 +111,9 @@ def excel_to_tabular(args=None):
     parser.add_argument("-o", "--output_file", dest="output_file",
       help="Path to output file")
     parser.add_argument("-c", "--columns2extract", dest="columns2extract", default=[0], type=list_based_0,
-      help="Column position to extract (1 based). Default 1")
+      help="Column position to extract (1 based). Default 1. Use 0 to extract all columns")
+    parser.add_argument("-r", "--rows2extract", dest="rows2extract", default=[-1], type=list_based_0,
+      help="Row positions to extract (1 based). Default 0, which means all rows will be extracted")  
     parser.add_argument("-s", "--sheet_number", dest="sheet_number", default=0, type=based_0,
       help="Sheet number to work with. Default 1")
 
