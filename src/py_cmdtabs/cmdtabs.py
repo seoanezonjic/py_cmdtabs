@@ -145,7 +145,9 @@ class CmdTabs:
 
 
 	def aggregate_column(input_table, col_index, cols_agg, sep, agg_mode="concatenate"):
-		make_aggregation = {"concatenate": lambda agg_col: sep.join(agg_col), "mean": np.mean, "median": np.median, "max": np.max, "min": np.min}
+		make_aggregation = {"concatenate": lambda agg_col: sep.join(agg_col), "mean": np.mean, "median": np.median, "max": np.max, "min": np.min, "sum": np.sum, "std": np.std, "var": np.var,
+					  		"count": lambda agg_col: len(agg_col), "IQR": lambda agg_col: np.percentile(agg_col, 75) - np.percentile(agg_col, 25),
+							"PC25": lambda agg_col: np.percentile(agg_col, 25), "PC75": lambda agg_col: np.percentile(agg_col, 75)}
 		aggregated_data = defaultdict(lambda: False	)
 		if type(cols_agg) == int: cols_agg = [cols_agg]
 		if type(col_index) == int: col_index = [col_index]
