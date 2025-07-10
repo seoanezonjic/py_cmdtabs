@@ -322,60 +322,6 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 
 
 
-<h4> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores, y otra función de agregación </h4>
-<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
-
-
-
-<p> <b>Input</b> </p>
-
-    <table id="table_4" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >as </td>
-                    <td  >1 </td>
-                    <td  >20 </td>
-    </tr>
-   <tr>
-                    <td  >as </td>
-                    <td  >2 </td>
-                    <td  >30 </td>
-    </tr>
-   <tr>
-                    <td  >zz </td>
-                    <td  >3 </td>
-                    <td  >100 </td>
-    </tr>
-   <tr>
-                    <td  >zz </td>
-                    <td  >4 </td>
-                    <td  >110 </td>
-    </tr>
-</table>
-
-
-
-<p><code>
-	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2,3 -A mean
-</p></code>
-
-<p> <b>Output</b> </p>
-
-
-    <table id="table_5" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >as </td>
-                    <td  >1.5 </td>
-                    <td  >25.0 </td>
-    </tr>
-   <tr>
-                    <td  >zz </td>
-                    <td  >3.5 </td>
-                    <td  >105.0 </td>
-    </tr>
-</table>
-
-
-
 <h4> Teniendo 2 columnas como referencia </h4>
 <p> Si se tuvieran dos columnas como referencia y no queremos agregarla, pero que tampoco se pierda, se puede utilizar el flag -x para pasar más de una columna 
 como referencia (además de más de una columna como agregación). Además del método de agregación deseado.
@@ -384,7 +330,7 @@ como referencia (además de más de una columna como agregación). Además del m
 
 <p> <b>Input</b> </p>
 
-    <table id="table_6" border="1" class= "table table-striped" >
+    <table id="table_4" border="1" class= "table table-striped" >
    <tr>
                     <td  >A </td>
                     <td  >as </td>
@@ -420,7 +366,7 @@ como referencia (además de más de una columna como agregación). Además del m
 <p> <b>Output</b> </p>
 
 
-    <table id="table_7" border="1" class= "table table-striped" >
+    <table id="table_5" border="1" class= "table table-striped" >
    <tr>
                     <td  >A </td>
                     <td  >as </td>
@@ -434,6 +380,114 @@ como referencia (además de más de una columna como agregación). Además del m
                     <td  >100,110 </td>
     </tr>
 </table>
+
+
+
+<h4> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores, y otra función de agregación </h4>
+<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
+<p> Ahora tiene otros métodos de agregación disponibles: suma ("sum"), desviación estándar ("std"), varianza ("var"), rango intercuartílico ("IQR"), percentil 25 ("PC25") y percentil 75 ("PC75"), además de conteo ("count"). </p>
+<p> Vamos a ver un ejemplo con la media de los valores de las columnas 2 y 3, en función de la columna 1. </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_6" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2,3 -A mean
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_7" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1.5 </td>
+                    <td  >25.0 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3.5 </td>
+                    <td  >105.0 </td>
+    </tr>
+</table>
+
+
+<h4> Ejemplo de agregación con conteos </h4>
+<p> Nos sirve para acabar en una columna con el identificador y en la otra con la cantidad de veces que se repetía ese identificador cuando estaba en formato desagregado </p>
+
+
+
+<p> <b>Input</b> </p>
+
+    <table id="table_8" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >1 </td>
+                    <td  >20 </td>
+    </tr>
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+                    <td  >30 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >3 </td>
+                    <td  >100 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >4 </td>
+                    <td  >110 </td>
+    </tr>
+</table>
+
+
+
+<p><code>
+	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2 -A count
+</p></code>
+
+<p> <b>Output</b> </p>
+
+
+    <table id="table_9" border="1" class= "table table-striped" >
+   <tr>
+                    <td  >as </td>
+                    <td  >2 </td>
+    </tr>
+   <tr>
+                    <td  >zz </td>
+                    <td  >2 </td>
+    </tr>
+</table>
+
 
 
 </div>
@@ -468,7 +522,7 @@ la tabla <code>long_disease_cluster</code> (flag -i). Además queremos que sea e
 
 <p> <b>Input</b> </p>
 
-    <table id="table_8" border="1" class= "table table-striped" >
+    <table id="table_10" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -532,7 +586,7 @@ la tabla <code>long_disease_cluster</code> (flag -i). Además queremos que sea e
 <p> <b>Output</b> </p>
 
 
-    <table id="table_9" border="1" class= "table table-striped" >
+    <table id="table_11" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >36_rand </td>
@@ -567,7 +621,7 @@ devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'<
 <p> <b>Output</b> </p>
 
 
-    <table id="table_10" border="1" class= "table table-striped" >
+    <table id="table_12" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >53_ref </td>
@@ -593,7 +647,7 @@ devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'<
 <p> <b>Output</b> </p>
 
 
-    <table id="table_11" border="1" class= "table table-striped" >
+    <table id="table_13" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -623,7 +677,7 @@ devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'<
 <p> <b>Output</b> </p>
 
 
-    <table id="table_12" border="1" class= "table table-striped" >
+    <table id="table_14" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -670,7 +724,7 @@ de obtener los registros que contienen "ref", obtendremos los que no lo contiene
 <p> <b>Output</b> </p>
 
 
-    <table id="table_13" border="1" class= "table table-striped" >
+    <table id="table_15" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0007172 </td>
                     <td  >22_rand </td>
@@ -720,7 +774,7 @@ En este caso, para quedarnos con distintos subsets, podemos utilizar el match pa
 <p> <b>Output</b> </p>
 
 
-    <table id="table_14" border="1" class= "table table-striped" >
+    <table id="table_16" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >53_ref </td>
@@ -747,7 +801,7 @@ En este caso, para quedarnos con distintos subsets, podemos utilizar el match pa
 <p> <b>Output</b> </p>
 
 
-    <table id="table_15" border="1" class= "table table-striped" >
+    <table id="table_17" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >36_rand </td>
@@ -782,7 +836,7 @@ podemos hacer lo siguiente:</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_16" border="1" class= "table table-striped" >
+    <table id="table_18" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -844,7 +898,7 @@ el comando sería algo como:</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_17" border="1" class= "table table-striped" >
+    <table id="table_19" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -914,7 +968,7 @@ el comando sería algo como:</p>
 
 
 
-<table id="table_18" border="1" class= "table table-striped" >
+<table id="table_20" border="1" class= "table table-striped" >
    <tr>
                     <td  >red </td>
                     <td  >metodo </td>
@@ -974,7 +1028,7 @@ a formato wide porque falta algún valor de los factores. </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_19" border="1" class= "table table-striped" >
+    <table id="table_21" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1001,7 +1055,7 @@ a formato wide porque falta algún valor de los factores. </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_20" border="1" class= "table table-striped" >
+    <table id="table_22" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1048,7 +1102,7 @@ a formato wide porque falta algún valor de los factores. </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_21" border="1" class= "table table-striped" >
+    <table id="table_23" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1078,7 +1132,7 @@ a formato wide porque falta algún valor de los factores. </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_22" border="1" class= "table table-striped" >
+    <table id="table_24" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1164,7 +1218,7 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 <p> <b>Output</b> </p>
 
 
-    <table id="table_23" border="1" class= "table table-striped" >
+    <table id="table_25" border="1" class= "table table-striped" >
    <tr>
                     <td  >genes </td>
                     <td  >cell1 </td>
@@ -1212,7 +1266,7 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 <p> <b>Output</b> </p>
 
 
-    <table id="table_24" border="1" class= "table table-striped" >
+    <table id="table_26" border="1" class= "table table-striped" >
    <tr>
                     <td  >genes </td>
                     <td  >cell5 </td>
@@ -1266,7 +1320,7 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 <p> <b>Output</b> </p>
 
 
-    <table id="table_25" border="1" class= "table table-striped" >
+    <table id="table_27" border="1" class= "table table-striped" >
    <tr>
                     <td  >genes </td>
                     <td  >cell1 </td>
@@ -1326,7 +1380,7 @@ Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas
 <p> <b>Output</b> </p>
 
 
-    <table id="table_26" border="1" class= "table table-striped" >
+    <table id="table_28" border="1" class= "table table-striped" >
    <tr>
                     <td  >genes </td>
                     <td  >cell2 </td>
@@ -1366,7 +1420,7 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
 
 <p> <b>Input</b> </p>
 
-    <table id="table_27" border="1" class= "table table-striped" >
+    <table id="table_29" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1426,7 +1480,7 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
 </table>
 
     <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
-    <table id="table_28" border="1" class= "table table-striped" >
+    <table id="table_30" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
     </tr>
@@ -1445,7 +1499,7 @@ añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este
 
     
     <p>outputs/filtered_long_table</p>
-    <table id="table_29" border="1" class= "table table-striped" >
+    <table id="table_31" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1487,7 +1541,7 @@ podemos activar el flag booleano --blacklist. </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_30" border="1" class= "table table-striped" >
+    <table id="table_32" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1547,7 +1601,7 @@ podemos activar el flag booleano --blacklist. </p>
 </table>
 
     <p><b>Archivo de 1 columna con los registros que queremos omitir</b></p>
-    <table id="table_31" border="1" class= "table table-striped" >
+    <table id="table_33" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
     </tr>
@@ -1566,7 +1620,7 @@ podemos activar el flag booleano --blacklist. </p>
 
     
     <p>outputs/blackfiltered_long_table</p>
-    <table id="table_32" border="1" class= "table table-striped" >
+    <table id="table_34" border="1" class= "table table-striped" >
    <tr>
                     <td  >red2 </td>
                     <td  >CPM </td>
@@ -1609,7 +1663,7 @@ haber usado el flag --not_exact_match</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_33" border="1" class= "table table-striped" >
+    <table id="table_35" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1653,7 +1707,7 @@ haber usado el flag --not_exact_match</p>
 </table>
 
     <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
-    <table id="table_34" border="1" class= "table table-striped" >
+    <table id="table_36" border="1" class= "table table-striped" >
    <tr>
                     <td  >ref </td>
     </tr>
@@ -1669,7 +1723,7 @@ haber usado el flag --not_exact_match</p>
 
     
     <p>outputs/ref_filtered_disease_cluster_ref_rnd</p>
-    <table id="table_35" border="1" class= "table table-striped" >
+    <table id="table_37" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1720,7 +1774,7 @@ y pudiendo utilizar un guión para seleccionar rango de columnas. </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_36" border="1" class= "table table-striped" >
+    <table id="table_38" border="1" class= "table table-striped" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-2 </td>
@@ -1760,7 +1814,7 @@ y pudiendo utilizar un guión para seleccionar rango de columnas. </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_37" border="1" class= "table table-striped" >
+    <table id="table_39" border="1" class= "table table-striped" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-3 </td>
@@ -1801,7 +1855,7 @@ ejemplo, escogido a propósito)</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_38" border="1" class= "table table-striped" >
+    <table id="table_40" border="1" class= "table table-striped" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-2 </td>
@@ -1841,7 +1895,7 @@ ejemplo, escogido a propósito)</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_39" border="1" class= "table table-striped" >
+    <table id="table_41" border="1" class= "table table-striped" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-3 </td>
@@ -1890,7 +1944,7 @@ aunque luego veremos otros casos de uso</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_40" border="1" class= "table table-striped" >
+    <table id="table_42" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1906,7 +1960,7 @@ aunque luego veremos otros casos de uso</p>
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_41" border="1" class= "table table-striped" >
+    <table id="table_43" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1932,12 +1986,12 @@ aunque luego veremos otros casos de uso</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_42" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-    </tr>
+    <table id="table_44" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
     </tr>
 </table>
 
@@ -1951,7 +2005,7 @@ usar el flag -full</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_43" border="1" class= "table table-striped" >
+    <table id="table_45" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1967,7 +2021,7 @@ usar el flag -full</p>
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_44" border="1" class= "table table-striped" >
+    <table id="table_46" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -1993,20 +2047,20 @@ usar el flag -full</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_45" border="1" class= "table table-striped" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-                    <td  >MONDO:0008995 </td>
-                    <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
-    </tr>
+    <table id="table_47" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >54_ref </td>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
                     <td  >tRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
     </tr>
 </table>
  
@@ -2027,7 +2081,7 @@ los registros específicos de la tabla A , pero sin devolver el resto de columna
 
 <p> <b>Input</b> </p>
 
-    <table id="table_46" border="1" class= "table table-striped" >
+    <table id="table_48" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2043,7 +2097,7 @@ los registros específicos de la tabla A , pero sin devolver el resto de columna
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_47" border="1" class= "table table-striped" >
+    <table id="table_49" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2069,7 +2123,7 @@ los registros específicos de la tabla A , pero sin devolver el resto de columna
 <p> <b>Output</b> </p>
 
 
-    <table id="table_48" border="1" class= "table table-striped" >
+    <table id="table_50" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0007172 </td>
     </tr>
@@ -2084,7 +2138,7 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 
 <p> <b>Input</b> </p>
 
-    <table id="table_49" border="1" class= "table table-striped" >
+    <table id="table_51" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2100,7 +2154,7 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 </table>
 
     <p><b>Tabla B</b></p>
-    <table id="table_50" border="1" class= "table table-striped" >
+    <table id="table_52" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2126,7 +2180,7 @@ los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto d
 <p> <b>Output</b> </p>
 
 
-    <table id="table_51" border="1" class= "table table-striped" >
+    <table id="table_53" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0007172 </td>
                     <td  >22_ref </td>
@@ -2162,7 +2216,7 @@ por defecto está a "-" </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_52" border="1" class= "table table-striped" >
+    <table id="table_54" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2178,7 +2232,7 @@ por defecto está a "-" </p>
 </table>
 
     <p><b>Segunda tabla</b></p>
-    <table id="table_53" border="1" class= "table table-striped" >
+    <table id="table_55" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2197,7 +2251,7 @@ por defecto está a "-" </p>
 </table>
 
     <p><b>Tercera tabla</b></p>
-    <table id="table_54" border="1" class= "table table-striped" >
+    <table id="table_56" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2215,7 +2269,7 @@ por defecto está a "-" </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_55" border="1" class= "table table-striped" >
+    <table id="table_57" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2266,7 +2320,7 @@ por defecto está a "-" </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_56" border="1" class= "table table-striped" >
+    <table id="table_58" border="1" class= "table table-striped" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -2293,7 +2347,7 @@ por defecto está a "-" </p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_57" border="1" class= "table table-striped" >
+    <table id="table_59" border="1" class= "table table-striped" >
    <tr>
                     <td  >mRNA </td>
                     <td  >2 </td>
@@ -2330,7 +2384,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 
 <p> <b>Input</b> </p>
 
-    <table id="table_58" border="1" class= "table table-striped" >
+    <table id="table_60" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2346,7 +2400,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 </table>
 
     <p><b>Tabla diccionario para reemplazar</b></p>
-    <table id="table_59" border="1" class= "table table-striped" >
+    <table id="table_61" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2365,7 +2419,7 @@ de la columna 1 por los términos de la columna 2 del diccionario con el flag -t
 <p> <b>Output</b> </p>
 
 
-    <table id="table_60" border="1" class= "table table-striped" >
+    <table id="table_62" border="1" class= "table table-striped" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
@@ -2390,7 +2444,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 
 <p> <b>Input</b> </p>
 
-    <table id="table_61" border="1" class= "table table-striped" >
+    <table id="table_63" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2406,7 +2460,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 </table>
 
     <p><b>Tabla diccionario para reemplazar</b></p>
-    <table id="table_62" border="1" class= "table table-striped" >
+    <table id="table_64" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2425,7 +2479,7 @@ Si queremos eliminar esos registros que no se han podido traducir, podemos añad
 <p> <b>Output</b> </p>
 
 
-    <table id="table_63" border="1" class= "table table-striped" >
+    <table id="table_65" border="1" class= "table table-striped" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
@@ -2454,7 +2508,7 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 
 <p> <b>Input</b> </p>
 
-    <table id="table_64" border="1" class= "table table-striped" >
+    <table id="table_66" border="1" class= "table table-striped" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -2574,7 +2628,7 @@ header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H
 <p> <b>Output</b> </p>
 
 
-    <table id="table_65" border="1" class= "table table-striped" >
+    <table id="table_67" border="1" class= "table table-striped" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -2625,7 +2679,7 @@ ya que la tabla inicial tiene 10 registros) </p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_66" border="1" class= "table table-striped" >
+    <table id="table_68" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2679,7 +2733,7 @@ ya que la tabla inicial tiene 10 registros) </p>
 
     
     <p>outputs/subset_table/disease_cluster_ref_rnd_chunk0</p>
-    <table id="table_67" border="1" class= "table table-striped" >
+    <table id="table_69" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2699,7 +2753,7 @@ ya que la tabla inicial tiene 10 registros) </p>
 </table>
     
     <p>outputs/subset_table/disease_cluster_ref_rnd_chunk1</p>
-    <table id="table_68" border="1" class= "table table-striped" >
+    <table id="table_70" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0009833 </td>
                     <td  >53_ref </td>
@@ -2719,7 +2773,7 @@ ya que la tabla inicial tiene 10 registros) </p>
 </table>
     
     <p>outputs/subset_table/disease_cluster_ref_rnd_chunk2</p>
-    <table id="table_69" border="1" class= "table table-striped" >
+    <table id="table_71" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0011142 </td>
                     <td  >66_ref </td>
@@ -2741,7 +2795,7 @@ en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o ta
 
 <p> <b>Input</b> </p>
 
-    <table id="table_70" border="1" class= "table table-striped" >
+    <table id="table_72" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2795,7 +2849,7 @@ en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o ta
 
     
     <p>outputs/subset_table2/disease_cluster_ref_rnd_chunk0</p>
-    <table id="table_71" border="1" class= "table table-striped" >
+    <table id="table_73" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2819,7 +2873,7 @@ en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o ta
 </table>
     
     <p>outputs/subset_table2/disease_cluster_ref_rnd_chunk1</p>
-    <table id="table_72" border="1" class= "table table-striped" >
+    <table id="table_74" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0009594 </td>
                     <td  >54_rand </td>
@@ -2872,7 +2926,7 @@ flag --columns2linker (por defecto a 1)</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_73" border="1" class= "table table-striped" >
+    <table id="table_75" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2888,7 +2942,7 @@ flag --columns2linker (por defecto a 1)</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_74" border="1" class= "table table-striped" >
+    <table id="table_76" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2914,7 +2968,7 @@ flag --columns2linker (por defecto a 1)</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_75" border="1" class= "table table-striped" >
+    <table id="table_77" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2941,7 +2995,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_76" border="1" class= "table table-striped" >
+    <table id="table_78" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2957,7 +3011,7 @@ con el valor por defecto</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_77" border="1" class= "table table-striped" >
+    <table id="table_79" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2983,7 +3037,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_78" border="1" class= "table table-striped" >
+    <table id="table_80" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3010,7 +3064,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_79" border="1" class= "table table-striped" >
+    <table id="table_81" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3026,7 +3080,7 @@ con el valor por defecto</p>
 </table>
 
     <p><b>Tabla a enlazar</b></p>
-    <table id="table_80" border="1" class= "table table-striped" >
+    <table id="table_82" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -3052,7 +3106,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_81" border="1" class= "table table-striped" >
+    <table id="table_83" border="1" class= "table table-striped" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3088,7 +3142,7 @@ con el valor por defecto</p>
 
 <p> <b>Input</b> </p>
 
-    <table id="table_82" border="1" class= "table table-striped" >
+    <table id="table_84" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3132,7 +3186,7 @@ con el valor por defecto</p>
 <p> <b>Output</b> </p>
 
 
-    <table id="table_83" border="1" class= "table table-striped" >
+    <table id="table_85" border="1" class= "table table-striped" >
    <tr>
                     <td  >red1 </td>
                     <td  >colapsada </td>
@@ -3202,7 +3256,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_84" border="1" class= "table table-striped" >
+    <table id="table_86" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3238,7 +3292,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_85" border="1" class= "table table-striped" >
+    <table id="table_87" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3256,7 +3310,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_86" border="1" class= "table table-striped" >
+    <table id="table_88" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3341,7 +3395,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_87" border="1" class= "table table-striped" >
+    <table id="table_89" border="1" class= "table table-striped" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3377,7 +3431,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 </table>
 
     <p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-    <table id="table_88" border="1" class= "table table-striped" >
+    <table id="table_90" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3395,7 +3449,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_89" border="1" class= "table table-striped" >
+    <table id="table_91" border="1" class= "table table-striped" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
@@ -3530,7 +3584,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_90" border="1" class= "table table-striped" >
+    <table id="table_92" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3562,7 +3616,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_91" border="1" class= "table table-striped" >
+    <table id="table_93" border="1" class= "table table-striped" >
    <tr>
                     <td  >\hline  </td>
     </tr>
@@ -3589,7 +3643,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_92" border="1" class= "table table-striped" >
+    <table id="table_94" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3621,7 +3675,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_93" border="1" class= "table table-striped" >
+    <table id="table_95" border="1" class= "table table-striped" >
    <tr>
                     <td  >\begin{table}[!htbp] </td>
     </tr>
@@ -3680,7 +3734,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 
 <p> <b>Input</b> </p>
 
-    <table id="table_94" border="1" class= "table table-striped" >
+    <table id="table_96" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3712,7 +3766,7 @@ caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en
 <p> <b>Output</b> </p>
 
 
-    <table id="table_95" border="1" class= "table table-striped" >
+    <table id="table_97" border="1" class= "table table-striped" >
    <tr>
                     <td  >as </td>
                     <td  >as </td>
