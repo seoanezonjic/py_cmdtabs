@@ -43,13 +43,14 @@ class CmdTabs:
 
 		return input_data_arr
 
-	def load_several_files(all_files, sep = "\t", limit=-1, dict_keys_mapper = None, add_empty_fields=True):
+	def load_several_files(all_files, sep = "\t", limit=-1, dict_keys_mapper = None, add_empty_fields=True, autodetect_compression=False):
 		loaded_files = {}
 		for file in all_files:
 			if os.path.isdir(file):
 				warnings.warn(file +" is not a valid file")
 				continue
 			key_id = file if not dict_keys_mapper else dict_keys_mapper(file)
+			if autodetect_compression: CmdTabs.compressed_input = file.endswith('.gz') or file.endswith('.gzip') or False
 			loaded_files[key_id] = CmdTabs.load_input_data(file, sep, limit, add_empty_fields=add_empty_fields)
 		return loaded_files
 
