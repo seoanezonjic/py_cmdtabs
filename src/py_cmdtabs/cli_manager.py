@@ -44,7 +44,7 @@ def aggregate_column_data(args=None):
     parser.add_argument("-a", "--column_aggregate", dest="col_aggregate",
       help="Column(s) index (1 based) to extract data and join for each id in column index (if more than one, comma separated)", type=list_based_0)
     parser.add_argument("-A", "--aggregation_mode", dest="agg_mode", default="concatenate",
-      help="Mode to perform aggregation. Current available: max,min,mean,median,sum,std,var,IQR,PC25,PC75,count & concatenate. Default (concatenate) is string concatenation by defined separator")    
+      help="Mode to perform aggregation. Current available: max,min,mean,median,sum,std,var,IQR,PC25,PC75,count & concatenate. Default (concatenate) is string concatenation by defined separator. More than one aggregation mode can be used separated by commas")    
     opts =  parser.parse_args(args)
     main_aggregate_column_data(opts)
 

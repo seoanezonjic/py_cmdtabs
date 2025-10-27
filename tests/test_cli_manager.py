@@ -76,6 +76,17 @@ def test_aggregate_column():
 	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'agg_2index_2values.txt'))
 	assert expected_result == test_result
 
+	#Testing multiple aggregation modes
+	input_2index_2values = os.path.join(DATA_TEST_PATH, 'agg_2index_2values.txt')
+	args=f"-i {input_2index_2values} -x 1,2 -a 3,4 -A mean,concatenate,count"
+	@capture_stdout
+	def script2test(lsargs):
+		return py_cmdtabs.aggregate_column_data(lsargs)
+	_, printed = script2test(args.split(" "))
+	test_result = strng2table(printed)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'agg_2index_2values_several_aggregators.txt'))
+	assert expected_result == test_result
+
 def test_aggregate_column_tanspose():
 	input_file = os.path.join(TRANS_DATA_TEST_PATH, 'cluster_genes_dis_desagg')
 	args = f"-i {input_file} -x 1 -s , -a 2 --transposed".split(" ")

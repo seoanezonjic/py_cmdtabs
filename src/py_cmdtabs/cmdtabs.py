@@ -146,9 +146,6 @@ class CmdTabs:
 
 
 	def aggregate_column(input_table, col_index, cols_agg, sep, agg_mode="concatenate"):
-		make_aggregation = {"concatenate": lambda agg_col: sep.join(agg_col), "mean": np.mean, "median": np.median, "max": np.max, "min": np.min, "sum": np.sum, "std": np.std, "var": np.var,
-					  		"count": lambda agg_col: len(agg_col), "IQR": lambda agg_col: np.percentile(agg_col, 75) - np.percentile(agg_col, 25),
-							"PC25": lambda agg_col: np.percentile(agg_col, 25), "PC75": lambda agg_col: np.percentile(agg_col, 75)}
 		aggregated_data = defaultdict(lambda: False	)
 		if type(cols_agg) == int: cols_agg = [cols_agg]
 		if type(col_index) == int: col_index = [col_index]
@@ -159,10 +156,22 @@ class CmdTabs:
 		for k, agg_dict in aggregated_data.items():
 			col_data = [idx_col for idx_col in k]
 			for aggregated_column in agg_dict.values():
-				if agg_mode != "concatenate": aggregated_column = [float(item) for item in aggregated_column]
-				col_data.append( str(make_aggregation[agg_mode](aggregated_column)) )
+				col_data.append( str(CmdTabs._make_one_or_several_aggregation(aggregated_column, agg_mode, sep)) )
 			aggregated_data_arr.append(col_data)
 		return aggregated_data_arr
+	
+	def _make_one_or_several_aggregation(aggregated_column, aggregation_modes, sep):
+		make_aggregation = {"concatenate": lambda agg_col: sep.join(agg_col), 
+					  		"mean": np.mean, "median": np.median, "max": np.max, "min": np.min, "sum": np.sum, "std": np.std, "var": np.var,
+					  		"count": lambda agg_col: len(agg_col), "IQR": lambda agg_col: np.percentile(agg_col, 75) - np.percentile(agg_col, 25),
+							"PC25": lambda agg_col: np.percentile(agg_col, 25), "PC75": lambda agg_col: np.percentile(agg_col, 75)}
+		aggregated_values = []
+		for aggregator in aggregation_modes.split(','):
+			aggregated_column_copy = aggregated_column.copy()
+			if aggregator != "concatenate": aggregated_column_copy = [float(item) for item in aggregated_column_copy]
+			agg_value = str(make_aggregation[aggregator](aggregated_column_copy))
+			aggregated_values.append(agg_value)
+		return "|".join(aggregated_values)
 
 	def records_count(input_table, col_index):
 		if len(col_index) == 1: col_index = col_index[0]
