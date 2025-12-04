@@ -200,14 +200,14 @@ def main_subset_table(options):
 
 def main_table_linker(options):
     set_class_attributes(options)
-    input_linker = CmdTabs.load_input_data(options.linker_file)
+    input_linker = CmdTabs.load_input_data(options.linker_file, sep=options.sep)
     indexed_linker = CmdTabs.index_array(input_linker, options.id_linker, options.columns2linker, options.header)
     if CmdTabs.transposed:
-      input_table = CmdTabs.load_input_data(options.input_file, "\t")
+      input_table = CmdTabs.load_input_data(options.input_file, options.sep)
     else:
-      input_table = CmdTabs.load_input_data(options.input_file, "\t", 2)
+      input_table = CmdTabs.load_input_data(options.input_file, options.sep, 2)
     linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep, options.header)
-    CmdTabs.write_output_data(linked_table, options.output_file)
+    CmdTabs.write_output_data(linked_table, options.output_file, sep=options.sep)
 
 def main_table_splitter(options):
     set_class_attributes(options)
