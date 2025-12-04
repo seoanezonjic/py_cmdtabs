@@ -1930,6 +1930,9 @@ ejemplo, escogido a propósito)</p>
 	<details class='rep_html_det' open='' id="inter_to">
 <summary style="display: none;"></summary>
 <div class=divImpar>
+<div class="alert alert-warning" role="alert"><p>Ojo al usar este binario, ya que intersect_columns indexa las columnas de IDS (es decir, obtiene los valores únicos) 
+previa unión de las tablas (lo que te haría perder registros si repites mismos valores en esa columna). Para una funcionalidad parecida a esto (que te una dos tablas en
+función de una columna que actúe como enlazadora) pero sin perder registros se puede usar <a href='#link_from'>table_linker</a>.</p></div>
 
 <p> Un script muy versatil en torno a la unión de dos tablas</p>
 
@@ -1988,10 +1991,10 @@ aunque luego veremos otros casos de uso</p>
 
     <table id="table_44" border="1" class= "table table-striped" >
    <tr>
-                    <td  >MONDO:0010193 </td>
+                    <td  >MONDO:0008995 </td>
     </tr>
    <tr>
-                    <td  >MONDO:0008995 </td>
+                    <td  >MONDO:0010193 </td>
     </tr>
 </table>
 
@@ -2049,18 +2052,18 @@ usar el flag -full</p>
 
     <table id="table_47" border="1" class= "table table-striped" >
    <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
-   <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
                     <td  >MONDO:0008995 </td>
                     <td  >HGNC:16873 </td>
                     <td  >mRNA </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
     </tr>
 </table>
  

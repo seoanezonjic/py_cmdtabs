@@ -2,6 +2,9 @@
 meth_name = getattr(lib, meth).__name__
 %>
 ${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="alert alert-warning" role="alert"><p>Ojo al usar este binario, ya que intersect_columns indexa las columnas de IDS (es decir, obtiene los valores únicos) 
+previa unión de las tablas (lo que te haría perder registros si repites mismos valores en esa columna). Para una funcionalidad parecida a esto (que te una dos tablas en
+función de una columna que actúe como enlazadora) pero sin perder registros se puede usar <a href='#link_from'>table_linker</a>.</p></div>
 
 <p> Un script muy versatil en torno a la unión de dos tablas</p>
 
