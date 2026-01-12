@@ -1,25 +1,24 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<% meth_name = getattr(lib, meth).__name__ %>
+##${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
 
-<p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
-<h4> Ejemplo básico </h4>
-<p> Se da la tabla con el flag -i </p>
+	<p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
+	<h3> Ejemplo básico </h3>
+	<p> Se da la tabla con el flag -i </p>
 
-<%
-	table_name = 'cluster_genes_dis_desagg_3cols'
-	args = f"-i tables/{table_name}"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<%
+		table_name = 'cluster_genes_dis_desagg_3cols'
+		args = f"-i tables/{table_name}"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
-<h4> Añadiendo el backbone </h4>
-<p> Si se quiere obtener un backbone algo más detallado con el que luego rellenar los campos restantes, se puede utilizar el parámetro --whole o -w </p>
+	<h3> Añadiendo el backbone </h3>
+	<p> Si se quiere obtener un backbone algo más detallado con el que luego rellenar los campos restantes, se puede utilizar el parámetro --whole o -w </p>
 
-<%
-	table_name = 'cluster_genes_dis_desagg_3cols'
-	args = f"-i tables/{table_name} --whole"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<%
+		table_name = 'cluster_genes_dis_desagg_3cols'
+		args = f"-i tables/{table_name} --whole"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 </div>

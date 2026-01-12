@@ -1,55 +1,53 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
+<%  meth_name = getattr(lib, meth).__name__ %>
 
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
-<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
+##${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
+	<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
-<h4> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h4>
-<p> En este caso, se agregan los valores de la segunda columna en función de los valores de la primera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos usar de referencia (en base 1) y el flag -a la columna que queremos agregar (base 1). Además, con el flag -s podemos escoger el separador que se utilice para la agregación.</p>
-<%
-	table_name = 'cluster_genes_dis_desagg_3cols'
-	args = f"-i tables/{table_name} -x 1 -s , -a 2"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
-
-
-<h4> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores </h4>
-<p> En este caso, se agregan los valores de la segunda y tercera columnas en función de la primera columna.</p>
-<%
-	table_name = 'cluster_genes_dis_desagg_3cols'
-	args = f"-i tables/{table_name} -x 1 -s , -a 2,3"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<h3> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h3>
+	<p> En este caso, se agregan los valores de la segunda columna en función de los valores de la primera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos usar de referencia (en base 1) y el flag -a la columna que queremos agregar (base 1). Además, con el flag -s podemos escoger el separador que se utilice para la agregación.</p>
+	<%
+		table_name = 'cluster_genes_dis_desagg_3cols'
+		args = f"-i tables/{table_name} -x 1 -s , -a 2"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 
-<h4> Teniendo 2 columnas como referencia </h4>
-<p> Si se tuvieran dos columnas como referencia y no queremos agregarla, pero que tampoco se pierda, se puede utilizar el flag -x para pasar más de una columna 
-como referencia (además de más de una columna como agregación). Además del método de agregación deseado.
-<%
-	table_name = 'cluster_genes_dis_desagg_4cols'
-	args = f"-i tables/{table_name} -x 1,2 -a 3,4"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<h3> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores </h3>
+	<p> En este caso, se agregan los valores de la segunda y tercera columnas en función de la primera columna.</p>
+	<%
+		table_name = 'cluster_genes_dis_desagg_3cols'
+		args = f"-i tables/{table_name} -x 1 -s , -a 2,3"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 
-<h4> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores, y otra función de agregación </h4>
-<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
-<p> Ahora tiene otros métodos de agregación disponibles: suma ("sum"), desviación estándar ("std"), varianza ("var"), rango intercuartílico ("IQR"), percentil 25 ("PC25") y percentil 75 ("PC75"), además de conteo ("count"). </p>
-<p> Vamos a ver un ejemplo con la media de los valores de las columnas 2 y 3, en función de la columna 1. </p>
-<%
-	table_name = 'cluster_genes_dis_desagg_3cols'
-	args = f"-i tables/{table_name} -x 1 -a 2,3 -A mean"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<h3> Teniendo 2 columnas como referencia </h3>
+	<p> Si se tuvieran dos columnas como referencia y no queremos agregarla, pero que tampoco se pierda, se puede utilizar el flag -x para pasar más de una columna 
+	como referencia (además de más de una columna como agregación). Además del método de agregación deseado.
+	<%
+		table_name = 'cluster_genes_dis_desagg_4cols'
+		args = f"-i tables/{table_name} -x 1,2 -a 3,4"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
-<h4> Ejemplo de agregación con conteos </h4>
-<p> Nos sirve para acabar en una columna con el identificador y en la otra con la cantidad de veces que se repetía ese identificador cuando estaba en formato desagregado </p>
-<%
-	table_name = 'cluster_genes_dis_desagg_3cols'
-	args = f"-i tables/{table_name} -x 1 -a 2 -A count"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
+	<h3> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores, y otra función de agregación </h3>
+	<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
+	<p> Ahora tiene otros métodos de agregación disponibles: suma ("sum"), desviación estándar ("std"), varianza ("var"), rango intercuartílico ("IQR"), percentil 25 ("PC25") y percentil 75 ("PC75"), además de conteo ("count"). </p>
+	<p> Vamos a ver un ejemplo con la media de los valores de las columnas 2 y 3, en función de la columna 1. </p>
+	<%
+		table_name = 'cluster_genes_dis_desagg_3cols'
+		args = f"-i tables/{table_name} -x 1 -a 2,3 -A mean"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+
+	<h3> Ejemplo de agregación con conteos </h3>
+	<p> Nos sirve para acabar en una columna con el identificador y en la otra con la cantidad de veces que se repetía ese identificador cuando estaba en formato desagregado </p>
+	<%
+		table_name = 'cluster_genes_dis_desagg_3cols'
+		args = f"-i tables/{table_name} -x 1 -a 2 -A count"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 </div>

@@ -1,56 +1,56 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
-<p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
-<h4> Ejemplo básico </h4>
+<% meth_name = getattr(lib, meth).__name__ %>
+## ${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
 
-<p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
-<div class="row">
-	<div class="col-md-6">
-		${plotter.embed_img("./special_files/hoja1.png")}
+	<p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
+	<h3> Ejemplo básico </h3>
+
+	<p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
+	<div class="row">
+		<div class="col-md-6">
+			${plotter.embed_img("./special_files/hoja1.png")}
+		</div>
+		<div class="col-md-6">
+			${plotter.embed_img("./special_files/hoja2.png")}
+		</div>
 	</div>
-	<div class="col-md-6">
-		${plotter.embed_img("./special_files/hoja2.png")}
-	</div>
-</div>
 
-<%
-	table_name = 'scRNAseq.xlsx'
-	args = f"-i special_files/{table_name} -c 1,2,3 -s 1"
-%>
+	<%
+		table_name = 'scRNAseq.xlsx'
+		args = f"-i special_files/{table_name} -c 1,2,3 -s 1"
+	%>
 
-<p> Vamos a sacar las 3 primeras columnas de la primera hoja del archivo ${f"special_files/{table_name}"} y convertirlo en formato plano tabular. 
-Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas a extraer y -s para la hoja a utilizar. <p>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+	<p> Vamos a sacar las 3 primeras columnas de la primera hoja del archivo ${f"special_files/{table_name}"} y convertirlo en formato plano tabular. 
+	Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas a extraer y -s para la hoja a utilizar. <p>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
 
 
 
-<h4> Sacando las dos primeras y dos últimas columnas de la segunda hoja </h4>
-<p> En este caso, sacamos las dos primeras y dos últimas columnas de la segunda hoja del mismo archivo </p>
-<%
-	args = f"-i special_files/{table_name} -c 1-2,4-5 -s 2"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+	<h3> Sacando las dos primeras y dos últimas columnas de la segunda hoja </h3>
+	<p> En este caso, sacamos las dos primeras y dos últimas columnas de la segunda hoja del mismo archivo </p>
+	<%
+		args = f"-i special_files/{table_name} -c 1-2,4-5 -s 2"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
 
 
 
 
-<h4> Sacando todas las columnas de la primera hoja </h4>
-<p> Si queremos sacar todas las columnas, pero no sabemos de antemano cuantas son, podemos utilizar el valor 0 para indicar que queremos todas las columnas. </p>
-<%
-	args = f"-i special_files/{table_name} -c 0 -s 1"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+	<h3> Sacando todas las columnas de la primera hoja </h3>
+	<p> Si queremos sacar todas las columnas, pero no sabemos de antemano cuantas son, podemos utilizar el valor 0 para indicar que queremos todas las columnas. </p>
+	<%
+		args = f"-i special_files/{table_name} -c 0 -s 1"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
 
 
 
 
-<h4> Sacando filas concretas</h4>
-<p> A parte de las columnas, también se pueden elegir las filas que sacar de la tabla (por defecto, se sacan todas, pero podemos seleccionar las que queramos) </p>
-<p> En este caso, vamos a obtener las filas 1,3 y las columnas 1,3,4 de la primera hoja</p>
-<%
-	args = f"-i special_files/{table_name} -r 1,3 -c 1,3,4 -s 1"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
+	<h3> Sacando filas concretas</h3>
+	<p> A parte de las columnas, también se pueden elegir las filas que sacar de la tabla (por defecto, se sacan todas, pero podemos seleccionar las que queramos) </p>
+	<p> En este caso, vamos a obtener las filas 1,3 y las columnas 1,3,4 de la primera hoja</p>
+	<%
+		args = f"-i special_files/{table_name} -r 1,3 -c 1,3,4 -s 1"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth, skip_input=True)}
 </div>

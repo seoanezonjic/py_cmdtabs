@@ -33,32 +33,41 @@ except NameError:
     is_supp_table = False
 %>
 
-<p> <b>Input</b> </p>
-
-% if isinstance(skip_input, Undefined) or not skip_input:
-    ${ plotter.table(id=table_name, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'})}
-%endif
-
-%if not isinstance(supp_table, Undefined) and supp_table:
-    ${supp_table_text}
-    ${ plotter.table(id=supp_table, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'})}
-%endif
-
-%if not isinstance(supp_table2, Undefined) and supp_table2:
-    ${supp_table_text2}
-    ${ plotter.table(id=supp_table2, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'})}
-%endif
-
-<p><code>
+<div class="code">
 	${f"{method_name} {args}"}
-</p></code>
+</div>
 
-<p> <b>Output</b> </p>
-<%
-res_tabname = f'{method_name}-{args.replace(",", "_")}'
-execute_command(library, method, args, res_tabname)
-%>
+<div class="divrow">
+    % if isinstance(skip_input, Undefined) or not skip_input:
+        <div class="divcolumn">
+            <b>Input</b>
+            ${ plotter.table(id=table_name, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped table-bordered table-compact'})}
+        </div>
+    %endif
 
-%if plotter.hash_vars.get(res_tabname):
-    ${ plotter.table(id=res_tabname, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped'} )}
-%endif
+    %if not isinstance(supp_table, Undefined) and supp_table:
+        <div class="divcolumn">
+            ${supp_table_text}
+            ${ plotter.table(id=supp_table, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped table-bordered table-compact'})}
+        </div>
+    %endif
+
+    %if not isinstance(supp_table2, Undefined) and supp_table2:
+        <div class="divcolumn">
+            ${supp_table_text2}
+            ${ plotter.table(id=supp_table2, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped table-bordered table-compact'})}
+        </div>
+    %endif
+
+    <%
+        res_tabname = f'{method_name}-{args.replace(",", "_")}'
+        execute_command(library, method, args, res_tabname)
+    %>
+
+    %if plotter.hash_vars.get(res_tabname):
+        <div class="divcolumn">
+            <b>Output</b>
+            ${ plotter.table(id=res_tabname, text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped table-bordered table-compact'} )}
+        </div>
+    %endif
+</div>

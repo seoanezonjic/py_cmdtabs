@@ -1,45 +1,44 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<% meth_name = getattr(lib, meth).__name__ %>
+##${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
 
-<p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
-<h4> Ejemplo básico </h4>
-<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
-y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
-header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
-<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
-<%
-	table_name = 'metrics_table'
-	args = f"-i tables/{table_name} -s 3 -l 4 -H"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
-
-
-<h4> Partiendo toda la tabla en distintos archivos con K líneas cada uno</h4>
-<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
-	el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
-<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
-ya que la tabla inicial tiene 10 registros) </p>
-<%
-	table_name = 'disease_cluster_ref_rnd'
-	args = f"-i tables/{table_name} -k 4 -o outputs/subset_table"
-	output_table = 'outputs/subset_table/*'
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
-                                    output_table=output_table)}
+	<p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
+	<h3> Ejemplo básico </h3>
+	<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
+	y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
+	header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
+	<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
+	<%
+		table_name = 'metrics_table'
+		args = f"-i tables/{table_name} -s 3 -l 4 -H"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 
-<h4> Partiendo toda la tabla en N archivos diferentes con la misma cantidad de registros cada uno</h4>
-<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files 
-en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
-<p> En este caso, vamos a partir la tabla de clusters de enfermedades en 2 archivos </p>
-<%
-	table_name = 'disease_cluster_ref_rnd'
-	args = f"-i tables/{table_name} -n 2 -o outputs/subset_table2"
-	output_table2 = 'outputs/subset_table2/*'
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
-                                    output_table=output_table2)}
+	<h3> Partiendo toda la tabla en distintos archivos con K líneas cada uno</h3>
+	<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
+		el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
+	<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
+	ya que la tabla inicial tiene 10 registros) </p>
+	<%
+		table_name = 'disease_cluster_ref_rnd'
+		args = f"-i tables/{table_name} -k 4 -o outputs/subset_table"
+		output_table = 'outputs/subset_table/*'
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+										output_table=output_table)}
+
+
+	<h3> Partiendo toda la tabla en N archivos diferentes con la misma cantidad de registros cada uno</h3>
+	<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files 
+	en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
+	<p> En este caso, vamos a partir la tabla de clusters de enfermedades en 2 archivos </p>
+	<%
+		table_name = 'disease_cluster_ref_rnd'
+		args = f"-i tables/{table_name} -n 2 -o outputs/subset_table2"
+		output_table2 = 'outputs/subset_table2/*'
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+										output_table=output_table2)}
 
 </div>

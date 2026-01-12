@@ -1,49 +1,48 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<% meth_name = getattr(lib, meth).__name__ %>
+## ${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
 
-<p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
+    <p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
 
-<h4> Ejemplo básico utilizando un string con tags separador por comas</h4>
-<p> Se pasa la tabla a la que se quiere añadir los tags con el flag -i y un string con los tags separados por comas al flag -t </p>
+    <h3> Ejemplo básico utilizando un string con tags separador por comas</h3>
+    <p> Se pasa la tabla a la que se quiere añadir los tags con el flag -i y un string con los tags separados por comas al flag -t </p>
 
-<%
-table_name = 'cluster_stats'
-tags = 'red1,colapsada,traducida'
-supp_table_text = "<p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>"
+    <%
+    table_name = 'cluster_stats'
+    tags = 'red1,colapsada,traducida'
+    supp_table_text = "<p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>"
 
-args = f"-i tables/{table_name} -t {tags}"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
-
-
-<h4> Ejemplo pasando el nombre de un archivo como tag al flag -t </h4>
-<p> Si en vez de pasarle un string separado por comas con los tags, se le pasa el nombre de un archivo, cmdtabs puede reconocerlo y en ese
-caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en este caso con el flag -s cual es el separador en ese archvio</p>
-
-<%
-table_name = 'cluster_stats'
-tag_file = 'tracker'
-supp_table_text = "<p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>"
-
-args = f"-i tables/{table_name} -t tables/{tag_file} -s \t"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                             supp_table=tag_file, supp_table_text=supp_table_text)}
+    args = f"-i tables/{table_name} -t {tags}"
+    %>
+    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 
-<h4> Pasar más de un archivo separado por comas al flag -t </h4>
-<p> Si le pasamos varios archivos separados por comas, leerá y utilizará cada uno de ellos para añadir los tags</p>
+    <h3> Ejemplo pasando el nombre de un archivo como tag al flag -t </h3>
+    <p> Si en vez de pasarle un string separado por comas con los tags, se le pasa el nombre de un archivo, cmdtabs puede reconocerlo y en ese
+    caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en este caso con el flag -s cual es el separador en ese archvio</p>
 
-<%
-table_name = 'cluster_stats'
-tag_file = 'tracker'
-supp_table_text = "<p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>"
+    <%
+    table_name = 'cluster_stats'
+    tag_file = 'tracker'
+    supp_table_text = "<p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>"
 
-args = f"-i tables/{table_name} -t tables/{tag_file},tables/{tag_file} -s \t"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                             supp_table=tag_file, supp_table_text=supp_table_text)}
+    args = f"-i tables/{table_name} -t tables/{tag_file} -s \t"
+    %>
+    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                                supp_table=tag_file, supp_table_text=supp_table_text)}
+
+
+    <h3> Pasar más de un archivo separado por comas al flag -t </h3>
+    <p> Si le pasamos varios archivos separados por comas, leerá y utilizará cada uno de ellos para añadir los tags</p>
+
+    <%
+    table_name = 'cluster_stats'
+    tag_file = 'tracker'
+    supp_table_text = "<p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>"
+
+    args = f"-i tables/{table_name} -t tables/{tag_file},tables/{tag_file} -s \t"
+    %>
+    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                                supp_table=tag_file, supp_table_text=supp_table_text)}
 
 </div>

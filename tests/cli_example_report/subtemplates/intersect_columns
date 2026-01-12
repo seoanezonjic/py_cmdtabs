@@ -1,62 +1,62 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
-<div class="alert alert-warning" role="alert"><p>Ojo al usar este binario, ya que intersect_columns indexa las columnas de IDS (es decir, obtiene los valores únicos) 
-previa unión de las tablas (lo que te haría perder registros si repites mismos valores en esa columna). Para una funcionalidad parecida a esto (que te una dos tablas en
-función de una columna que actúe como enlazadora) pero sin perder registros se puede usar <a href='#link_from'>table_linker</a>.</p></div>
+<% meth_name = getattr(lib, meth).__name__ %>
+##${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
 
-<p> Un script muy versatil en torno a la unión de dos tablas</p>
+    <div class="alert alert-warning" role="alert"><p>Ojo al usar este binario, ya que intersect_columns indexa las columnas de IDS (es decir, obtiene los valores únicos) 
+    previa unión de las tablas (lo que te haría perder registros si repites mismos valores en esa columna). Para una funcionalidad parecida a esto (que te una dos tablas en
+    función de una columna que actúe como enlazadora) pero sin perder registros se puede usar <a href='#link_from'>table_linker</a>.</p></div>
 
-<h4> Ejemplo básico </h4>
-<p> El caso más básico será obtener los registros comunes de dos columnas de dos tablas distintas. Para este caso (además de todos los siguientes) el funcionamiento es simple:
-tenemos los flag -a y -b para indicar las dos tablas de interés, y los flags -A y -B para indicar las columnas de interés en las respectivas tablas. El flag -s nos servirá para 
-indicar el separador (tabulador por defecto). Por defecto se obtienen los identificadores que estén en las dos tablas (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), que es el valor por defecto del flag --keep, 
-aunque luego veremos otros casos de uso</p>
-<p> Vamos a ver un ejemplo con dos tablas , ambas con una columna que tienen identificadores de enfermedad de MONDO, para encontrar los registros comunes entre ambas tablas.</p>
-<%
-table_a = 'disease_cluster'
-table_b = 'disease_gene'
-table_b_text = '<p><b>Tabla B</b></p>'
-args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 -s \\t"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                            supp_table=table_b, supp_table_text=table_b_text)}
+    <p> Un script muy versatil en torno a la unión de dos tablas</p>
 
-
-<h4> Obtener el resto de columnas para los registros comunes encontrados </h4>
-<p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
-usar el flag -full</p>
-<%
-args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 -s \\t --keep c --full"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                            supp_table=table_b, supp_table_text=table_b_text)} 
+    <h3> Ejemplo básico </h3>
+    <p> El caso más básico será obtener los registros comunes de dos columnas de dos tablas distintas. Para este caso (además de todos los siguientes) el funcionamiento es simple:
+    tenemos los flag -a y -b para indicar las dos tablas de interés, y los flags -A y -B para indicar las columnas de interés en las respectivas tablas. El flag -s nos servirá para 
+    indicar el separador (tabulador por defecto). Por defecto se obtienen los identificadores que estén en las dos tablas (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), que es el valor por defecto del flag --keep, 
+    aunque luego veremos otros casos de uso</p>
+    <p> Vamos a ver un ejemplo con dos tablas , ambas con una columna que tienen identificadores de enfermedad de MONDO, para encontrar los registros comunes entre ambas tablas.</p>
+    <%
+    table_a = 'disease_cluster'
+    table_b = 'disease_gene'
+    table_b_text = '<p><b>Tabla B</b></p>'
+    args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 -s \\t"
+    %>
+    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                                supp_table=table_b, supp_table_text=table_b_text)}
 
 
-<h4> Obtener registros específicos de tabla </h4>
-<p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
-Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
- y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
+    <h3> Obtener el resto de columnas para los registros comunes encontrados </h3>
+    <p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
+    usar el flag -full</p>
+    <%
+    args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 -s \\t --keep c --full"
+    %>
+    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                                supp_table=table_b, supp_table_text=table_b_text)} 
 
-<p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
-Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
-con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full. En el próximo ejemplo, enseñamos como devolver
-los registros específicos de la tabla A , pero sin devolver el resto de columnas (que podríamos hacer con el flag --full)</p>
 
-<%
-args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 --keep a"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                            supp_table=table_b, supp_table_text=table_b_text)}
+    <h3> Obtener registros específicos de tabla </h3>
+    <p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
+    Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
+    y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
 
-<p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
-específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
-los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
-<%
-args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 --keep ab --full"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                            supp_table=table_b, supp_table_text=table_b_text)}
-                                                                            
+    <p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
+    Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
+    con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full. En el próximo ejemplo, enseñamos como devolver
+    los registros específicos de la tabla A , pero sin devolver el resto de columnas (que podríamos hacer con el flag --full)</p>
+
+    <%
+    args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 --keep a"
+    %>
+    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                                supp_table=table_b, supp_table_text=table_b_text)}
+
+    <p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
+    específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
+    los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
+    <%
+    args = f"-a tables/{table_a} -b tables/{table_b} -A 1 -B 1 --keep ab --full"
+    %>
+    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_a, args=args, library=lib, method_name=meth_name, method=meth,
+                                                                                supp_table=table_b, supp_table_text=table_b_text)}
+                                                                                
 </div>

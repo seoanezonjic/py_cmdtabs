@@ -1,25 +1,24 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<% meth_name = getattr(lib, meth).__name__ %>
+## ${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
 
-<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
+	<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
-<h4> Ejemplo básico con una tabla con tres columnas, donde hay dos sin agregar y otra agregada. </h4>
-<p> En este caso, se desagregan los valores de la tercera columna, amoldando el resto de columnas según la cantidad de valores en cada fila de la tercera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos desagregar (en base 1). Con el flag -s indicamos el separador que se ha utilizado en esa columna agregada.</p>
-<%
-	table_name = 'cluster_genes_dis_agg'
-	args = f"-i tables/{table_name} -x 3 -s ,"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<h3> Ejemplo básico con una tabla con tres columnas, donde hay dos sin agregar y otra agregada. </h3>
+	<p> En este caso, se desagregan los valores de la tercera columna, amoldando el resto de columnas según la cantidad de valores en cada fila de la tercera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos desagregar (en base 1). Con el flag -s indicamos el separador que se ha utilizado en esa columna agregada.</p>
+	<%
+		table_name = 'cluster_genes_dis_agg'
+		args = f"-i tables/{table_name} -x 3 -s ,"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 
-<h4> Ejemplo básico con una tabla con cuatro columnas, donde hay dos sin agregar y dos agregada. </h4>
-<p> Si existe más de una columna agregada, se puede indicar con el flag -x, separándolas por comas. Se asume que todos las columnas agregadas van a tener la misma cantidad de elementos para una determinada fila (ejemplo 1 columna con pat1,pat2,pat y otra con male,male,female).</p>
-<%
-	table_name = 'cluster_genes_dis_agg2'
-	args = f"-i tables/{table_name} -x 3,4 -s ,"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<h3> Ejemplo básico con una tabla con cuatro columnas, donde hay dos sin agregar y dos agregada. </h3>
+	<p> Si existe más de una columna agregada, se puede indicar con el flag -x, separándolas por comas. Se asume que todos las columnas agregadas van a tener la misma cantidad de elementos para una determinada fila (ejemplo 1 columna con pat1,pat2,pat y otra con male,male,female).</p>
+	<%
+		table_name = 'cluster_genes_dis_agg2'
+		args = f"-i tables/{table_name} -x 3,4 -s ,"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 </div>

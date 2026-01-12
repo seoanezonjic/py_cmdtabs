@@ -6,6 +6,6 @@ source venv/bin/activate
 #pip install -e ~/dev_py/py_cmdtabs
 #pip install -e ~/dev_py/py_report_html
 
-report_html -t template.txt -d "./tables/*" -s ./subtemplates
+report_html -t template.txt -d "./tables/*" -s ./subtemplates -c styles.css
 
 

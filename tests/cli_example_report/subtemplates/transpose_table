@@ -1,16 +1,15 @@
-<% 
-meth_name = getattr(lib, meth).__name__
-%>
-${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<% meth_name = getattr(lib, meth).__name__ %>
+##${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<div class="lvl1">
 
-<p> Se utiliza para transponer una tabla  </p>
-<h4> Ejemplo básico </h4>
-<p> Se transpone la tabla que se da con el flag -i </p>
+	<p> Se utiliza para transponer una tabla  </p>
+	<h3> Ejemplo básico </h3>
+	<p> Se transpone la tabla que se da con el flag -i </p>
 
-<%
-	table_name = 'cluster_genes_dis_desagg_3cols'
-	args = f"-i tables/{table_name}"
-%>
-${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
+	<%
+		table_name = 'cluster_genes_dis_desagg_3cols'
+		args = f"-i tables/{table_name}"
+	%>
+	${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth)}
 
 </div>
