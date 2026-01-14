@@ -1,62 +1,61 @@
-<% meth_name = getattr(lib, meth).__name__ %>
-## ${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<% meth="filter_by_list" %>
 <div class="lvl1">
 
-    <div class="alert alert-warning" role="alert"><p>Este binario presenta cierto solapamiento con el el binario "column_filter", si bien el solapamiento no 100% 
-    ya que column_filter acepta los keywords mediante una string y este binario acepta un archivo de una columna con los términos a filtrar. </p></div>
-    <p> Se utiliza para filtrar las filas que nos interesan de una o más tablas en función a una serie de valores que se pasan  </p>
-    <h3> Ejemplo básico </h3>
-    <p> Tenemos nuestra tabla con la primera columna teniendo el identificador de una red (la que nos interesa para poder filtrar), y las otras columnas 
-    siendo factores y metrica-valor. Tenemos otro archivo en el que tenemos los identificadores de las redes que queremos filtrar (red1 y red3). </p>
+    <div class="alert alert-warning" role="alert">
+        <p>Este binario presenta cierto solapamiento con el el binario "column_filter", si bien el solapamiento no 100% 
+        ya que column_filter acepta los keywords mediante una string y este binario acepta un archivo de una columna con los términos a filtrar. </p>
+    </div>
 
-    <p> Pasamos la tabla de interés tabla como input al flag -i y la columna en la que están los valores que filtrarán las filas con el flag -c.  El archivo de una columna 
-    con los IDs de redes que queremos filtrar se pasan al flag -t. Pasamos el path a la carpeta (si, a una carpeta, ya que el flag de input -f puede aceptar más de una tabla, 
-    separada por comas, para ser filtrada) en el que queremos que se escriba la/s tabla/s filtrada/s con el flag -o y podemos
-    añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este caso usamos "filtered_" en este caso) con el flag --prefix</p>  
-    <%
-    table_name = 'long_table'
-    filterer = 'nets_to_filter'
-    filterer_table_tex = '<p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>'
-    args = f"-f tables/{table_name} -c 1 -t tables/{filterer} --prefix filtered_ -o outputs"
-    output_table = f'outputs/filtered_{table_name}' 
-    %>
-    ${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                                supp_table=filterer, supp_table_text=filterer_table_tex, output_table=output_table, lib=lib)}
+    <p> Se utiliza para filtrar las filas que nos interesan de una o más tablas en función a una serie de valores que se pasan  </p>
+    
+    <h3> Ejemplo básico </h3>
+        <p> Tenemos nuestra tabla con la primera columna teniendo el identificador de una red (la que nos interesa para poder filtrar), y las otras columnas 
+        siendo factores y metrica-valor. Tenemos otro archivo en el que tenemos los identificadores de las redes que queremos filtrar (red1 y red3). </p>
+
+        <p> Pasamos la tabla de interés tabla como input al flag -i y la columna en la que están los valores que filtrarán las filas con el flag -c.  El archivo de una columna 
+        con los IDs de redes que queremos filtrar se pasan al flag -t. Pasamos el path a la carpeta (si, a una carpeta, ya que el flag de input -f puede aceptar más de una tabla, 
+        separada por comas, para ser filtrada) en el que queremos que se escriba la/s tabla/s filtrada/s con el flag -o y podemos
+        añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este caso usamos "filtered_" en este caso) con el flag --prefix</p>  
+        <%
+            table_name = 'long_table'
+            filterer = 'nets_to_filter'
+            filterer_table_tex = 'Archivo de 1 columna con los registros que queremos filtrar'
+            args = f"-f tables/{table_name} -c 1 -t tables/{filterer} --prefix filtered_ -o outputs"
+            output_table = f'outputs/filtered_{table_name}' 
+        %>
+		${show_n_exec(table_name, args, meth, out = output_table, supp_tables=[[filterer_table_tex, filterer]])}
 
     <h3> Usar un match complementario (usar los términos como blacklist en vez de whitelist) </h3>
-    <p> Si en vez de querer quedarnos con todas las filas que tengan los términos de la tabla que pasamos con el flag -t, queremos quedarnos con todas las filas que no tengan esos términos,
-    podemos activar el flag booleano --blacklist. </p>
+        <p> Si en vez de querer quedarnos con todas las filas que tengan los términos de la tabla que pasamos con el flag -t, queremos quedarnos con todas las filas que no tengan esos términos,
+        podemos activar el flag booleano --blacklist. </p>
 
-    <p> Repitiendo el mismo ejemplo anterior, pero activando ese flag, tenemos: </p>
-    <%
-    filterer_table_tex = '<p><b>Archivo de 1 columna con los registros que queremos omitir</b></p>'
-    args = f"-f tables/{table_name} -c 1 -t tables/{filterer} --prefix blackfiltered_ -o outputs --blacklist"
-    output_table = f'outputs/blackfiltered_{table_name}' 
-    %>
-    ${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                                supp_table=filterer, supp_table_text=filterer_table_tex, output_table=output_table, lib=lib)}
+        <p> Repitiendo el mismo ejemplo anterior, pero activando ese flag, tenemos: </p>
+        <%
+            filterer_table_tex = 'Archivo de 1 columna con los registros que queremos omitir'
+            args = f"-f tables/{table_name} -c 1 -t tables/{filterer} --prefix blackfiltered_ -o outputs --blacklist"
+            output_table = f'outputs/blackfiltered_{table_name}' 
+        %>
+		${show_n_exec(table_name, args, meth, out = output_table, supp_tables=[[filterer_table_tex, filterer]])}
 
     <h3> Match parcial (vale tanto para whitelist como para blacklist) </h3>
-    <p> Si en vez de querer filtrar los elementos de la tabla por un match exacto, queremos que sea por un match parcial, podemos activar el flag booleano --not_exact_match</p>
+        <p> Si en vez de querer filtrar los elementos de la tabla por un match exacto, queremos que sea por un match parcial, podemos activar el flag booleano --not_exact_match</p>
 
-    <p> En la tabla siguiente, vamos a quedarnos con todos los clústeres de referencia y descartar los random, indicando que los valores que queremos filtrar en nuestra tabla de entrada
-    dada con el flag -i están en la segunda columna (-c 2) y el archivo que pasamos para filtrar con el flag -t solo tiene el valor 'ref', que será usado para hacer un match parcial al
-    haber usado el flag --not_exact_match</p>  
-    <%
-    table_name = 'disease_cluster_ref_rnd'
-    filterer = 'clusts_to_filter'
-    filterer_table_tex = '<p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>'
-    args = f"-f tables/{table_name} -c 2 -t tables/{filterer} --prefix ref_filtered_ -o outputs --not_exact_match"
-    output_table = f'outputs/ref_filtered_{table_name}' 
-    %>
-    ${plotter.renderize_child_template(plotter.get_internal_template('example_written'), table_name=table_name, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                                supp_table=filterer, supp_table_text=filterer_table_tex, output_table=output_table, lib=lib)}
+        <p> En la tabla siguiente, vamos a quedarnos con todos los clústeres de referencia y descartar los random, indicando que los valores que queremos filtrar en nuestra tabla de entrada
+        dada con el flag -i están en la segunda columna (-c 2) y el archivo que pasamos para filtrar con el flag -t solo tiene el valor 'ref', que será usado para hacer un match parcial al
+        haber usado el flag --not_exact_match</p>  
+        <%
+            table_name = 'disease_cluster_ref_rnd'
+            filterer = 'clusts_to_filter'
+            filterer_table_tex = 'Archivo de 1 columna con los registros que queremos filtrar'
+            args = f"-f tables/{table_name} -c 2 -t tables/{filterer} --prefix ref_filtered_ -o outputs --not_exact_match"
+            output_table = f'outputs/ref_filtered_{table_name}' 
+        %>
+		${show_n_exec(table_name, args, meth, out = output_table, supp_tables=[[filterer_table_tex, filterer]])}
 
     <h3> Filtrar múltiples tablas </h3>
 
-    <p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
-    Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar el flag --prefix para que no se escriban con el mismo nombre y nos reemplacen las tablas de entrada. </p>
-    <p> Por lo tanto, podemos filtrar varias tablas a la vez utilizando el mismo archivo de filtrado. Esto es util si tenemos distintos archivos de métricas con los mismos identificadores y queremos filtrar todos ellos por los mismos términos. </p>
-
+        <p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
+        Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar el flag --prefix para que no se escriban con el mismo nombre y nos reemplacen las tablas de entrada. </p>
+        <p> Por lo tanto, podemos filtrar varias tablas a la vez utilizando el mismo archivo de filtrado. Esto es util si tenemos distintos archivos de métricas con los mismos identificadores y queremos filtrar todos ellos por los mismos términos. </p>
 
 </div>

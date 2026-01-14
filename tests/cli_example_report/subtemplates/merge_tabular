@@ -1,24 +1,25 @@
-<% meth_name = getattr(lib, meth).__name__ %>
-##${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
+<% meth="merge_tabular" %>
 <div class="lvl1">
 
-    <div class="alert alert-warning" role="alert"><p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
-        es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p></div>
+    <div class="alert alert-warning" role="alert">
+        <p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
+        es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p>
+    </div>
     <p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
+    
     <h3> Ejemplo básico </h3>
-    <p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
-    separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
-    por defecto está a "-" </p>
-    <p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
-    <%
-    first_table = 'disease_cluster'
-    second_table = 'disease_gene'
-    third_table = 'mondo_to_orpha'
-    second_table_tex = '<p><b>Segunda tabla</b></p>'
-    third_table_tex = '<p><b>Tercera tabla</b></p>'
-    args = f"tables/{first_table} tables/{second_table} tables/{third_table} --fill_character 'NA'"
-    %>
-    ${plotter.renderize_child_template(plotter.get_internal_template('example'), table_name=first_table, args=args, library=lib, method_name=meth_name, method=meth,
-                                                                                supp_table=second_table, supp_table_text=second_table_tex, supp_table2=third_table, supp_table_text2=third_table_tex)}
+        <p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
+        separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
+        por defecto está a "-" </p>
+        <p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+        <%
+            first_table = 'disease_cluster'
+            second_table = 'disease_gene'
+            third_table = 'mondo_to_orpha'
+            second_table_tex = 'Segunda tabla'
+            third_table_tex = 'Tercera tabla'
+            args = f"tables/{first_table} tables/{second_table} tables/{third_table} --fill_character 'NA'"
+        %>
+		${show_n_exec(first_table, args, meth, supp_tables=[[second_table_tex, second_table], [third_table_tex, third_table]])}
 
 </div>                                                                        

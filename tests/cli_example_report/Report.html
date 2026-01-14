@@ -259,13 +259,12 @@ h3 {
 <div  >
 <ul>
 <ul>
-<li><a href=#gen_from>Pautas generales</a></li>
 <li><a href=#agg_from>aggregate_column_data</a></li>
 <li><a href=#colfil_from>column_filter</a></li>
 <li><a href=#metr_from>create_metric_table</a></li>
 <li><a href=#desagg_from>desaggregate_column_data</a></li>
 <li><a href=#excel_from>excel_to_tabular</a></li>
-<li><a href=#filt_from>filter_by_list</a></li>
+<li><a href=#filter_from>filter_by_list</a></li>
 <li><a href=#getcol_from>get_columns</a></li>
 <li><a href=#inter_from>intersect_columns</a></li>
 <li><a href=#merge_from>merge_tabular</a></li>
@@ -280,74 +279,62 @@ h3 {
 </div>
 
 
-<style>
-.divPar {
-	background-color: rgba(173, 216, 230, 0.3);
-}
-.divImpar {
-	background-color: rgba(47, 180, 80, 0.21);
-}
-</style>
 
 <div style="width: 95%; padding:20px;">
 	
 	<h1> Operation with tables </h1>
 
-		<h2 id="gen_from"  class="dummy" onclick="hide_show_element('gen_to')">Pautas generales (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="gen_to">
-<summary style="display: none;"></summary><p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
-<p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
-pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
-pero también se pueden cargar comprimidas en gzip utilizando el flag '--compressed_in'. Por ejemplo:</p>
+		<h2> Pautas generales </h2>
+			<p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
+			<p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
+			pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
+			pero también se pueden cargar comprimidas en gzip utilizando el flag '--compressed_in'. Por ejemplo:</p>
 
-<div class='code'>
-	desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in -o desaggregated.txt
-</div>
+			<div class='code'>
+				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in -o desaggregated.txt
+			</div>
 
-<p> Además, para aquellos comandos que solo necesiten una tabla de entrada (como 'aggregate_column_data', 'desaggregate_column_data' o 'transpose_table',
-pero no 'intersect_columns'), se puede utilizar un guión '-' con el flag de input para indicar que el contenido de la tabla proviene por stdout (por ejemplo fruto de un pipe de un
-comando anterior), pudiendo venir también comprimido. Por ejemplo: </p>
+			<p> Además, para aquellos comandos que solo necesiten una tabla de entrada (como 'aggregate_column_data', 'desaggregate_column_data' o 'transpose_table',
+			pero no 'intersect_columns'), se puede utilizar un guión '-' con el flag de input para indicar que el contenido de la tabla proviene por stdout (por ejemplo fruto de un pipe de un
+			comando anterior), pudiendo venir también comprimido. Por ejemplo: </p>
 
-<div class='code'>
-	cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in
-</div>
+			<div class='code'>
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in
+			</div>
 
-<p> En los scripts que devuelvan algún tipo de output (generalmente con el flag -o), de manera similar, también se puede utilizar el flag --compressed_out 
-para que el resultado se devuelva comprimido en gzip. Además, si no se indica un flag de output (omitiendo '-o archivo_salida') y el script solo devuelve una tabla,
-el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que puede aprovecharse para pipear en otro script.  Por ejemplo:</p>
+			<p> En los scripts que devuelvan algún tipo de output (generalmente con el flag -o), de manera similar, también se puede utilizar el flag --compressed_out 
+			para que el resultado se devuelva comprimido en gzip. Además, si no se indica un flag de output (omitiendo '-o archivo_salida') y el script solo devuelve una tabla,
+			el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que puede aprovecharse para pipear en otro script.  Por ejemplo:</p>
 
-<div class='code'>
-	desaggregate_column_data -i patients_and_phens.txt -x 2 --compressed_out | script_que_utiliza_datos_comprimidos
-</div>
+			<div class='code'>
+				desaggregate_column_data -i patients_and_phens.txt -x 2 --compressed_out | script_que_utiliza_datos_comprimidos
+			</div>
 
-<p>Se pueden usar ambos flags a la vez, de manera que se pueda recibir una tabla comprimida y devolverla también comprimida. Por ejemplo:</p>
-<div class='code'>
-	desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in --compressed_out -o desaggregated.gz
-</div>
+			<p>Se pueden usar ambos flags a la vez, de manera que se pueda recibir una tabla comprimida y devolverla también comprimida. Por ejemplo:</p>
+			<div class='code'>
+				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in --compressed_out -o desaggregated.gz
+			</div>
 
-<p>O utilizando pipes: </p>
-<div class='code'>
-	cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
-</div>
+			<p>O utilizando pipes: </p>
+			<div class='code'>
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
+			</div>
 
-<p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
-tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
+			<p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
+			tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
 
-</details>
-	
-		<h2 id="agg_from"  class="dummy" onclick="hide_show_element('agg_to')">aggregate_column_data (Click me)</h2>	
-			
-			<details class='rep_html_det' open='' id="agg_to">
+		
+			<h2 id="agg_from"  class="dummy" onclick="hide_show_element('agg_to')">aggregate_column_data (Click me)</h2>
+<details class='rep_html_det' open='' id="agg_to">
 <summary style="display: none;"></summary>
 
 <div class="lvl1">
 	<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
 	<h3> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h3>
-	<p> En este caso, se agregan los valores de la segunda columna en función de los valores de la primera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos usar de referencia (en base 1) y el flag -a la columna que queremos agregar (base 1). Además, con el flag -s podemos escoger el separador que se utilice para la agregación.</p>
-	
-	
+		<p> En este caso, se agregan los valores de la segunda columna en función de los valores de la primera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos usar de referencia (en base 1) y el flag -a la columna que queremos agregar (base 1). Además, con el flag -s podemos escoger el separador que se utilice para la agregación.</p>
+		
+		
 
 <div class="code">
 	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -s , -a 2
@@ -381,12 +368,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_1" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_1" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >1,2 </td>
@@ -396,14 +383,13 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >3,4 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-
 	<h3> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores </h3>
-	<p> En este caso, se agregan los valores de la segunda y tercera columnas en función de la primera columna.</p>
-	
-	
+		<p> En este caso, se agregan los valores de la segunda y tercera columnas en función de la primera columna.</p>
+		
+		
 
 <div class="code">
 	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -s , -a 2,3
@@ -437,12 +423,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_3" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_3" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >1,2 </td>
@@ -454,15 +440,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >100,110 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-
 	<h3> Teniendo 2 columnas como referencia </h3>
-	<p> Si se tuvieran dos columnas como referencia y no queremos agregarla, pero que tampoco se pierda, se puede utilizar el flag -x para pasar más de una columna 
-	como referencia (además de más de una columna como agregación). Además del método de agregación deseado.
-	
-	
+		<p> Si se tuvieran dos columnas como referencia y no queremos agregarla, pero que tampoco se pierda, se puede utilizar el flag -x para pasar más de una columna 
+		como referencia (además de más de una columna como agregación). Además del método de agregación deseado.
+		
+		
 
 <div class="code">
 	aggregate_column_data -i tables/cluster_genes_dis_desagg_4cols -x 1,2 -a 3,4
@@ -500,12 +485,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_5" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_5" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >A </td>
                     <td  >as </td>
@@ -519,16 +504,15 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >100,110 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-
 	<h3> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores, y otra función de agregación </h3>
-	<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
-	<p> Ahora tiene otros métodos de agregación disponibles: suma ("sum"), desviación estándar ("std"), varianza ("var"), rango intercuartílico ("IQR"), percentil 25 ("PC25") y percentil 75 ("PC75"), además de conteo ("count"). </p>
-	<p> Vamos a ver un ejemplo con la media de los valores de las columnas 2 y 3, en función de la columna 1. </p>
-	
-	
+		<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
+		<p> Ahora tiene otros métodos de agregación disponibles: suma ("sum"), desviación estándar ("std"), varianza ("var"), rango intercuartílico ("IQR"), percentil 25 ("PC25") y percentil 75 ("PC75"), además de conteo ("count"). </p>
+		<p> Vamos a ver un ejemplo con la media de los valores de las columnas 2 y 3, en función de la columna 1. </p>
+		
+		
 
 <div class="code">
 	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2,3 -A mean
@@ -562,12 +546,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_7" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_7" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >1.5 </td>
@@ -579,13 +563,13 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >105.0 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 	<h3> Ejemplo de agregación con conteos </h3>
-	<p> Nos sirve para acabar en una columna con el identificador y en la otra con la cantidad de veces que se repetía ese identificador cuando estaba en formato desagregado </p>
-	
-	
+		<p> Nos sirve para acabar en una columna con el identificador y en la otra con la cantidad de veces que se repetía ese identificador cuando estaba en formato desagregado </p>
+		
+		
 
 <div class="code">
 	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2 -A count
@@ -619,12 +603,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_9" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_9" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >2 </td>
@@ -634,37 +618,36 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >2 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>
 </details>
 
-		<h2 id="colfil_from"  class="dummy" onclick="hide_show_element('colfil_to')">column_filter (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="colfil_to">
+			<h2 id="colfil_from"  class="dummy" onclick="hide_show_element('colfil_to')">column_filter (Click me)</h2>
+<details class='rep_html_det' open='' id="colfil_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
     <p> Se utiliza para filtrar registros de una o más tablas en funcion a una o varias keywords en una o más columnas  </p>
 
     <h3> Ejemplo básico </h3>
-    <p> Este script permite filtrar registros de una o varias tablas (si se usa el wildcard * en un path a archivo del flag -i se pueden cargar varias tablas y aplicar todo lo de este apartado para varias tablas,
-    aunque en estos ejemplos se mostrará el caso solo para una tabla) en función de una o varias keywords aplicada a una o más columnas, por lo que es un script
-    bastante versatil y completo, aunque pueda parecer complejo. Se enseñarán varios ejemplos aumentando la complejidad del caso para entender mejor su funcionamiento. </p>
+        <p> Este script permite filtrar registros de una o varias tablas (si se usa el wildcard * en un path a archivo del flag -i se pueden cargar varias tablas y aplicar todo lo de este apartado para varias tablas,
+        aunque en estos ejemplos se mostrará el caso solo para una tabla) en función de una o varias keywords aplicada a una o más columnas, por lo que es un script
+        bastante versatil y completo, aunque pueda parecer complejo. Se enseñarán varios ejemplos aumentando la complejidad del caso para entender mejor su funcionamiento. </p>
 
-    <p> Los argumentos más básicos que se usarán siempre serán la tabla de entrada (flag -i), las columnas que se devolverán (flag -c), 
-    la columna que contiene las keywords (flag -f), la keyword/s a buscar (flag -k),  -m o --match_mode para indicar si queremos que la keyword esté incluida (opción "i") en la columna
-    (es decir match parcial) o que esté al completo (opción "c"), es decir, match completo. Finalmente con el flag -s o --search se indica (cuando queremos match en varias columnas)
-    si queremos que el match sea completo (opción "c"), es decir, que se cumpla la keyword buscada en cada columna, o algún (some) match en alguna columna (opción "s") </p>.
+        <p> Los argumentos más básicos que se usarán siempre serán la tabla de entrada (flag -i), las columnas que se devolverán (flag -c), 
+        la columna que contiene las keywords (flag -f), la keyword/s a buscar (flag -k),  -m o --match_mode para indicar si queremos que la keyword esté incluida (opción "i") en la columna
+        (es decir match parcial) o que esté al completo (opción "c"), es decir, match completo. Finalmente con el flag -s o --search se indica (cuando queremos match en varias columnas)
+        si queremos que el match sea completo (opción "c"), es decir, que se cumpla la keyword buscada en cada columna, o algún (some) match en alguna columna (opción "s") </p>.
 
-    <p> Lo más esencial es entender como se construye el string de keywords de búsqueda. El patrón es el siguiente:
-    <code>key1_col1&key2_col1%key1_col2&key2_col2</code> donde cada keyword se separa por un "&" (quieres un keyword u otro en una determinada columna) y cada columna por un "%"</p>
+        <p> Lo más esencial es entender como se construye el string de keywords de búsqueda. El patrón es el siguiente:
+        <code>key1_col1&key2_col1%key1_col2&key2_col2</code> donde cada keyword se separa por un "&" (quieres un keyword u otro en una determinada columna) y cada columna por un "%"</p>
 
-    <p> Vamos empezar con un caso básico en el que vamos a quedarnos con aquellos registros que contengan la keyword <code>MONDO:0017999</code> (en flag -k) en la columna 1 (flag -f) de 
-    la tabla <code>long_disease_cluster</code> (flag -i). Además queremos que sea el match completo de la palabra (-m c) y nos retorne las columnas 1 y 2 de los registros resultantes (flag -c)</p>
-    
-    
+        <p> Vamos empezar con un caso básico en el que vamos a quedarnos con aquellos registros que contengan la keyword <code>MONDO:0017999</code> (en flag -k) en la columna 1 (flag -f) de 
+        la tabla <code>long_disease_cluster</code> (flag -i). Además queremos que sea el match completo de la palabra (-m c) y nos retorne las columnas 1 y 2 de los registros resultantes (flag -c)</p>
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 1 -k MONDO:0017999 -s c -m c
@@ -730,12 +713,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_11" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_11" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >36_rand </td>
@@ -749,15 +732,15 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >53_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Match completo en TODAS las columnas indicadas (dos keys, una en cada columna) </h3>
-    <p>Como vemos visto, el ejemplo anterior nos devuelve varios MONDOs que cumplen la condición de match completo en la columna 1. Vamos a ampliar el caso anterior para que solo nos 
-    devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'</p>
+        <p>Como vemos visto, el ejemplo anterior nos devuelve varios MONDOs que cumplen la condición de match completo en la columna 1. Vamos a ampliar el caso anterior para que solo nos 
+        devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'</p>
 
-    
-    
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%53_ref -s c -m c
@@ -766,25 +749,25 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_12" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_12" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >53_ref </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Buscar dos (o más registros) en una misma columna (match exacto) </h3>
     <p>Vamos a obtener las filas que contienen o bien "MONDO:0008995" o bien "MONDO:0013969".</p>
 
-    
-    
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 1 -k MONDO:0008995&MONDO:0013969 -s c -m c
@@ -793,12 +776,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_13" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_13" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -808,14 +791,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >1189_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Match parcial en la segunda columna </h3>
-    <p>Vamos a obtener las filas que contengan el substring "ref" en la segunda columna (cambiando el flag -m o --mode a i (de include)).</p>
+        <p>Vamos a obtener las filas que contengan el substring "ref" en la segunda columna (cambiando el flag -m o --mode a i (de include)).</p>
 
-    
-    
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 2 -k ref -s c -m i
@@ -824,12 +807,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_14" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_14" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -855,15 +838,15 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >66_ref </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Match parcial reverso en la segunda columna </h3>
-    <p>Si lo que nos interesa no es obtener los registros que cumplen el patrón, sino los que no lo cumplen, podemos usar el flag -r o --reverse. 
-    Esto es válido tanto para un match completo como parcial. En este caso vamos a enseñar el mismo ejemplo que el anterior, pero con el caso reverso, por lo que en vez
-    de obtener los registros que contienen "ref", obtendremos los que no lo contienen ("rand")</p>
-    
-    
+        <p>Si lo que nos interesa no es obtener los registros que cumplen el patrón, sino los que no lo cumplen, podemos usar el flag -r o --reverse. 
+        Esto es válido tanto para un match completo como parcial. En este caso vamos a enseñar el mismo ejemplo que el anterior, pero con el caso reverso, por lo que en vez
+        de obtener los registros que contienen "ref", obtendremos los que no lo contienen ("rand")</p>
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 2 -k ref -s c -m i --reverse
@@ -872,12 +855,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_15" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_15" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0007172 </td>
                     <td  >22_rand </td>
@@ -907,14 +890,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >1189_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Match parcial en TODAS las columnas especificadas (dos columnas) </h3>
-    <p> En el caso que filtrabamos por MONDO:0017999 en la primera columna, vimos que encontrabamos 3 clústeres, 36_rand, 53_ref y 53_rand. 
-    En este caso, para quedarnos con distintos subsets, podemos utilizar el match parcial. Por ejemplo, para quedarnos con los MONDO:0017999 del cluster 53 </p> 
-    
-    
+        <p> En el caso que filtrabamos por MONDO:0017999 en la primera columna, vimos que encontrabamos 3 clústeres, 36_rand, 53_ref y 53_rand. 
+        En este caso, para quedarnos con distintos subsets, podemos utilizar el match parcial. Por ejemplo, para quedarnos con los MONDO:0017999 del cluster 53 </p> 
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%53 -s c -m i
@@ -923,12 +906,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_16" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_16" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >53_ref </td>
@@ -938,11 +921,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >53_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
-    <p> Y para quedarnos con los MONDO:0017999 de clusteres random </p> 
-    
-    
+
+        <p> Y para quedarnos con los MONDO:0017999 de clusteres random </p> 
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%rand -s c -m i
@@ -951,12 +935,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_17" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_17" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0017999 </td>
                     <td  >36_rand </td>
@@ -966,19 +950,19 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >53_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
-
-
-    <h3> Match exacto en ALGUNA de las columnas especificadas (dos columnas) </h3>
-    <p>Hasta ahora hemos estado viendo como hacer matches que se cumplan en todas las columnas. Si queremos buscar keywords en varias columnas pero que el patrón se cumpla solo en 
-    ALGUNA de las columnas, podemos cambiar el -s o --search a "s" (some)</p>
-
-    <p>Por ejemplo, si queremos quedarnos con los registros que contengan MONDO:0008995 o MONDO:0013969 en la primera columna o 22_rand o 66_ref en la segunda columna,
-    podemos hacer lo siguiente:</p>
-
     
 
+    <h3> Match exacto en ALGUNA de las columnas especificadas (dos columnas) </h3>
+        <p>Hasta ahora hemos estado viendo como hacer matches que se cumplan en todas las columnas. Si queremos buscar keywords en varias columnas pero que el patrón se cumpla solo en 
+        ALGUNA de las columnas, podemos cambiar el -s o --search a "s" (some)</p>
+
+        <p>Por ejemplo, si queremos quedarnos con los registros que contengan MONDO:0008995 o MONDO:0013969 en la primera columna o 22_rand o 66_ref en la segunda columna,
+        podemos hacer lo siguiente:</p>
+
+        
+        
 
 <div class="code">
 	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0008995&MONDO:0013969%22_rand&66_ref -s s -m c
@@ -987,12 +971,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_18" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_18" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1010,48 +994,93 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >1189_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 </div>
 </details>
 
-		<h2 id="metr_from"  class="dummy" onclick="hide_show_element('metr_to')">create_metric_table (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="metr_to">
+			<h2 id="metr_from"  class="dummy" onclick="hide_show_element('metr_to')">create_metric_table (Click me)</h2>
+<details class='rep_html_det' open='' id="metr_to">
 <summary style="display: none;"></summary>
+
 <div class="lvl1">
 
     <p> Pasa una tabla del formato long al formato wide </p>
 
     <p> En ocasiones, al trabajar con flujos como el de autoflow, lanzamos tareas paralelizadas con distintas conmbinaciones de trabajo, por ejemplo:
     red (ORPHA y MONDO) y tipo de clustering (CPM y HLC) y volcamos distintas métricas en un archivo común, del estilo: </p>
-    <table class="table table-striped table-bordered table-compact">
-        <tr><td>ORPHA</td><td>CPM</td><td>N_CLUSTERS</td><td>500</td></tr>
-        <tr><td>ORPHA</td><td>CPM</td><td>CLUSTER_SIZE</td><td>10</td></tr>
-        <tr><td>ORPHA</td><td>HLC</td><td>N_CLUSTERS</td><td>600</td></tr>
-        <tr><td>ORPHA</td><td>HLC</td><td>CLUSTER_SIZE</td><td>12</td></tr>
-        <tr><td>MONDO</td><td>CPM</td><td>N_CLUSTERS</td><td>550</td></tr>
-        <tr><td>MONDO</td><td>CPM</td><td>CLUSTER_SIZE</td><td>11</td></tr>
-        <tr><td>MONDO</td><td>HLC</td><td>N_CLUSTERS</td><td>650</td></tr>
-        <tr><td>MONDO</td><td>HLC</td><td>CLUSTER_SIZE</td><td>13</td></tr>
-    </table>
+
+    <table id="table_19" border="1" class= "table table-striped table-bordered table-compact" >
+   <tr>
+                    <td  >ORPHA </td>
+                    <td  >CPM </td>
+                    <td  >N_CLUSTERS </td>
+                    <td  >500 </td>
+    </tr>
+   <tr>
+                    <td  >ORPHA </td>
+                    <td  >CPM </td>
+                    <td  >CLUSTER_SIZE </td>
+                    <td  >10 </td>
+    </tr>
+   <tr>
+                    <td  >ORPHA </td>
+                    <td  >HLC </td>
+                    <td  >N_CLUSTERS </td>
+                    <td  >600 </td>
+    </tr>
+   <tr>
+                    <td  >ORPHA </td>
+                    <td  >HLC </td>
+                    <td  >CLUSTER_SIZE </td>
+                    <td  >12 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO </td>
+                    <td  >CPM </td>
+                    <td  >N_CLUSTERS </td>
+                    <td  >550 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO </td>
+                    <td  >CPM </td>
+                    <td  >CLUSTER_SIZE </td>
+                    <td  >11 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO </td>
+                    <td  >HLC </td>
+                    <td  >N_CLUSTERS </td>
+                    <td  >650 </td>
+    </tr>
+   <tr>
+                    <td  >MONDO </td>
+                    <td  >HLC </td>
+                    <td  >CLUSTER_SIZE </td>
+                    <td  >13 </td>
+    </tr>
+   <tr>
+                    <td  > </td>
+    </tr>
+</table>
+
     <p>En lo que vemos que las dos primeras columnas son factores (red y tipo de clustering), la tercera es la métrica medida y la cuarta es el valor
     que toma la misma. Que es lo que se llamaría el formato "long" de una tabla <a href="https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/">(ejemplo de casos long y wide)</a>
     Sin embargo, para poder utilizar algunos métodos de graficado de CanvasXpress o para ver la tabla de métricas de una forma más sencilla,
     necesitamos transformar esta tabla a un formato "wide". Es en este caso cuando se utiliza el método <code>create_metric_table</code>.</p>
 
     <h3> Ejemplo básico </h3>
-    <p>Este método es un tanto especial en cuanto a la mayoría de sus parámetros son posicionales. Por orden, los argumentos son: </p>
-    <ol>
-        <li> tabla de entrada </li>
-        <li>nombres para las columnas de los factores en la tabla de salida (separados por comas)</li>
-        <li>nombre para la tabla de salida</li>
-    </ol>
-    <p>Siendo los tres obligatorios. </p>
-    <p>Imaginando que tenemos una tabla de entrada con las columnas que representan "nombre de la red, tipo de clustering, tipo de red, métrica, valor" , 
-    el comando sería algo como:</p>
-    
-    
+        <p>Este método es un tanto especial en cuanto a la mayoría de sus parámetros son posicionales. Por orden, los argumentos son: </p>
+        <ol>
+            <li> tabla de entrada </li>
+            <li>nombres para las columnas de los factores en la tabla de salida (separados por comas)</li>
+            <li>nombre para la tabla de salida</li>
+        </ol>
+        <p>Siendo los tres obligatorios. </p>
+        <p>Imaginando que tenemos una tabla de entrada con las columnas que representan "nombre de la red, tipo de clustering, tipo de red, métrica, valor" , 
+        el comando sería algo como:</p>
+        
+		
 
 <div class="code">
 	create_metric_table tables/long_table red,metodo,tipo outputs/wide_table
@@ -1060,7 +1089,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_19" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_20" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1121,12 +1150,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-</div>
-    
-    <table id="table_20" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_21" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red </td>
                     <td  >metodo </td>
@@ -1163,25 +1192,26 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >25 </td>
     </tr>
 </table>
+            </div>
+</div>
+
 
     <h3> Definir otra tabla para volcar los registros corruptos </h3>
-    <p>Opcionalmente, se puede pasar un flag -c para devolver otra tabla con los valores corruptos, es decir, aquellos que no se han podido transformar 
-    a formato wide porque falta algún valor de los factores. </p>
+        <p>Opcionalmente, se puede pasar un flag -c para devolver otra tabla con los valores corruptos, es decir, aquellos que no se han podido transformar a formato wide porque falta algún valor de los factores. </p>
 </div>
 </details>
 
-		<h2 id="desagg_from"  class="dummy" onclick="hide_show_element('desagg_to')">desaggregate_column_data (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="desagg_to">
+			<h2 id="desagg_from"  class="dummy" onclick="hide_show_element('desagg_to')">desaggregate_column_data (Click me)</h2>
+<details class='rep_html_det' open='' id="desagg_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
 	<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
 
 	<h3> Ejemplo básico con una tabla con tres columnas, donde hay dos sin agregar y otra agregada. </h3>
-	<p> En este caso, se desagregan los valores de la tercera columna, amoldando el resto de columnas según la cantidad de valores en cada fila de la tercera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos desagregar (en base 1). Con el flag -s indicamos el separador que se ha utilizado en esa columna agregada.</p>
-	
-	
+		<p> En este caso, se desagregan los valores de la tercera columna, amoldando el resto de columnas según la cantidad de valores en cada fila de la tercera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos desagregar (en base 1). Con el flag -s indicamos el separador que se ha utilizado en esa columna agregada.</p>
+		
+		
 
 <div class="code">
 	desaggregate_column_data -i tables/cluster_genes_dis_agg -x 3 -s ,
@@ -1190,7 +1220,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_21" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_22" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1210,12 +1240,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_22" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_23" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1252,14 +1282,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >304_ref </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 
 	<h3> Ejemplo básico con una tabla con cuatro columnas, donde hay dos sin agregar y dos agregada. </h3>
-	<p> Si existe más de una columna agregada, se puede indicar con el flag -x, separándolas por comas. Se asume que todos las columnas agregadas van a tener la misma cantidad de elementos para una determinada fila (ejemplo 1 columna con pat1,pat2,pat y otra con male,male,female).</p>
-	
-	
+		<p> Si existe más de una columna agregada, se puede indicar con el flag -x, separándolas por comas. Se asume que todos las columnas agregadas van a tener la misma cantidad de elementos para una determinada fila (ejemplo 1 columna con pat1,pat2,pat y otra con male,male,female).</p>
+		
+		
 
 <div class="code">
 	desaggregate_column_data -i tables/cluster_genes_dis_agg2 -x 3,4 -s ,
@@ -1268,7 +1298,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_23" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_24" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1291,12 +1321,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_24" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_25" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -1340,36 +1370,37 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >304_ref </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>
 </details>
 
-		<h2 id="excel_from"  class="dummy" onclick="hide_show_element('excel_to')">excel_to_tabular (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="excel_to">
+			<h2 id="excel_from"  class="dummy" onclick="hide_show_element('excel_to')">excel_to_tabular (Click me)</h2>
+<details class='rep_html_det' open='' id="excel_to">
 <summary style="display: none;"></summary>
+
 <div class="lvl1">
 
 	<p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
 	<h3> Ejemplo básico </h3>
 
-	<p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
-	<div class="row">
-		<div class="col-md-6">
-			<img  src="data:image/png;base64,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">
+		<p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
+		<div class="row">
+			<div class="col-md-6">
+				<img  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAd0AAACsCAYAAAA+NHa+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAACHYSURBVHhe7d1tbGNXmQfwf3h//dLS0gk7LGnjYZRGWtBEWrCFhIZZ0bjMMAg0+4FspyDiaLYfEkEnCClSGsnSLjMFOVqVKgmCTtf7YSMWqkknHsQ03+yClFFWlRuGOiVAW0+3pf3Aq4Am3nPOPde+dvxybd977Gv/f+gS+17fpPP42s895557noF8Pl8AERER+e5N+icRERH5jEmXiIjIECZdIiIiQ5h0iYiIDGHSJSIiMoRJl4iIyBAjSXdwcFA/Ij/99re/1Y/IT4yzGYyzGYyzGc8884yKtZGku7W1pR+Rn/b29vQj8hPjbAbjbAbjbEahYE2JYSTp8k01g3E2g3E2g3E2g3E2g0m3BzHOZjDOZjDOZjDOZvmSdF977TX9yPLGG2/oR8Gwu3JKXYc+tbKr1wRDMOK8i5VTgyq+lcvshn5JlwvS8Wwfy6XlFIJyWHd/nGsfy4NBOZiFoH9vWMssuj3ivrV0ZcL99a9/rZ9ZgnUmtYtra5uYmJjA5vyjXf9GOgUpzmMLaeTz+dKSnEByIhiJNxhxtr6kImsnkXbEOb0AzEcYZy8dOJbzaSzcmMDgqRXxLnS/QH9vFJcLOK5f0618SbrVEq4UqKS78SjmNydwz7kQxpDE1QBl3UDFudLxc1gYA2483/1fU0GI88ZsBPNYQPryJIb0Omlo8rJIvOLITnR/Qgju8TyEyctJTGzO41Ge3JDmedKtlXClIL2pG1eT4nQqhKGhEzgpkkAyQFmXHx4zuj/OG5CH8cRMecK1ycSbr0jG3SjYx/NxnJMnNwH4/uD3hlmeJN16CVcKzptqfVmNnTwhvpCGcMLKuoHpYg70h0f2MIiW2eJkt6eCAMR593ncwBhC3R/KuoKeDIbuOiq7btijQIpnLd1GCVcKzMCTjatIYgIz+ot/6MTJQHUxB2mAz+Z8pHwgxIQ429nMBeIaWDDifBR3BTzpBul4rikAx3Sgvzf0EoRBr54kXTcJVwrKmZTqWp64p3RBPmBdzEE6Yz04IEKe7oglAINPghHnGwjA5fG6eqIFJi9V6YfdKtjfG9ZyOQA9ZG0nXbcJVwrGm2p1LSM54TiDimB+U64LRhdzsL+kjuOCiH0QWgZdH+ehu0Q7dxO5moHcwGwAbh0KetJVJ/FH72LSpTItJd1mEq4UhDd1dyWhupaTlWdR6YXAdDHzw2NG98dZD+KpMULZOta7v/s52MezHsx2T7ffyMLvDVNabuk2m3Cl7n9TrXtzy7qWbQHqYg72h2cXK4kkxhbOHXwPukwQ4jw0uYgFzCNS0V0vJ8uIzG9iItn99zUG93iW90iLE/ixBZzr/pzLpGtIS0m3lYQrdf2F+t1rsHJutU+IPYo50fXdccEeEBHB2sl0IK7NBCPO8l7RPJJHReJ1xDkyDyyk87gQgGQQlOO51rEchNuypF4YSBWEmdbspDuQz+etRz66du0aTpw4oZ+RXxhnMxhnMxhnMxhnM55++mmEQqH2Ri+7xe4LMxhnMxhnMxhnMxhnMzy5ZcgtvqlmMM5mMM5mMM5mMM5mnH96GZ+99CAGtra2Cvv7+5CLDL792LlUW9/Ma+VCRETUr/79uf9RP41c011bW0MsFtPPyC/PPvss7r77bv2M/MI4m8E4m8E4m2HH2Uj3MhERERm6pktERERNJd1gTB1HHtlZRGQggsWdisdlUpiqup5cqxtnGd8BDBSXKbGGWlI3zjtYjJTiHOEB3bq6cbbV/t5ITTmO98iieGfK+b3dBNdJd2NWTkdPVJKaimJZPyavyS8mEd/YurrVQC7rsWVEO/RF0ctSUyHMjNpxXsfoTIiJ10e1vjd2FiOIZhPIqfchhwRmEJoqnWb6vd0UF0lXtnAHISuvEVmsFliUGdc/qSfEF1MYifPjegUwfj6BcGYVV5gPvCNaY/FlZ5zHcT4RRmb1Ck9uPFfveyOFizMZxOamMayeD2N6LgYsPyG2SH5vN6dx0pU1ZkXGtSb+94qz2yyCxZTshnB2nZV395R1q9ldFmqf0mvKT1jq7C+p3+HcXrl/r6iIw4F/ZIM41SITgmyB5UQS0Kv6mw9xHl8SZ+NpTFvfEKT4EOfhaaQZ5wo+xFmq972x8xyyYu1ISD+Xxk8jJk49n5C/3O/tBjVOuscvIO/pRK1Wt1k2kRNfKrKZP4ft6Awyeqv1hjq7ewrIJbIV3WoZzMSBS8XtYSxH7Te+wf4y4YZWcSZnbVOLOAiy0V5LvJVxWEdsOer4N7qJcw0yISyVWmD9zcc4V0hdFJ+T8Bnc25cJwlScK1tE/cbHONf73shti2/1URypFXS/txvUxEAqj6husxjmiqeWVndOUeoiZjIxrDvenOHpOcQyM7joSIrOD8XwvWfEOUwWz8l33dX+FcFXZ7sF9FQe2bmC1Ux5t9mS89/oMs7UgKE4q+tRshv0Up8mA9/jLJOJbLVFsRxOwNGr31+68Hsjq77Ya/N7u9eMJ92d57JAeATOVr6VNC1qu0jL0WLXhf4giLWl4FR0Ezg03F8k2Dk5IMXe1lvN25IGZ3bu4kwNGYizTLgh2fpa7+NuUN/jPIzptNVyK8xtI+S2y7TXdOH3xmit/xjN7+1eM9/SdUOcaVojzMqXtNtvnAb7jy/Z66yuE+vA6cMPWbtxJnfaiLO8xSE0AyRyPdYT4wevjucOXesLDD++N0Ijpd7KavzebpDxpDt8ZBTIbCOnnyvq7MpibW99hGZz+1tdJyr59tqHrMFB1m6cSfMxzlaXcgzrHOjjX5xTU/15wl1Lp743ho+I9nUG287EoC9FnpYnm35vN8h8S1efRcaL98GlMOUcQz5+HolwBjNnHRfm1Qej+s3UBzTav9qHrNrItqAbvhdnZByKF1r0NSu7O73dOJPFrzjvLOKsauEuiVND8i3Oar+KE275ZSxac315Xbdj3xvjOC3v4Inbv1f83bjIC7HT+vj3e7s5Hehelq1L6wZ0q1s3jpGEiEaRvLaib1y2rxlEs+LLx+3ZfoP95Qi6dZRfk1CjmXutNaHjkLW7z/WIw2IfZbtxJos/cd65sirOy8WXW0jv41h6dRhCfX4dz9Z+I/FSfAfiI8il+3X0sl9xbkxe9lsftX9v5d/1f7sp3VFlSJ4p9fWB7g1WCzGDcTaDcTaDcTajc1WGDnRF6Gb+6BEmXCIi6mkduKa7hFwCjm6zzjXziYiITBrY2toq7O/vQy57e3vqZ+VSbX0zr5VLJBLRf5KIiKg/dcc1XfIEr82YwTibwTibwTib0blrukRERH2KSZeIiMgQF0nXqqc7WFxmxZpeISsecTIIctrRE99bC4uZ+0dOcWnHeaCFqkvUgLpTxBFjx9Kf93obYpefrXFAN0i6MuFOWPV083m1yMcTp1awq18RZKkpa6JuIltqSo+m19ODyklcmHi9p6a4zNpz+OrJFpgJvKVqMpfmRpbLuhxa06+zbRkhTtrPOkvVHlQ/6coC9hjDwrlSPd3j5xYwtrmGa4HOulYRfefsk0TyDDUuy+c5yprJspOZ1StshXmqsmbtMKbn5Bx9T5RPz0reEi3fvi4PacDO4llx+hgW/6utftKVBezzlzE5pJ97xkp6VleHaIanZHPcOR9yeRdf2VzJdtNd7VN6TflJcp39JTm3aky0ZnKJusGhPqPqKnMaTN9Vm+uclX18pichis3x+PaLmi99FOuXzugV1TU9kGrj0Xlsjp3EiZYTsUy4UWQTOd3lMYftqLM5LhOms4uvgFwii2jZNZ8MZuLApeL2MJajdmJ1sb/sduFkHNRQZYuMPNGgZiv5QBWfd/bikLdE3jk7g9H1xgVKmkq6uyunMJEcw8LiJFrPuVY5pbni6ZbVhVekDo4Y1h1JcXh6DrHMDIqFLwTnF6FVBF+Xo3K5P1Ftdk9JtH+rzXSIX4XQ+13qCbZy/aS6lUVDz01bznXSlQk3Mr8pkm573c07z2WB8AicPUtW0rSo7SItl1UBkl9+Ym3pA1m7DJ+7/YnqkZVUrF6Swtw2Qqy3aswom78+SEHlXNOFY/uF3a3ssvfUVdLdmB0UCRdYSOdxoTSmyj+idWGNaixf0m5P09rdn8jGa43ea1AonTzWoWLt/cIqw+lo6IXk5VKrLGe1AfkNk67VpTyBpEcDqoaPjAKZbTgL+FvXeCzW9lVcafED2e7+1MfUfY1s1fpu+AhGxSd+2/klwMTgm2q9i+Sd4el0eQNPDdANI5ErVO1urp90d1cwrVq4F+BZA1e3HOLFex9TmHLeuzN+HomwOEs46xj4dKAcYB3t7k/9Sx07Fa1amQx4Xddj4zgt7xCK259Re2Tt6YaDUKh5uW3RpGHp1K5RN+nuXlvDpvjffMQ5I5W1zLY8LdU4lvSkA9b11jhGEs5iCPJ6mr5Z3m6uR7PirMHtrRzt7k/9yzp2RuL6uJFLfAS5NEcve218qYD1UfszyvKe/tmB1dBlO7dbdEeVIdkS5Zdb21gtxAzG2QzG2QzG2YzOVRk60NWru5bY/UFERD3OfNIdX0IuATWyy+rCY9cSERH1h4Gtra3C/v4+5LK3t6d+Vi7V1jfzWrlEIhH9J4mIiPpTd1zTJU/w2owZjLMZjLMZjLMZnbumS0RE1KeYdImIiAxxkXR3sXKqdH/uqZWeKF/vKC0oF85CRCWpKcexUVbdinxhl+tkoL2nYus4nnlM+6OJODdMuhuzEcwfTSKfz4sliaPzkYAnXqu0oKqnq6ftWo8tV5QOpH61sxhBNGvP3a0nWak2gSp5xCqJVirtSZ6SU+xWzkXP+RC810Sc6yfd3RUkZCm/c/YkkMdxbmEMm2vXRPs3oNQcr+V1JcfPJxDmfM0kTsjK6+cOY3pOzlf4BHtCfKJKoqmZaskPat5lzoHgu2biXD/pDk3iskeFDso5u3cjWEzJprmzi9euZ2ovjm12V5Tap/Sa8sZInf1lAfsCp4SkKnaeQ1Z8/ZfNmMcqQ/6xS6JdOqNXkNfkvMucAtJ/zcS5yYFUG3hU1tSdaaOIvUq4UWQTOd0Mn8N21Nm9JBOmnjBDN9NziWxF928GM3HgUnF7GMtRO7G62b9c6qL4++EzuJeJuL+palejYElXE6xu5dH1JRY58I1VRxerZ6s3QMgjzcXZZdK1B1NNIDm2gGJvcyt0Ca+5YlNzHOdF0ixKXcRMJgZnQeDh6TnEMjO46PhXlLoAxXZVBF/X53S5v01dw1sOI3GJ1zmotiyLv3pKdSuLE2NOROcj1XMjnLlUbIAUciOIM/F6q8k4u0y6Q5i8LAdSiWUmh8jgrGjztqZabUcraVrUdpGWiwWB1RIVa5xffBVdgA7u9rfIhBuS1/DW2d1M9Y2y+esdu1uZGddfw9NIiwSQdn65qVrGvFziqSbj3GT3snD8Hoj2Lq62XNrPhcpRYHop+0fV42J/eVtIaAY1Cw1THwqNlHpMyDc7V1aRcZ4Yiw9iRl4yClWOzSDqPfWT7sYsBtto1VYzfGQUyGwjp58r6lqaxdre+khiN/tbXcoxrHNAFTmps9MMtp0Hp74ccponZp4Znk6XnxDnEuJkJ8wTYK+pim7Vujhr9xRSC5qMc/2ke/wcFsYqWrUbV9u7rqtHg8aLd8KnMBWVnb/a+HkkwuKs96xj4NOBcoB1NNpfdW3JFi4HcFClcZyWdwjF7WNnxyo7GTvNY4WCR30XVnRxypNIDhr1VpNxbtC9LK/lphFKlGakGkyEkL7czujlcSwV1jE6E7K6lgbiGEk4iyEMYzqtJyWwu5+iWZEk3bZK6+9vdW1ZXVnW3y8t7Nqi8aUC1kftY4dlJynI5HfhOhB1fM/FR5Dj5Bgeay7O3VFlSLZEeTC0jdVCzGCczWCczWCczehclaEDXcW6C4+zphARUY8zn3THl5BLwNG9yy48IiLqDwNbW1uF/f19yGVvb0/9rFyqrW/mtXKJRCL6TxIREfWn7rimS57gtRkzGGczGGczGGczOndNl4iIqE8x6RIRERnSXNLdXcGpwVMIdA17RVYiKt1TFXE16wb1CzlFaPF+uzrVqag9jLNhdllUBtoXbo/nJpLuLlam57GpnwVZaspZ+s+aqIOJlyQ1RWjWnrtbT7LCWVM8xzibZpVSLJVQJS81czy7Trq7K9OYx5j4X8CJs724LOV33r5FySotmFm9wjPtvpfCRVl1qlg2chjTc3JeyCeqluiiVjHOpqlSimqGa/Jec8ezu6S7u4Lp+aNILp7UK9olC9nbTfEIFlOy28M5YXR592/ZZNJ2F4nap/Sa8pOKOvurMkwsdEBVqLqYFZOU67nCWQrNQ4yzWXYpxUtn9AryVJPHs4uka3UrH01eQDu160tkwo0im8jp7t05bEed3R4yYTq7fwvIJbKIlvWRZzATBy4Vt4exHLUTq5v9nSrPUqhvqWpXo2DpXJ8xzgZZ3cqj6yzw4psmj+eGSVd1Kx9N4oI3GVfkOKtU2lyxqWl17xalLmImE4OzwPXw9BximRlcdJw1OJOkVQRf10F1ub+VnGUrOIrlcALF3maiKrIssmsE4+wt1a0sGiCc8K8zqh3P9ZOu3a3sWcYVB8FzWSA8AmdL3EqaFrVdpOVigWu1iMQo1pb+AbXrQbrbX5KVIayWcGFuG6Gq9RCJLKNslhnBOHvI7lZmxu2Yasdz3aS7e20Nm0hiwi7rF5GjlzcxHxnErJeV7SuJlqc1Cqx8Sbu9ENvs/ryeRFJopNRjQv5hnI2wypg6GiAheRnPKmvKgeIeavJ4rpt0hyYvI5/Pl5b0ghq/vJDOt9zdPHxkFMhsI6efK6pP3GJtX8WVFj+QDfevWeWf+t7wEYyKI3HbeXDqyyGn2VjwDuNsxPB0urzhkUuI5BBGIldgd7OXmjyeXQyk8phuVcaL98WmMBWVnb+aqsIvzsbOOgY+HSgHWEej/WtW+ed1XRrHaTnSP24fOztW2cnYaQ5C8RTjTL2kuePZfNIV/xlLekIK63prHCMJ8V9cJK+16puL7W6RaFacnbm9zafR/tb2kbjeJhcW0CdtfKmA9VH72GHZSb8wztRLmjmeu6PKkGyJMvG1jdVCzGCczWCczWCczehclaEDXcW6KT56hAmXiIh6Wgeu6S4hl4AaQWd177JriYiI+sPA1tZWYX9/H3LZ29tTPyuXauubea1cIpGI/pNERET9qTuu6ZIneG3GDMbZDMbZDMbZjM5d0yUiIupTTLpERESGNE66uys4ZU8DaS+nVrCrNweTs7SgXCpmqFLlA53bxVJRpSg1VXub1O526hy+NybYBUesJeJq5htqBY9nM9zG2UXSzWFzbAFp53SQlycxpDcHj1VacDlWKv23HlsuL/0np6WsnL/ZcQ/xzmIE0ay9XU/E4ZjMtN3t1Dl8b8xITTnLb1qT5TDxeo/HsxlNxVkOpKq3pBfGCphIVt3mdllaWhKfrS6xHisA4UJCRKcolyiEHetyiXABsXXryQHrhRhQKNusfmdMbFFP2tzeumw2qx9Ra9y9N4xzmyo+b5L6zIUTBefHknFuF49nM5qLc8OW7m5uE2Mhr9u1zu7dCBZTsjvX2cVb3vVU1v2run7tfUqvKT+pqLP/+JI4E6k/pWRuO4Nw7dqByKKitKCzSlG726lz+N6YMTyNdIPPIHmAx7MZTca5QdLdwNWk+LE27bimOyvWtsPq3s0mcrpraQ7bUVlyyiYTprPrqYBcIlve/StePRMHLhW3h7EctROrm/3LpS6Kvx8+g3vVl0AKT8j6C6tnqydtVRFpFDXLfra7nTqH702HpHBxJoPYHKeB9RSPZzOajHP9pLv7PG7InycXHeX9Qki0k3h1yaO54mnuOM6LpFmUuoiZTAzOwsvD03OIZWZw0XHW4PyAWkXwdT1Dl/vbVF/8chiJS/r3qbMW4cylYtIu5EYQrxxsVUV5kfyD2t1OncP3xg92j1SUVb4M4/FsRrU410+6Q5O4LBLt5UlH9/LQXTiKJK62mHV3nhMpLTwCZ0vcSpoWtV2k5WLhZbWID6VYW/oHVDTlHdztb5EJNyTPsNcdXV2q66ui4L2ql9i4S2a0walOu9upc/je+EFW/NIntnPbCLk4sSVv8Hg2o1qcG49e7oTKkcN6KUuE9bjYXw7vDs2g+YLOoZFSq7qadrdT5/C96Rxea/Qej2czmoxz/aS7MVvjGu4YWh1bNXxkFMhsw1lk3+oTt1jbV3GlxQPFzf5Wl3IM69UGc6gqSNXOuHXrWrV6M9h2/gN0l/lpmbzb3U6dw/fGjJqfMfIUj2czmo2z89aeg0u6sDCGwkTSsS45UcDYQiFd9rr6S/ktQ9bw6nDxfgHreWl4da6QCIvnztsH1PBrfYtBldsNyte1sH8Za/8Dw78dv2895vz9+u85dmh3e6s49L99bt4bxrldjT9jEuPcPh7PZjQT54b36ebzycKESop6aTLhyuXgfbp2opWLSICJynua9H+08zX2p7Fh0pVq76/uByyuL19KMXL+94ml4stAUkG2t1cEV2p3eyv44fFGo/eGcfZCxWe0ymeMcfYGj2cz3Ma5O6oMye6m+AhyjlmfqHmsFmIG42wG42wG42xG56oMqes5EZRmfNvBYnxZDvNiwiUiop5mPumOLyGXAGZC9u08eiKLpoYQExERBcOdD34aJ7//VfVzIJVKqe7lQsHqZfb65/mn5R2ywNqXvq1+EhER9ROZcG0DzzzzjJUdffLZSw+qn798+MfqJ/mH12bMYJzNYJzNYJz9J1u4ksyD3Tk5BhERUQ9i0iUiIjLEVdL92ZNTGL+ol8eu4iW9noiIiNxrmHRlwk2+bwGp80tqeeh9P8JXmHiJiIiaVj/pvn4VyZ8fxieP3KFXAP8Y/hyGX93ET1/XK4iIiMiV+kn3tTx2bhvDx27Rz6Vb7sF/nJ/D553riIiIqKG6SfclkXTxvkP4QO57pWu6F7+Hn+ntRERE5F7dpPvib18Afv4djP/iWPGabuo08BCv6RIRETWt4UAq3PY5fPcz/6CfCKFj+KdXf4T/dtYOJCIioobqJt2/e99hq3tZPyciIqLW1U26H7h1EPj59SrXcA/j72/VD4mIiMiV+t3LoSi+ctvPkPzpy3oF8NJP1/CTyhHNRERE1FCDa7p34PP3L+CTN+aLo5e/cmMM373/HnY5ExERNanxQCqVePXIZbkw4RIREbXERdIlIiIiLzDpEhERGTKQSqVUEftCwapl7/XP808vq59rX/q2+klERNRPTn7/q/qRSLr5fN7Kjj5aW1tDLBbTz8gvzz77LO6++279jPzCOJvBOJvBOPvvzgc/rR+xe5mIiMhXv3z4x6q3V/5k0iUiIjKkftLdmMXg4GDVZXZDv4aIiIhcqZ90j19APp8vW5ITYv3YAs4dt15CRERE7jTXvSxavhPJMSwsTmJIryIiIiJ3mki6u1hJJIGJGUwy4xIRETXNfdLdeBTzm6KVy35lIiKilrhOuhtX2colIiJqh8ukuwGVc+9hK5eIiKhV7pLuxlUkMQHmXCIiota5Srq7z98AxkIcsUxERNSGgaWlJd/nXqbG+mlu6uVlqwgGEVG/MVLwgOrrt4IQMumePHlSPyMi6h/ubxkiIiKitjDpEhERGcKkS+QjeemAiMjGpEtERGQIky5RH/rrX/+K1157DS+++CJ2d3fVIh/LdXIbEfmDo5e7AEcv9y753nbTv7VQKOD111/H7373O7znPe/Bu971LrzlLW9R29544w386U9/wh/+8Ae8973vxS233II3vYnn5UHwwx/+UD+ibsek2wWaT7pPY/bBh/ADfAorD8+K/9de+W+cuvA9ZA99GU997Z9dTGZi/5678I3Z72Dydr26nuwF3PnYU+JBxd9uQueS7nUs3bcITD+OqWN6lc+6KenKhPvyyy9jf38ft99+O9761rfqLeX+9re/4ZVXXsGb3/xmvP/978fAwIDeQt1KJt0HHnhAP3PvkUceUT9b2Zdaw9NYcukFrHzr0zrhdoJMmHN48qZ+WlRrfTXHMPW4u4R788k53HfffXpZEn8l+GQLVybeQ4cO1Uy4ktwmXyOTs9yH/HX9+nW1UH8wmnR/9atf6Uf+MvV3gu/juPDwj/HLh122cqWPfgpf0A9713VcfulzeFwkaLl888wLWFwK9peivE77+9//HrfddtuBLmP7mq6TfI18rdyH13iJvGMs6ZpOhEy8NtmFLFqoxeUCSm1Ve5u9TrdmHa+fzaoNwmFMfk0k6C9+Qj/vXteX7BaqWOaeRKkRXNEqvr7kaM3eh1JeFS1iR3P40LGP4YMv3HT8nuCRyfPd73533RZuJflauY/cl/xz7Ngxtfjpwx/+sH5EnWYk6XYqAfZ+4n0Kk44Eeae8nqu3WOxrtk5yH2fidXoRuYrM8oPH/hUrr+gnASC7hRdfOINv6lbq9OFVfL1qK/Umntz8QPF1j09HkF6s0Y2cfwm/OXwIh/TTIPrzn/+sBk01S+4j96XgYsLtLr4n3U4nvn5u8e4+9Z9WwpUDq1Q38nfxDZU5nsKPy7OzZnc3W8vKR+W655HrmqT7G6x+3dGKVcsi0nqr6hZeBc488Jligjw2NY1IerNKMj2Ez0yVXodjY4iIlv7NyubszScxJ8demRp55RM5OOptb3ubflbqUnZ2K1dbJ/eR+5J//Lymy4TbfXxPuh/60If0o87o9N/3lxxBXEqSv5z9Mkb1FqfRj4T1SObDOPGRu9SjG//3gvpZRo5+drScJ7f0+q7xQZz5pm6ZFheRVPVWy2EcOtAkrZJMhfLBUs7kbVHbHwEeeHwKwU657eHo5WBiwu1ORrqXO5X4ejvhupd9+UX96AVc+9/n1aOj7z+sfjo99ROre/oL98skbreKg6Zagq2SiK8v4es//Vipe7kiecuE+wgewONxR2s4wOT1WeeAqKGhoeJiq7ZOtnLt+3jJH35d0/3FL36hH1E3MTaQynQCZMIVX6Kf+hdrpPHWQ7r1+hX8m0pIn8KnqzSJ77zDagX/4DHna4PkGMYiv8HqI6XBU9eXRAs2MtawpXrzyR+VWro3n8QjL30O8c/0Qrq1vPOd71QTXzTrj3/8o9qXgomJt/sYS7qSqUTIhGuT12gfqrjFp/akFsUkLX30IX1NN1iOTenBU7rbWA2qqnY99tgpnEHpdY/gY6WWrhw4lV50dD3Lxe29wN1Jzj4lE2gz12fla+U+cl/yj9/36TLxdhfOSNUFOjYNpD2DVZ1E7IfOzki1iTGD12i7aUYqOa/yX/7yF9xxxx0Np3eUE2PI2ave/va349Zbb9VryQ92wm2ni5kzUgWH0ZYudY+n/stxi9FHP2Es4XbU9U2kP/gBDOqn/UbOpSwHRd28ebNui1duk6+RiVnuQ/4ycZ8udQ8m3b4nWrlf/Lh+3KPsSTDkrT89MjCqFTLhylbuO97xDlVR6NVXX1Xdx7L1Kxf5WK6T22QLV87PzJHLRN5i93IX6Fj3coewylDn2dNCysFVe3t7ap0cpSwHTclruDLpUnCwylBwMOl2ASbd3tWtSZeIOoNJtwtEvnW/ftQ/0l97TD/qbUy6ROTEa7pEPmLCJSIntnSJiIiMAP4f6nmZDWEJxq0AAAAASUVORK5CYII=">
+			</div>
+			<div class="col-md-6">
+				<img  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeEAAAClCAYAAABr9EXAAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAACRDSURBVHhe7Z1tbBzJeecf+v31ix2vLRprmBZnLXAJJIYGOGcGwQFaAV7OWgoDBMyHY1aJE5KQjYBELqJhYAAugQGSSD5j+GFvMeQmMPd4OIRwHEFccSSclkAQcJwAFBI4swPZQ5l2dkPtrb37wa+wveJcPdXVPTXN7pnu6ZeZ5vx/i1rOdHWJ0lPV9a96qrqeocPDwwYBAAAAIHbepn4CAAAAIGYgwgAAAECPgAgDAAAAPQIiDAAAAPSI2EX4Rz/6kfoEogR2jgfYOR5g53iAneNBt3PsIvzw4UP1CUQJ7BwPsHM8wM7xADvHg25niPAJBXaOB9g5HmDneICd40G3M0T4hAI7xwPsHA+wczzAzvGg2zlyEX7jjTfUJ4O33npLfUoGB2sXaXh4mC6uHagrySAZdj6gtYvD0r72tLijbulzktSezbbcTBcpKc26/+3s3paHk9KYBUnvN4y0SP1ucd3OkYowC/APfvAD9c0gWSOtA7qztUfT09O0t/Rc31esTpLsnF7epcPDw2bamKaN6WQIcTLsbHRa2a0LtKvZeXeZaCkLO4fJsbZ8uEvL96Zp+OKaqIX+J9H9hpWu0jl1T7+i2zkyEXYSYCZJlUw7z9HS3jQ9eTlFadqgWwlS4UTZ2c65y7ScJrp3v/+7rSTYeWcxS0u0TLs3ZmhEXWNGZm4IIRYtu9j/ApHc9jxCMzc2aHpviZ7DYAcodDtHIsJuAswkqZJ3bm2I4VaKRkbO0wUhChsJUmE8TPHQ/3beIW7G0wutAmzCQnxoE+d+JNnt+Rxd5sFOAvoP9BvxoNs5dBFuJ8BMcirZ6LzSF86LDmqEzhsqnBiXdKIfJvZAiJnbyky/S0MC7Hxwn+5RmlL9b8q2JF0cRk6fYdcOPA5Aots5VBHuJMBMYjay7NyiDZqmBSUEI+cvJMolnaQNQ3tL2daNFdNi9LNXT8QaWjLsfIZOJ1yEk9SeXUlAm050v6FSEjbR6nYOTYS9CDCTlJGWdEVPP9lc4E+YSzpJI9rjGyx4+CNSAjazJMPO9ygBy+ttOREzNF7aUh/7lWT3G0a6kTAPWigi7FWAmWRUsuGKpo1pbYSVpaU9vpYMl3SyO61zdFXYPgkzh76388hpMQ/eo7qrIXdoMQGvKiW7PatB/ZnTEGEg0e0cWIT9CDCThEo+WCtKV/SGfZS1u5wYlzQepnjofzurTUEuO6CNtt7/7upkt2e1Oe7Jfn9xBv1GXOh2DiTCfgWY6f9KNt4NbnFFmyTIJZ3sh+mA1ooblF6+fLwO+owk2HlkZoWWaYmyNvc+H96RXdqj6Y1kvVeZLPgdbTGgTy/T5f7X4IT3G8lBt3PXItyNADN9v/B/cIcMDXZ6Ysxd0sW+d98le4NFlrYu7CZibScZduZ3VQ9p44wQYs3O2SWi5d1DupoAcUhKe3Zry0l4DYxJdr9hpv5fXtHtPHR4eNhQn2Phzp07dP78efUNRAXsHA+wczzAzvEAO8eDbufQdkd7Be6OeICd4wF2jgfYOR5g53jQ7QwRPqHAzvEAO8cD7BwPsHM86HYeqtVqDb5wdHTUkpyuuV33cy8nAAAAAPRgTXhra4tmZ2fVNxAVL7/8Mj3++OPqG4gK2DkeYOd4gJ3jQbdz7O5oAAAAABhAhAEAAIAe0aUIJ+OoOxAS+yuUHcrSyr7tMyO/D9GQnrIrZGYDH7Szs6A8BxuHgpudy3Ot7VhLc2VZEvihQ3s2KNOc03V5v60ebG2+0/MQND8uuhLhnUU+Xh8AQb1GlUyR6o0GNcy0O0+jKhuEA3cYhbG6ZePt8QVKQYjDZaLUbMOmnXn7imjfVyaMW0C4lOdytKo+t9ChX9lfyVKuaubXqUjiedBGSkHz48SnCPMMeJg40hwAzP53q0Tjj0F0o0TMCgqrGZp6qmnliStFylQ26SZUODrEzDgn7F5cx6AyfHgGPCTsq77aaN+vlOnaQoVm82a9jNJ8XoyWVq+LHCZofrz4E2GOsSsU2AhkEBZGZRhugSytlNkNMacZY59WsprbQM8zXRyyTPOe1gFNm/KMg9vjZLqebHY49o/sYCcX6rUKZcZS6huIxM5yVjBFmgaLfmOedhu7NO/cSw0A0bTnJqJ8QSjEbH6AbcxEZOfydVqd3aZGXQwm1SWdtv3K/nepKkq1ZE9M0qyYU1/nXx40P2b8ifC5q3QY6kGzLMA5qhZNN1uearkFqqhco4JTtDAuKkvmN6herFKuxQ1XoYUC0bqVn6HVnNkQOpRnAU5t0lTdyJNJNIpq7qQJsd0O2zS7mtP+jV7s7ESZrvNIdvOS/4fwRBKNna1ZQcuaJewcfnvWKF+jhYqYBQ+0HzpCO7Prv+Rm2w79Cg9KaZwecxscBc2PmS43ZoUEj4bE+CNvDTUn6IoQUQv5IMzStlZZo/N5mq0s0DWtB2q6FUT+U1NijFOl73Ir8FTeVhlyhtEg1/aRRPZv0mZLhzJBJf3f6NHOx5AjSsHUuvUQNupjVBhUgYjIzjwrECNLGro+2bTzNvkTlZNEVO1Zo8wqMOiz4Bjs7EiAfqUqO353guZHQU9FWI7wM2OkewUMETWQ+UKmc9ZoiJOxkN80ls2toNGxvBDc/KyWf7Kmv006jPy82dkBNWDZ1Xuq0cfEb+qNW6fnRGVnhjepaJ2ddJ8F7eySSpR2lhgzsdlJzd6DSOR2diFAvzLu9pdVBM2Pgt7OhL1g3yGnUksFtaND+YmSec1wtRgNaQBnckHtDLzRhZ1TY2JYis1v/gjSnpWHbtA12BO96DdSY01vpxNB82OmpyI8+tg4UaVGdfVdIkdfBkZ+9ztA/ZU3XC1SjD2MuBJFh0bXtZ3lGqXTgMXdO3GiicjOspzjzk3Y2Ymg/Yac4dk8dANJxHZ2pVO/ImfFFarpwqEPnILmx0xvZ8JqR1rBelO7THP6nvWJK1TMVGjhkrb2JSvI6aVvBzqVd6psp51zSWf0KZpiO1i+S95QIWb8pvu9WzvLcrYBCzdm+07eQSFiOzefE/EnrxRg57DtrJBr8PA8RG5nVzr2KxM0yW8UFczfK/5ecif7pMhhgubHS4/d0Tz73KbxhZSoOHYDF2isKKxjMUrzu+pFanPNIVelYt3rqxkdyvMOPd7gYuZxkrulT9qrH8oOVdPdrnY0WmuM3dqZy0kDNu1XGKP6wB7WEaWd6zS1aT4nQ5TanIKdQ7czs0/GRHjg58GCKO3cDv5z2/crvIwoD6xx/HsFz4+T/ouixCOpge7IwwHRUOIBdo4H2DkeYOd46J8oSsdcF8otAFcQAACAAaDHa8IlqheJFlLK5dBjtwAAAAAQJ0O1Wq3x8OFDOjo6aklO19yu+7mXUzabVb8eAAAAGFz6b00YhALWduIBdo4H2DkeYOd46J81YQAAAGCAgQgDAAAAPcKnCBvxhIettCiuJByHUIZDg3ow/sChDh9Q9Z51OGGAg+mjXUQP7BwHnds78IAfzTDD7bYxtQ8RZgGeNuIJHx7KxJ+nL67RgbojkfAxmfbzT/GO8kBQnlO78dVxpXxojN4xsTAUxswwm+rlfghE6OyvZClXNZ9BdfjDSQ2m0kM6tXfgEc+aIQY9l/TQvM54F2EO6E9pWr7cjCd87vIypfe26E6CVVieE4v3kgcPMUItrLaGaeMwmpXNm4bIqvwp7VzIiStFykRxVu5AU6ZrCxUtHOkozef5TEGns7JB13Rq78AzXjVjf+WSGE5mxH/t8S7CHND/8AbNjKjvocGB/c1pvZi2l3n6rp/n3OpCaTnr2ZzqyzLNe1oH0W3KC/icWBxRN4DIcGltjteTo13b2cydygD/OJ3Vrs6UH8hwmFGBthsanjRDaNOlhXHaXp9SF9wJtDFr57kl2ktfoPNdCzMLcI6qRdPll6daTp++s4DqLpQG1YtVWzDzCi0UiNat/Ayt5kyh7VTeiBtKm5dcRRoMCq0zMmu0K091Q9uIjA4xa0FU2D0QwBteNMNwQ49vlzwFhOhahA/WLtL0RpqWV2aoew02wkflreGZ4SKxKF+jhcosbWsnaI3O548FM9cb0uhTU2JcrcJvdSovR+GCqXVLpBv1MSqgsx0gTE9JjlYzRTK9dTKSDseXvj7ZbBt8pjzWhGMjUGB44IJzewce8aAZ0g0tJn5eD37sSoRZgLNLe0KEg7mnneJ2GiJqIPOFTLdEOeLGI642H1D3sIMdy0sXjS0AtYw1CVfY4MARW9TDlK9RSh+A8eYL/UliN6ltAAiiYxzT4who095BZzpphumG9nH0sm8R3lkcFgJMtLx7SFebe7Siw74LTaUWI7QjaHkwOGhrkakxMRTEhr3o6RA4HkQI1t5DZ//mJlWETa2JX4qXVysyPoLbhn9fImy4oKdpI6QNWqOPjRNValRX3yVyjcjAyO9+N2rH8nK9z2kkeMKC+oPjuNa9gWw7jjt00TZCRc4iKlTTOwG1TDUJV2l4dGjvwCMdNGN0frd1wlcvipwMFesNV/e0dxE+WKN5OQO+SqFNgNVIrGC9q1amuRw7ixUTV6iYEaOIS9o6nDRC+5efLTqVl/m2kSB3APZdseDk4Vr3ap1M5TfbJnuaCmgboTNBk/xGUsF8RveNcKazk542tQCPdGrvwBsRaIZnET64s0V74r+lrH5ilpEWuz42a4JK6qVxY722QGNFPbgDr1+ol/fN6X2uKkYVXrfadyrP+bzbRuVxKoxRHYd1DABG2xgruNW9kT+1abbNIUptTqFtRMBESR2EIu2McKbR0Km9A2+Erxn9F0WJZ6poHIFBNJR4gJ3jAXaOB9g5HvonitIx17JyRWFDDAAAgAGgtyI8UaJ6keTOMWNqD1cUAACAwWGoVqs1Hj58SEdHRy3J6ZrbdT/3cspms+rXAwAAAINL/60Jg1DA2k48wM7xADvHA+wcD/2zJgwAAAAMMBBhAAAAoEf4FOEDWrvYfD/44lqiw/lbcPB2650vHNAPNNA2AiLfgNBsqCXHY/zM8KQwdFe4tle/9QC6R7Zhm53b9B2+RHhnMUtLZzbo8PBQpA06s5RNvBBzoy2MmaEU1aEB6GyBYH8lS7mqefa4OvQFPZY/JkrNI/zMZ4y3hDie1GSEgGuGMgV+aNuX+aoHEAgZi9wWs6DNuRfeRfhgjYocuvCyeWjlObq8nKa9rTtifpxQxIilsJqhKe28sYkrRcoEOK8anBTs8VZHaT4vei3H86SBZ8SMLCeeueL68U5JhoCTJ+0C3/jty9rUAwiGFYtcfe+EdxEemaEbIQVuaIUD+5vT9iytlHkqrx+Qbca/NJOWZ7quZJnmPa2TlTbl5YjFduanDFXl9VhMcGKRcUNtwRoQdSYg5rnQ+ePPl3iWZQi49Sl1AfjCV1/Wph5AYDgWecZHlJcAG7N26DmOKbwQIKi/FOAcVYumCyVPtZzujmIBVQd4qGl9vVi1BVav0EKBaN3Kz9BqzhTa9uWtEUvLeolThAwwcMhoXuOEkLYhUr5GCxUx+zrm/xTP6aUFGt8uIWhDl/jqy1zrAQSnTNc5BtHmpc71oOhChM3NWdO0kV4myzvdDSpkWd4ajk3QFSGiFrKxzJIeIHl0Pn8ssHrTZSjyn5oS8xcVn7RDeR6xCMWmoeuTlkg3+GxurAmDNlQR/LYrytw7Ocy+pBtaDJRxUF73+OnL3OoBhID0oAmm1pv1UB+jQhsh7kKER2jmBm/MEmmhTtnhRTEn7g45esuMkT5xN0TUQObrAZJlyokrekfoHt/VU3leQNeffnY52kQeAJ1xTI+7wJghzNqDBJtuaChwcDz1ZS71AMJBLgE0aFcf4ciY2e7LWAHc0YJzT5KYD9OtrkMZesC+y0ylln9kO9qUT40JuUewCOBEaqzpUQHBUV6vYxp8c5Mq+kA5xctRFXmePDaie8dzX+ZSD6B3eBfhnUUaDjDrdWL0sXGiSo3q6rtErsUZGPnd71TuVF7mO+52dZ9dgwFBjl4rVNMbJzqwrnHyejGj87utA+R6UTx9GSrWG3BP+8BrX+ZWDyAk5Jq8k+vZXVO8i/C5y7Scts16d24FWxdWu00L1pv5ZZrLsbNYMXGFihkxKr6krWvIf6THl/k7lZf5+u9n71iBVu27DMEAMkGT/EZSwWw75o7SSWwe6gK5ZgmvU3R47MtQDxGj6qHF9cyD9zaa4sMdzWvBu5QqNk/MGi6maPdGkN3RE1RqbNP4QspwRQ0VaKyoB3cYpflddUiC6a7KVcUo2esrRJ3KG/lTm+bvH6LU5hTV27xYDQaHiZI68EC2DYTZ7J59MiZgmH9Fh5e+DPUQPVwPvCNO6Q2nwlhbTem/KEo8U+3wlwadQTSUeICd4wF2jgfYOR76J4rSMdeycvnBXQIAAGAA6K0IT5SoXiS5E9KYusPlBwAAYHAYun37doN3JTJR/7zyLWPT1dYff03+BAAAAAaZoW9/+9uGQsbA767/hfz5va/elj9BdGBtJx5g53iAneMBdo6H/lkTBgAAAAYYiDAAAADQI7oX4Tdv0Z9dK9Dfv6m+JxaOtKS904XgDYODDIWp1b1D/XOgdLSNiPFQDyAMWvu6rKcTj4B/9PC8ne3cpQi/Rn9/4x9OwEPCjTJFC9Q8X1oezoAOYDCQMVhtZ4tr76fvr2QpVzXz1aEvONA4fDrUAwiH8pwe1tU4JAlCHDasKTlatdqzcYBKOzt3JcL/+c/P0/P0aPIfkv2btMlxNdebD/zElSJlApxXDZKDPEfX9Z30Ml1bqGhhMkdpPs/nWDqdzwuC0L4eQCjsr1BhVY8hbISNrWzexIQjTMxYzZamGP1GZeGaa7/hX4TfvEV/9U/D9MzFtLoQFH3qnqWVMrum9AOwbe5iPU+6scwyzXtaJyttyoOBhs/RdT3CT8YFtR26rs46dwtJBrqjbT2AcJAh9rwe9wuCMU4t0U47RGTzKcKGG3pk8gv0X9SVYLAA56harCsXSZ5qOQ5lZqLcxZYLpUH1YtUWqLpCCwWidSs/Q6s5U2g7lB99iqZsAR7K18TvRwCHAcCIq0qbl5wHaDKal+1hAhHQoR5ARNg9PSA8bIIr+xJbRDYNXyIs3dC/8UX687AGrSo0XN4anhkuEgs5tZ8lPeD36Hz+WKBqvSGNPjXVHHV0LM+HbeuH9A8Za4BYjzr5yJmuYGrdGqA16mNU8CAAVQQZDo8A9QC6wfQMGuuWlncahIP0lomJnSVQwt58FHMbvIuw6Yb+/G+qC8Fxim1piKiBzBcybQX8lkk0HnG12RG6x2nsXN5whefInCmbEZfQAZx4pHuuQbu6f07GEO7sbh7H9Dg8AtQD6AZj4iH7u3wNfV3oGJEBZ1dzSm8uEeWNGNluOuVZhP/zu3tC0/+Fnrk2RxOc/oZ3R79Cz//NHH3NZZodCvZdkyq1PLTtaFdezcSbM2XRQNfZYO7+ezAgdFjHASDxYI9DRLAQm1qzS/MdPMeeRfjjn81T+Uqpmf7k94RkPUp/+ielrt3To4+NE1Vq1KLh0n9uYOR3v1M5aHlwgpERvJxmAWrEKmdjtnUcNWibhAsvPDrVAwgHVzuDUDE3C2uas39zs+0+I58bs0JGjcQK1t+4THM5zX8+cYWKto1TRmNq/Ue60qm8+v05bTs1NmYNCLJt2GYBLLJW3U/QJL+RVDDbjlrbmZ0UOSA0OtYDCAVXO2NdOFTMzb7mmrAQ5UsdNsD1VoSV/5xfGjf85wUaK+oB/3n9wlynVWu6uSoV61632ncqb/ffY2PW4MBtY5sop9oFp8JYS91PlPRNewizGQ2d6wGEgdEXjhVg52gx2rOlKakFGt9uULtuo/+iKPFMFY0jMIiGEg+wczzAzvEAO8dD/0RROuZaVi4/nJ4DAABgAOjxmnCJ6kWihZTpIoHLDwAAwOAwdPv27QZvpWai/nnlW8amq60//pr8CQAAAAwyQ4eHh4ZCxsTW1hbNzuqbr0AUYG0nHmDneICd4wF2jof+WRMGAAAABhiIMAAAANAj/InwwRpdHB6mYT1dXKMDlZ1M9FCKnGynysgTUPR8kWxB/8tz7nlM0HzQO1A3cWAGFTASAs13S6sdW9qrfBNFy9NSa+hXEJw29eCATxGu0156mXYPD+nQTDdmaERlJw8jlOLqbDPU4fbsamuoRD5G037+tPYO8/5K1jjgQ+apg0G0Vh00H/QOFuDCmBlmUx3cASEOnfKcHm7UOLwHQuwX7viFHUUPYvZVLe11omS1YzNt89YcnJgVMh3qwQFfInxw/x7RmdMJFl0b8izgDBW1VjhxpUgZ7bxpGYnJ9b1le0zOUZrP81mH19VsOmg+6Bn7K1RYzdCUdnaivW2AEFB2bj6DRjjTyuZNDHb8sH+TNivCjuvNCULb9ipmxjm2u3Y/CAG/9SDwJ8L1PUqnwpZg3R2cpZUyu391l7Btaq/nmYdlyzLNe1onkm3Ky9Fh+yMw67UKZdxjJVLVftC8HpkkaD7oHdIDYju/WIbd83pkKvAEbNoDRJ8oz0HPw+59gA8R3qFbG+LH1ry2JrworgbBcAdXi6bLL0+13IIVRckQUN1V1aB6sdrqLuYAygWidSs/Q6s5U2i9lG+lNYBDma7zq82bl5xFXEZ8GifX8LJB80HPsDwgLWtp+uAQRIPdOwQ8YQYO0ILVuAajKV+jBZ6twQ8dPn7qQeFdhA/u0z3+eWGluR68m6JiECFWoeHy1nDMcEVZyMaix/vlgXOeZisLZAapYPQHdvSpKTG3VHFgPZY3keuzuotGzlQFU+uWiDfqY1Tw0BlXOwSiDZoPooU9IGI0R0PXJ5t1z3EGsCYcEabHKofIPl3BgQPU+qMaNLoFoynzzAKz4IjwXg8m3kV4ZIZuCOG9MaO5o0dO0xnaoFtdqrCcbWTGSPfGGiJqIPOFTOfUP8ZI4iEVV5si5R531Ft5AxbgFI/AtzXXmHSVNWhXb60yzmxnd/F4h+lt0HwQA7whTz9ClZcKXAZwIChG5yUHO/ma6MDgdfCHsayXI9PrZ0aPs9vR8O7NIih2RHithya+1oR7gn1nskotwtgOD+V5F2xqgahYbx9y6hipseas24mg+aBnpMbEUBCBRHoD9kX4R3kVm14/MahZLx7vX9R90OCI8FoPGt5FeGfRZQ04Td3u1Rp9bJyoUqO6+i6R66QGRn73u1G9lDdc0MJoTptD5Hqg0whGzb7lrLhCNf0foDfyoPmgZ8i247hL3d3zArrA9RkDUeDkfQS9xbsIn7tMy2mb63nnFm2kL9D5bjdMqxFvwXonUEzlc+wsVkxcoaJtkdt4aPXwh23oVH5/hS7JGXCJHDVPlreNyFkkrUX2CZrkN4oK5p9v7jqcVH9e0HzQM1TdN9smN5eCVvcgFFyfMawL+0L1pTnt1RCnDUFyrwM8PNHhsR5a4AAO3tNGY5qIAz4YKb3c2HW8zz2VSqVGK9sNoUPqz8w0isVZ8XNWXDWpN4oZ7XfyPXUzq9jI6N+ZY9fcy9eLGe16a5q1/gL630+kTFH8ia1sz2r5zYIWQfO7oVqtqk+ge2xtx6HuYecwgJ3DoVNfZdg509JhtgI7h0FnzdDt3H9RlHimWhhru5sMdAbRUOIBdo4H2DkeYOd46J8oSsdcy8odC3cJAACAAaC3IjxRonqRaCFlvj6kDtbwtUUZAAAASCZDtVqt8fDhQzo6OmpJTtfcrvu5l1M2m1W/HgAAABhc+m9NGIQC1nbiAXaOB9g5HmDneOifNWEAAABggIEIAwAAAD3CtwjvLJoRlES6uEYH6joAAAAA/OFLhFmAi6ldK4rSxpklykKIAQAAgK7wLsIHa1TcSNMF7YzKc5eXKb23RXegwgAAAIBvfIhwnfbs50TL8IY3SI9uCAAAAABveBbhg/v3iM6cphEZTclcFw4Q0B8AAAAYcLyLcH2PaGOahm89aa0JH24QTWNNGAAAAOgKXxuzKL1Mu1fPqS+Cc0/S9N4SPYfpMAAAAOAbzyI8kkob7mj1HQAAAADB8C7Cp88QbdxyWANOUwrKDAAAAPjGuzv63GVaTm9Qca25AnywVqQN+45pAAAAAHjCx5rwCM3c2KULW1lrd3R26wLt3piBixoAAADoAn8bs6QQq53RnCDAAAAAQNf4FGEAAAAAhAVEGAAAAOgRQ7VarfHw4UM6OjpqSU7X3K77uZdTNptVvx4AAAAYXIYODw8b6nMsbG1t0ezsrPoGouLll1+mxx9/XH0DUQE7xwPsHA+wczzodoY7GgAAAOgREGEAAACgR3gX4ZboSa1pEWdHAwAAAL7xLsLnrjbfD1ZpY1pcTy/TZS2mAwAAAAC80b07WsyMpzfStLyCAzsAAACAbuhShA9orcjBhBdoBgoMAAAAdEV3IrzzHC3tiVkw/NAAAABA13Qlwju3MAsGAAAAgtKFCO+Q1OAnMQsGAAAAguBfhHdu0QZNEzQYAAAACIZvET64f48oncKOaAAAACAgQ6VSKdazowGwMyhnia+urqpPAABgEHsABwB0BimgB4vwhQsX1DcAAOj2FSUAAAAABAYiDAAAAPQIiHCfwe5ZAAAAgwFEGAAAAOgREGEABpxf/epX9MYbb9Crr75KBwcHMvFnvsZ5AIDowO7oPoPd0YO0gxa7o3tHo9GgN998k3784x/TBz7wAXrf+95H73jHO2TeW2+9RT//+c/ppz/9KX3wgx+kD33oQ/S2t2HMngS++c1vqk8gCUCE+4zeifBdKj29QjT/As2dVZdiwL8If4sW/+IZ+gY9QWtfXRT/V7z+d3Tx6t9S9dQX6KX//gceDpMx/5zT9JXF/0kzj6jLLhy89EV6onxfffNWxk4/iTAL8GuvvUZHR0f0yCOP0Dvf+U6V08qvf/1rev311+ntb387ffSjH6WhoSGVA/oVFuEvfelL6pt3nn32Wfmzm7KgezC0PRGwgObpxQfqq4XbdSfO0twLfgSY/+ynKe/tD082QuDnLQFm7tNfXr1KL6lvSYRnwCzEp06dchVghvP4HhZrLgOi5e7duzKBwaFnIvz9739ffYqWuH7PIPHgxTw9/fQefXzqE+pKEvltuvrV2/S9r3qb0Z6ZeF7cy/c/T185xVe+T997XWYlDl7n/clPfkIf+chHjrmYzTVhHb6H7+UyWCMGIFx6IsJxCyOEuMnd0tNCQFXKv0jNeaxt1ny31LxPpJI2OD/1+QK98MKcmDv3O+xy/hx9ykr67NXMM6+9Qmv/Q7/3c7RYlRlEj/wBXX3iUfUl+bCYvv/97287A7bD93IZLgui4+zZszJFyac//Wn1CfQDsYtwrwQRQmzMYFdemaK/fuEFIaIv0Pyjm/RlXV0tHtCLex+37nthPku7KyUh0/3ESzSjCeaneD1Y5RiYa746XMbNjfwq1W2e9W98/Yu0Zp/tVv8P/SXfd+q/0nmfa8L9wi9+8Qu5CcsvXIbLguQCAe4/YhXhXgvhyRbi/6DNL2uzXJlWaFfl8kz3xibR1Jc+T9KbKjg7N0/Z3T0HcT1Fn59r3kdn05QVM8UHCVr+PXjpfxkCzBu1WtzIL9HtVrVWmO5pI619hq/dp7omwrw561NfZwk/TV/5Qy+bv/oT3mz1rne9S31ruqB1N7TTNS7DZUF0RLkmDAHuT2IV4U9+8pPqU2/o9e+Plk/Q1F+rmauVhMiqXINH6ZSlrCbO4mqs+zqJeb/Au6Obovm9xS/QuMrRGf+tjBLLR+n8b52Wn+79v1fkzxZ4d7U2s575V3Vd8dL//pzaHc2/1//O6JMCdkcnEwhw/xK7O7pXQniyBdgrToLrIMx3S/Tlf/5s0x19TMyTQ/W1V9WnV+jOvxk7nM989Pj67kv/13Bn//4fsaibs2aFEOgVFmU5q9Zei0oovL6rb7AaGRmxkonTNZ4Fm+8Rg2iIak34O9/5jvoE+o2ebMyKWxAhwMxZSmf/gzafbW7GulsSM9xsuuMGqwcv/kMfzoTbM/LEH9Lv84d/fUbNbv/UWMsVEvo5hynzpz5mzJK/8XX9XoODf/9HY735wd/SE9ps2dq4lTDe+973yoM4/PKzn/1MlgXJBELcn/REhJm4hBEC3OTsnNqMpdzMcpOW04vBZy/SFDXve5Y+m8CZMK/xPmMIsYXtgA8NS7SZzzyj1oRPJnw6Fguqn/VdvpfLcFkQHVG/Jwwh7j9wYlaf0dsTs/YoHfOrRz07ttI8YauNMIdNP52YxedC//KXv6SPfexjHY+j5IM6+HStd7/73fThD39YXQVRYApwEJc0TsxKFj2bCYM+4+4e7X7i4zSsvp5keJOV9UrTZ34nFgHuN/gsaN5k9eDBg7YzYs7je1iouQyIljjeEwb9BUR40DEP5eBjowvaa0kDgZgF/7ffVp8HCxZgngW/5z3vkRGTfvjDH0p3M8+OOfFnvsZ5PAPm86WxMxqAsCH6/6CoZL/UQU9HAAAAAElFTkSuQmCC">
+			</div>
 		</div>
-		<div class="col-md-6">
-			<img  src="data:image/png;base64,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">
-		</div>
-	</div>
 
-	
+		
 
-	<p> Vamos a sacar las 3 primeras columnas de la primera hoja del archivo special_files/scRNAseq.xlsx y convertirlo en formato plano tabular. 
-	Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas a extraer y -s para la hoja a utilizar. <p>
-	
+		<p> Vamos a sacar las 3 primeras columnas de la primera hoja del archivo special_files/scRNAseq.xlsx y convertirlo en formato plano tabular. 
+		Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas a extraer y -s para la hoja a utilizar. <p>
+		
+		
 
 <div class="code">
 	excel_to_tabular -i special_files/scRNAseq.xlsx -c 1,2,3 -s 1
@@ -1378,12 +1409,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_25" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_26" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >genes </td>
                     <td  >cell1 </td>
@@ -1410,15 +1441,13 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >3 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-
-
 	<h3> Sacando las dos primeras y dos últimas columnas de la segunda hoja </h3>
-	<p> En este caso, sacamos las dos primeras y dos últimas columnas de la segunda hoja del mismo archivo </p>
-	
-	
+		<p> En este caso, sacamos las dos primeras y dos últimas columnas de la segunda hoja del mismo archivo </p>
+		
+		
 
 <div class="code">
 	excel_to_tabular -i special_files/scRNAseq.xlsx -c 1-2,4-5 -s 2
@@ -1427,12 +1456,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_26" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_27" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >genes </td>
                     <td  >cell5 </td>
@@ -1464,16 +1493,13 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >8 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-
-
-
 	<h3> Sacando todas las columnas de la primera hoja </h3>
-	<p> Si queremos sacar todas las columnas, pero no sabemos de antemano cuantas son, podemos utilizar el valor 0 para indicar que queremos todas las columnas. </p>
-	
-	
+		<p> Si queremos sacar todas las columnas, pero no sabemos de antemano cuantas son, podemos utilizar el valor 0 para indicar que queremos todas las columnas. </p>
+		
+		
 
 <div class="code">
 	excel_to_tabular -i special_files/scRNAseq.xlsx -c 0 -s 1
@@ -1482,12 +1508,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_27" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_28" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >genes </td>
                     <td  >cell1 </td>
@@ -1524,17 +1550,15 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >0 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 
-
-
 	<h3> Sacando filas concretas</h3>
-	<p> A parte de las columnas, también se pueden elegir las filas que sacar de la tabla (por defecto, se sacan todas, pero podemos seleccionar las que queramos) </p>
-	<p> En este caso, vamos a obtener las filas 1,3 y las columnas 1,3,4 de la primera hoja</p>
-	
-	
+		<p> A parte de las columnas, también se pueden elegir las filas que sacar de la tabla (por defecto, se sacan todas, pero podemos seleccionar las que queramos) </p>
+		<p> En este caso, vamos a obtener las filas 1,3 y las columnas 1,3,4 de la primera hoja</p>
+		
+		
 
 <div class="code">
 	excel_to_tabular -i special_files/scRNAseq.xlsx -r 1,3 -c 1,3,4 -s 1
@@ -1543,12 +1567,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_28" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_29" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >genes </td>
                     <td  >cell2 </td>
@@ -1560,40 +1584,43 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >5 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
+
 </div>
 </details>
 
-		<h2 id="filt_from"  class="dummy" onclick="hide_show_element('filt_to')">filter_by_list (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="filt_to">
+			<h2 id="filter_from"  class="dummy" onclick="hide_show_element('filter_to')">filter_by_list (Click me)</h2>
+<details class='rep_html_det' open='' id="filter_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-    <div class="alert alert-warning" role="alert"><p>Este binario presenta cierto solapamiento con el el binario "column_filter", si bien el solapamiento no 100% 
-    ya que column_filter acepta los keywords mediante una string y este binario acepta un archivo de una columna con los términos a filtrar. </p></div>
-    <p> Se utiliza para filtrar las filas que nos interesan de una o más tablas en función a una serie de valores que se pasan  </p>
-    <h3> Ejemplo básico </h3>
-    <p> Tenemos nuestra tabla con la primera columna teniendo el identificador de una red (la que nos interesa para poder filtrar), y las otras columnas 
-    siendo factores y metrica-valor. Tenemos otro archivo en el que tenemos los identificadores de las redes que queremos filtrar (red1 y red3). </p>
+    <div class="alert alert-warning" role="alert">
+        <p>Este binario presenta cierto solapamiento con el el binario "column_filter", si bien el solapamiento no 100% 
+        ya que column_filter acepta los keywords mediante una string y este binario acepta un archivo de una columna con los términos a filtrar. </p>
+    </div>
 
-    <p> Pasamos la tabla de interés tabla como input al flag -i y la columna en la que están los valores que filtrarán las filas con el flag -c.  El archivo de una columna 
-    con los IDs de redes que queremos filtrar se pasan al flag -t. Pasamos el path a la carpeta (si, a una carpeta, ya que el flag de input -f puede aceptar más de una tabla, 
-    separada por comas, para ser filtrada) en el que queremos que se escriba la/s tabla/s filtrada/s con el flag -o y podemos
-    añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este caso usamos "filtered_" en este caso) con el flag --prefix</p>  
+    <p> Se utiliza para filtrar las filas que nos interesan de una o más tablas en función a una serie de valores que se pasan  </p>
     
-    
+    <h3> Ejemplo básico </h3>
+        <p> Tenemos nuestra tabla con la primera columna teniendo el identificador de una red (la que nos interesa para poder filtrar), y las otras columnas 
+        siendo factores y metrica-valor. Tenemos otro archivo en el que tenemos los identificadores de las redes que queremos filtrar (red1 y red3). </p>
+
+        <p> Pasamos la tabla de interés tabla como input al flag -i y la columna en la que están los valores que filtrarán las filas con el flag -c.  El archivo de una columna 
+        con los IDs de redes que queremos filtrar se pasan al flag -t. Pasamos el path a la carpeta (si, a una carpeta, ya que el flag de input -f puede aceptar más de una tabla, 
+        separada por comas, para ser filtrada) en el que queremos que se escriba la/s tabla/s filtrada/s con el flag -o y podemos
+        añadir un prefijo para el nombre de la tabla de salida si nos interesa (en este caso usamos "filtered_" en este caso) con el flag --prefix</p>  
+        
+		
 
 <div class="code">
 	filter_by_list -f tables/long_table -c 1 -t tables/nets_to_filter --prefix filtered_ -o outputs
 </div>
 
 <div class="divrow">
-
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_29" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_30" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1654,8 +1681,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
-            <table id="table_30" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Archivo de 1 columna con los registros que queremos filtrar</b>
+            <table id="table_31" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red1 </td>
     </tr>
@@ -1665,14 +1692,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
-
     
 
         
-        <div class="divcolumn">
-            <p><b>Output: </b>outputs/filtered_long_table</p>
-            <table id="table_31" border="1" class= "table table-striped table-bordered table-compact" >
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_32" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1702,26 +1727,25 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >20 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Usar un match complementario (usar los términos como blacklist en vez de whitelist) </h3>
-    <p> Si en vez de querer quedarnos con todas las filas que tengan los términos de la tabla que pasamos con el flag -t, queremos quedarnos con todas las filas que no tengan esos términos,
-    podemos activar el flag booleano --blacklist. </p>
+        <p> Si en vez de querer quedarnos con todas las filas que tengan los términos de la tabla que pasamos con el flag -t, queremos quedarnos con todas las filas que no tengan esos términos,
+        podemos activar el flag booleano --blacklist. </p>
 
-    <p> Repitiendo el mismo ejemplo anterior, pero activando ese flag, tenemos: </p>
-    
-    
+        <p> Repitiendo el mismo ejemplo anterior, pero activando ese flag, tenemos: </p>
+        
+		
 
 <div class="code">
 	filter_by_list -f tables/long_table -c 1 -t tables/nets_to_filter --prefix blackfiltered_ -o outputs --blacklist
 </div>
 
 <div class="divrow">
-
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_32" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_33" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red1 </td>
                     <td  >HLC </td>
@@ -1782,8 +1806,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Archivo de 1 columna con los registros que queremos omitir</b></p>
-            <table id="table_33" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Archivo de 1 columna con los registros que queremos omitir</b>
+            <table id="table_34" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red1 </td>
     </tr>
@@ -1793,14 +1817,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
-
     
 
         
-        <div class="divcolumn">
-            <p><b>Output: </b>outputs/blackfiltered_long_table</p>
-            <table id="table_34" border="1" class= "table table-striped table-bordered table-compact" >
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_35" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red2 </td>
                     <td  >CPM </td>
@@ -1830,27 +1852,26 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >25 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Match parcial (vale tanto para whitelist como para blacklist) </h3>
-    <p> Si en vez de querer filtrar los elementos de la tabla por un match exacto, queremos que sea por un match parcial, podemos activar el flag booleano --not_exact_match</p>
+        <p> Si en vez de querer filtrar los elementos de la tabla por un match exacto, queremos que sea por un match parcial, podemos activar el flag booleano --not_exact_match</p>
 
-    <p> En la tabla siguiente, vamos a quedarnos con todos los clústeres de referencia y descartar los random, indicando que los valores que queremos filtrar en nuestra tabla de entrada
-    dada con el flag -i están en la segunda columna (-c 2) y el archivo que pasamos para filtrar con el flag -t solo tiene el valor 'ref', que será usado para hacer un match parcial al
-    haber usado el flag --not_exact_match</p>  
-    
-    
+        <p> En la tabla siguiente, vamos a quedarnos con todos los clústeres de referencia y descartar los random, indicando que los valores que queremos filtrar en nuestra tabla de entrada
+        dada con el flag -i están en la segunda columna (-c 2) y el archivo que pasamos para filtrar con el flag -t solo tiene el valor 'ref', que será usado para hacer un match parcial al
+        haber usado el flag --not_exact_match</p>  
+        
+		
 
 <div class="code">
 	filter_by_list -f tables/disease_cluster_ref_rnd -c 2 -t tables/clusts_to_filter --prefix ref_filtered_ -o outputs --not_exact_match
 </div>
 
 <div class="divrow">
-
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_35" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_36" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1895,22 +1916,20 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Archivo de 1 columna con los registros que queremos filtrar</b></p>
-            <table id="table_36" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Archivo de 1 columna con los registros que queremos filtrar</b>
+            <table id="table_37" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >ref </td>
     </tr>
 </table>
         </div>
 
-
-
     
 
         
-        <div class="divcolumn">
-            <p><b>Output: </b>outputs/ref_filtered_disease_cluster_ref_rnd</p>
-            <table id="table_37" border="1" class= "table table-striped table-bordered table-compact" >
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_38" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -1932,32 +1951,30 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >66_ref </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Filtrar múltiples tablas </h3>
 
-    <p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
-    Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar el flag --prefix para que no se escriban con el mismo nombre y nos reemplacen las tablas de entrada. </p>
-    <p> Por lo tanto, podemos filtrar varias tablas a la vez utilizando el mismo archivo de filtrado. Esto es util si tenemos distintos archivos de métricas con los mismos identificadores y queremos filtrar todos ellos por los mismos términos. </p>
-
+        <p> Como se ha comentado antes, el flag -f acepta múltiples tablas separadas por comas. Es por ello que el flag -o para el output indica carpeta de salida y no archivo de salida.
+        Además, si vamos a escribir los archivos en la misma carpeta, podemos utilizar el flag --prefix para que no se escriban con el mismo nombre y nos reemplacen las tablas de entrada. </p>
+        <p> Por lo tanto, podemos filtrar varias tablas a la vez utilizando el mismo archivo de filtrado. Esto es util si tenemos distintos archivos de métricas con los mismos identificadores y queremos filtrar todos ellos por los mismos términos. </p>
 
 </div>
 </details>
 
-		<h2 id="getcol_from"  class="dummy" onclick="hide_show_element('getcol_to')">get_columns (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="getcol_to">
+			<h2 id="getcol_from"  class="dummy" onclick="hide_show_element('getcol_to')">get_columns (Click me)</h2>
+<details class='rep_html_det' open='' id="getcol_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
 	<p> Se utiliza para obtener un subset de la tabla original, con las columnas pedidas por el usuario </p>
 	<h3> Ejemplo básico usando índices numéricos para seleccionar las columnas de interés</h3>
-	<p> La tabla de entrada se indica con el flag -i. Las columnas a obtener se indican con el flag -c, siendo índices numéricos en base 1, separados por comas, 
-	y pudiendo utilizar un guión para seleccionar rango de columnas. </p>
-	<p> En este caso, vamos a coger las columnas 1,3,4 y 5 , que como veremos, para mostrar la funcionalidad, lo hacemos pidiendo la columna 1 y luego las columnas 3-5.</p>
-	
-	
+		<p> La tabla de entrada se indica con el flag -i. Las columnas a obtener se indican con el flag -c, siendo índices numéricos en base 1, separados por comas, 
+		y pudiendo utilizar un guión para seleccionar rango de columnas. </p>
+		<p> En este caso, vamos a coger las columnas 1,3,4 y 5 , que como veremos, para mostrar la funcionalidad, lo hacemos pidiendo la columna 1 y luego las columnas 3-5.</p>
+		
+		
 
 <div class="code">
 	get_columns -i tables/simple_table -c 1,3-5
@@ -1966,7 +1983,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_38" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_39" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-2 </td>
@@ -1999,12 +2016,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_39" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_40" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-3 </td>
@@ -2030,19 +2047,19 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >15 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 	<h3> Utilizando los nombres de las columnas si se utiliza el flag header</h3>
-	<p> Si se activa el flag -H para indicar que la tabla tiene header, podemos pedir entonces también las columnas que nos interesan dando sus nombres separados por comas.
-	(OJO: la tabla puede tener header igualmente, que si nos interesa indicar las columnas por índices numéricos, podemos utilizar el script igualmente sin activar el flag -H,
-	tal y como hemos hecho en el ejemplo anterior)</p>
-	<p> En este caso, vamos a coger las columnas col-1,col-3,col-4 y col-5, las mismas del ejemplo anterior, pero esta vez utilizando el nombre del cabecero de cada columna. 
-	Como veremos, en el caso de indicar columnas por nombres, también podemos utilizar el guión si nos interesa obtener un rango de columnas entre esas 2, pero en este caso 
-	utilizando "%-%" como separador del rango de las dos columnas (para evitar problemas con el guión como parte de nombre de la columna, tal y como se está viendo en este 
-	ejemplo, escogido a propósito)</p>
-	
-	
+		<p> Si se activa el flag -H para indicar que la tabla tiene header, podemos pedir entonces también las columnas que nos interesan dando sus nombres separados por comas.
+		(OJO: la tabla puede tener header igualmente, que si nos interesa indicar las columnas por índices numéricos, podemos utilizar el script igualmente sin activar el flag -H,
+		tal y como hemos hecho en el ejemplo anterior)</p>
+		<p> En este caso, vamos a coger las columnas col-1,col-3,col-4 y col-5, las mismas del ejemplo anterior, pero esta vez utilizando el nombre del cabecero de cada columna. 
+		Como veremos, en el caso de indicar columnas por nombres, también podemos utilizar el guión si nos interesa obtener un rango de columnas entre esas 2, pero en este caso 
+		utilizando "%-%" como separador del rango de las dos columnas (para evitar problemas con el guión como parte de nombre de la columna, tal y como se está viendo en este 
+		ejemplo, escogido a propósito)</p>
+		
+		
 
 <div class="code">
 	get_columns -i tables/simple_table -H -c col-1,col-3%-%col-5
@@ -2051,7 +2068,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_40" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_41" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-2 </td>
@@ -2084,12 +2101,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_41" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_42" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >col-1 </td>
                     <td  >col-3 </td>
@@ -2115,31 +2132,32 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >15 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 </div>
 </details>
 
-		<h2 id="inter_from"  class="dummy" onclick="hide_show_element('inter_to')">intersect_columns (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="inter_to">
+			<h2 id="inter_from"  class="dummy" onclick="hide_show_element('inter_to')">intersect_columns (Click me)</h2>
+<details class='rep_html_det' open='' id="inter_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-    <div class="alert alert-warning" role="alert"><p>Ojo al usar este binario, ya que intersect_columns indexa las columnas de IDS (es decir, obtiene los valores únicos) 
-    previa unión de las tablas (lo que te haría perder registros si repites mismos valores en esa columna). Para una funcionalidad parecida a esto (que te una dos tablas en
-    función de una columna que actúe como enlazadora) pero sin perder registros se puede usar <a href='#link_from'>table_linker</a>.</p></div>
+    <div class="alert alert-warning" role="alert">
+        <p>Ojo al usar este binario, ya que intersect_columns indexa las columnas de IDS (es decir, obtiene los valores únicos) 
+        previa unión de las tablas (lo que te haría perder registros si repites mismos valores en esa columna). Para una funcionalidad parecida a esto (que te una dos tablas en
+        función de una columna que actúe como enlazadora) pero sin perder registros se puede usar <a href='#link_from'>table_linker</a>.</p>
+    </div>
 
     <p> Un script muy versatil en torno a la unión de dos tablas</p>
 
     <h3> Ejemplo básico </h3>
-    <p> El caso más básico será obtener los registros comunes de dos columnas de dos tablas distintas. Para este caso (además de todos los siguientes) el funcionamiento es simple:
-    tenemos los flag -a y -b para indicar las dos tablas de interés, y los flags -A y -B para indicar las columnas de interés en las respectivas tablas. El flag -s nos servirá para 
-    indicar el separador (tabulador por defecto). Por defecto se obtienen los identificadores que estén en las dos tablas (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), que es el valor por defecto del flag --keep, 
-    aunque luego veremos otros casos de uso</p>
-    <p> Vamos a ver un ejemplo con dos tablas , ambas con una columna que tienen identificadores de enfermedad de MONDO, para encontrar los registros comunes entre ambas tablas.</p>
-    
-    
+        <p> El caso más básico será obtener los registros comunes de dos columnas de dos tablas distintas. Para este caso (además de todos los siguientes) el funcionamiento es simple:
+        tenemos los flag -a y -b para indicar las dos tablas de interés, y los flags -A y -B para indicar las columnas de interés en las respectivas tablas. El flag -s nos servirá para 
+        indicar el separador (tabulador por defecto). Por defecto se obtienen los identificadores que estén en las dos tablas (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), que es el valor por defecto del flag --keep, 
+        aunque luego veremos otros casos de uso</p>
+        <p> Vamos a ver un ejemplo con dos tablas , ambas con una columna que tienen identificadores de enfermedad de MONDO, para encontrar los registros comunes entre ambas tablas.</p>
+        
+		
 
 <div class="code">
 	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t
@@ -2148,7 +2166,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_42" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_43" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2165,8 +2183,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla B</b></p>
-            <table id="table_43" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla B</b>
+            <table id="table_44" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2185,28 +2203,28 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_44" border="1" class= "table table-striped table-bordered table-compact" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-    </tr>
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_45" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
     </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+    </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 
     <h3> Obtener el resto de columnas para los registros comunes encontrados </h3>
-    <p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
-    usar el flag -full</p>
-    
-    
+        <p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
+        usar el flag -full</p>
+        
+		
 
 <div class="code">
 	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t --keep c --full
@@ -2215,7 +2233,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_45" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_46" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2232,8 +2250,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla B</b></p>
-            <table id="table_46" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla B</b>
+            <table id="table_47" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2252,19 +2270,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_47" border="1" class= "table table-striped table-bordered table-compact" >
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-                    <td  >MONDO:0010193 </td>
-                    <td  >HGNC:3527 </td>
-                    <td  >tRNA </td>
-    </tr>
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_48" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2272,23 +2283,29 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >HGNC:16873 </td>
                     <td  >mRNA </td>
     </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+                    <td  >MONDO:0010193 </td>
+                    <td  >HGNC:3527 </td>
+                    <td  >tRNA </td>
+    </tr>
 </table>
-        </div>
-</div> 
-
+            </div>
+</div>
 
     <h3> Obtener registros específicos de tabla </h3>
-    <p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
-    Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
-    y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
+        <p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
+        Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
+        y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
 
-    <p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
-    Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
-    con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full. En el próximo ejemplo, enseñamos como devolver
-    los registros específicos de la tabla A , pero sin devolver el resto de columnas (que podríamos hacer con el flag --full)</p>
+        <p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
+        Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
+        con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full. En el próximo ejemplo, enseñamos como devolver
+        los registros específicos de la tabla A , pero sin devolver el resto de columnas (que podríamos hacer con el flag --full)</p>
 
-    
-    
+        
+		
 
 <div class="code">
 	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep a
@@ -2297,7 +2314,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_48" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_49" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2314,8 +2331,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla B</b></p>
-            <table id="table_49" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla B</b>
+            <table id="table_50" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2334,24 +2351,24 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_50" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_51" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0007172 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-    <p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
-    específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
-    los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
-    
-    
+        <p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
+        específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
+        los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
+        
+		
 
 <div class="code">
 	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep ab --full
@@ -2360,7 +2377,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_51" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_52" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2377,8 +2394,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla B</b></p>
-            <table id="table_52" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla B</b>
+            <table id="table_53" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2397,12 +2414,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_53" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_54" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0007172 </td>
                     <td  >22_ref </td>
@@ -2413,28 +2430,30 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >mRNA </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
-                                                                                
+
 </div>
 </details>
 
-		<h2 id="merge_from"  class="dummy" onclick="hide_show_element('merge_to')">merge_tabular (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="merge_to">
+			<h2 id="merge_from"  class="dummy" onclick="hide_show_element('merge_to')">merge_tabular (Click me)</h2>
+<details class='rep_html_det' open='' id="merge_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-    <div class="alert alert-warning" role="alert"><p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
-        es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p></div>
+    <div class="alert alert-warning" role="alert">
+        <p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
+        es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p>
+    </div>
     <p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
+    
     <h3> Ejemplo básico </h3>
-    <p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
-    separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
-    por defecto está a "-" </p>
-    <p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
-    
-    
+        <p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
+        separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
+        por defecto está a "-" </p>
+        <p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+        
+		
 
 <div class="code">
 	merge_tabular tables/disease_cluster tables/disease_gene tables/mondo_to_orpha --fill_character 'NA'
@@ -2443,7 +2462,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_54" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_55" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2460,8 +2479,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Segunda tabla</b></p>
-            <table id="table_55" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Segunda tabla</b>
+            <table id="table_56" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -2479,10 +2498,9 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
     </tr>
 </table>
         </div>
-
         <div class="divcolumn">
-            <p><b>Tercera tabla</b></p>
-            <table id="table_56" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tercera tabla</b>
+            <table id="table_57" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2496,9 +2514,10 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_57" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_58" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2509,44 +2528,43 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
    <tr>
                     <td  >MONDO:0007172 </td>
                     <td  >22_ref </td>
-                    <td  >'NA' </td>
-                    <td  >'NA' </td>
-                    <td  >'NA' </td>
+                    <td  >NA </td>
+                    <td  >NA </td>
+                    <td  >NA </td>
     </tr>
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >54_ref </td>
                     <td  >HGNC:3527 </td>
                     <td  >tRNA </td>
-                    <td  >'NA' </td>
+                    <td  >NA </td>
     </tr>
    <tr>
                     <td  >MONDO:0012866 </td>
-                    <td  >'NA' </td>
+                    <td  >NA </td>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
                     <td  >ORPHA:171629 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>                                                                        
 </details>
 
-		<h2 id="recs_from"  class="dummy" onclick="hide_show_element('recs_to')">records_count (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="recs_to">
+			<h2 id="recs_from"  class="dummy" onclick="hide_show_element('recs_to')">records_count (Click me)</h2>
+<details class='rep_html_det' open='' id="recs_to">
 <summary style="display: none;"></summary>
+
 <div class="lvl1">
-
-
 	<p> Se utiliza para obtener el número de ocurrencias de todos los términos en una columna de una tabla </p>
+
 	<h3> Ejemplo básico </h3>
-	<p> Se indica la tabla a utilizar con el flag -i y la columna (indice basado en 1) en la que queremos obtener los conteos con el flag -x </p>
-	<p>Vamos a ver la cantidad de ocurrencias de los distintos términos en la columna 2 de la tabla 'cluster_genes_dis_agg'</p>
-	
-	
+		<p> Se indica la tabla a utilizar con el flag -i y la columna (indice basado en 1) en la que queremos obtener los conteos con el flag -x </p>
+		<p>Vamos a ver la cantidad de ocurrencias de los distintos términos en la columna 2 de la tabla 'cluster_genes_dis_agg'</p>
+		
+		
 
 <div class="code">
 	records_count -i tables/cluster_genes_dis_agg -x 2
@@ -2555,7 +2573,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_58" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_59" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >HGNC:21197 </td>
                     <td  >mRNA </td>
@@ -2575,12 +2593,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_59" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_60" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >mRNA </td>
                     <td  >2 </td>
@@ -2590,31 +2608,31 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >1 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>
 </details>
 
-		<h2 id="repl_from"  class="dummy" onclick="hide_show_element('repl_to')">standard_name_replacer (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="repl_to">
+			<h2 id="repl_from"  class="dummy" onclick="hide_show_element('repl_to')">standard_name_replacer (Click me)</h2>
+<details class='rep_html_det' open='' id="repl_to">
 <summary style="display: none;"></summary>
-<div class="lvl1">
 
+<div class="lvl1">
 
     <p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
     y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>
-    <h3> Ejemplo básico </h3>
-    <p> Tenemos nuestra tabla con datos de Identificadores de MONDO y cluster/es donde se ha encontrado esa enfermedad de MONDO. Luego tenemos otro archivo
-    que nos relaciona cada identificador de MONDO con su identificador de ORPHA correspondiente. Utilizamos ese archivo para traducir los identificadores de MONDO
-    por los de ORPHA en la primera tabla</p>
 
-    <p> Pasamos la primera tabla como input al flag -i y el diccionario al flag -I. Luego indicamos que queremos reemplazar los términos de la columna 1 de la tabla de entrada
-    con el flag -c, y que queremos utilizar la columna 1 del diccionario como clave de búsqueda con el flag -f (from). Finalmente, indicamos que queremos reemplazar los términos
-    de la columna 1 por los términos de la columna 2 del diccionario con el flag -t (to). </p>  
-    
-    
+    <h3> Ejemplo básico </h3>
+        <p> Tenemos nuestra tabla con datos de Identificadores de MONDO y cluster/es donde se ha encontrado esa enfermedad de MONDO. Luego tenemos otro archivo
+        que nos relaciona cada identificador de MONDO con su identificador de ORPHA correspondiente. Utilizamos ese archivo para traducir los identificadores de MONDO
+        por los de ORPHA en la primera tabla</p>
+
+        <p> Pasamos la primera tabla como input al flag -i y el diccionario al flag -I. Luego indicamos que queremos reemplazar los términos de la columna 1 de la tabla de entrada
+        con el flag -c, y que queremos utilizar la columna 1 del diccionario como clave de búsqueda con el flag -f (from). Finalmente, indicamos que queremos reemplazar los términos
+        de la columna 1 por los términos de la columna 2 del diccionario con el flag -t (to). </p>  
+        
+		
 
 <div class="code">
 	standard_name_replacer -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 -f 1 -t 2
@@ -2623,7 +2641,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_60" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_61" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2640,8 +2658,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla diccionario para reemplazar</b></p>
-            <table id="table_61" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla diccionario para reemplazar</b>
+            <table id="table_62" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2653,12 +2671,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_62" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_63" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
@@ -2672,15 +2690,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >54_ref </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-
     <h3> Eliminar los registros no traducidos </h3>
-    <p> Como hemos podido comprobar en el ejemplo anterior, si no hay un término en el diccionario para un identificador de la tabla de entrada, ese identificador se queda sin traducir.
-    Si queremos eliminar esos registros que no se han podido traducir, podemos añadir el flag -u al comando. </p>
-    
-    
+        <p> Como hemos podido comprobar en el ejemplo anterior, si no hay un término en el diccionario para un identificador de la tabla de entrada, ese identificador se queda sin traducir.
+        Si queremos eliminar esos registros que no se han podido traducir, podemos añadir el flag -u al comando. </p>
+        
+		
 
 <div class="code">
 	standard_name_replacer -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 -f 1 -t 2 -u
@@ -2689,7 +2706,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_63" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_64" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -2706,8 +2723,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla diccionario para reemplazar</b></p>
-            <table id="table_64" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla diccionario para reemplazar</b>
+            <table id="table_65" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >ORPHA:3472 </td>
@@ -2719,37 +2736,36 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_65" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_66" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >ORPHA:3472 </td>
                     <td  >19_ref </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>                                                                            
 </details>
 
-		<h2 id="subs_from"  class="dummy" onclick="hide_show_element('subs_to')">subset_table (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="subs_to">
+			<h2 id="subs_from"  class="dummy" onclick="hide_show_element('subs_to')">subset_table (Click me)</h2>
+<details class='rep_html_det' open='' id="subs_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
 	<p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
 	<h3> Ejemplo básico </h3>
-	<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
-	y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
-	header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
-	<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
-	
-	
+		<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
+		y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
+		header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
+		<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
+		
+		
 
 <div class="code">
 	subset_table -i tables/metrics_table -s 3 -l 4 -H
@@ -2758,7 +2774,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_66" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_67" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -2871,12 +2887,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_67" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_68" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >sample </td>
                     <td  >initial_total_sequences </td>
@@ -2914,78 +2930,25 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  > </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 
 	<h3> Partiendo toda la tabla en distintos archivos con K líneas cada uno</h3>
-	<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
-		el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
-	<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
-	ya que la tabla inicial tiene 10 registros) </p>
-	
-	
+		<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
+			el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
+		<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
+		ya que la tabla inicial tiene 10 registros) </p>
+		
+		
 
 <div class="code">
 	subset_table -i tables/disease_cluster_ref_rnd -k 4 -o outputs/subset_table
 </div>
 
 <div class="divrow">
-
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_68" border="1" class= "table table-striped table-bordered table-compact" >
-   <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0007172 </td>
-                    <td  >22_rand </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0014823 </td>
-                    <td  >25_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0017999 </td>
-                    <td  >53_rand </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0009833 </td>
-                    <td  >53_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0009594 </td>
-                    <td  >54_rand </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0012176 </td>
-                    <td  >62_rand </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0011142 </td>
-                    <td  >66_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0013969 </td>
-                    <td  >1189_rand </td>
-    </tr>
-</table>
-        </div>
-
-
-
-
-    
-
-        
-        <div class="divcolumn">
-            <p><b>Output: </b>outputs/subset_table/disease_cluster_ref_rnd_chunk0</p>
             <table id="table_69" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
@@ -3003,12 +2966,40 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >MONDO:0017999 </td>
                     <td  >53_rand </td>
     </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
 </table>
         </div>
+
+
+    
+
         
-        <div class="divcolumn">
-            <p><b>Output: </b>outputs/subset_table/disease_cluster_ref_rnd_chunk1</p>
-            <table id="table_70" border="1" class= "table table-striped table-bordered table-compact" >
+            <div class="divcolumn">
+                <b>disease_cluster_ref_rnd_chunk1</b>
+                <table id="table_70" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0009833 </td>
                     <td  >53_ref </td>
@@ -3026,40 +3017,11 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >62_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
         
-        <div class="divcolumn">
-            <p><b>Output: </b>outputs/subset_table/disease_cluster_ref_rnd_chunk2</p>
-            <table id="table_71" border="1" class= "table table-striped table-bordered table-compact" >
-   <tr>
-                    <td  >MONDO:0011142 </td>
-                    <td  >66_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0013969 </td>
-                    <td  >1189_rand </td>
-    </tr>
-</table>
-        </div>
-</div>
-
-
-	<h3> Partiendo toda la tabla en N archivos diferentes con la misma cantidad de registros cada uno</h3>
-	<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files 
-	en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
-	<p> En este caso, vamos a partir la tabla de clusters de enfermedades en 2 archivos </p>
-	
-	
-
-<div class="code">
-	subset_table -i tables/disease_cluster_ref_rnd -n 2 -o outputs/subset_table2
-</div>
-
-<div class="divrow">
-
-        <div class="divcolumn">
-            <b>Input</b>
-            <table id="table_72" border="1" class= "table table-striped table-bordered table-compact" >
+            <div class="divcolumn">
+                <b>disease_cluster_ref_rnd_chunk0</b>
+                <table id="table_71" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3076,22 +3038,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >MONDO:0017999 </td>
                     <td  >53_rand </td>
     </tr>
-   <tr>
-                    <td  >MONDO:0009833 </td>
-                    <td  >53_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0009594 </td>
-                    <td  >54_rand </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0010193 </td>
-                    <td  >54_ref </td>
-    </tr>
-   <tr>
-                    <td  >MONDO:0012176 </td>
-                    <td  >62_rand </td>
-    </tr>
+</table>
+            </div>
+        
+            <div class="divcolumn">
+                <b>disease_cluster_ref_rnd_chunk2</b>
+                <table id="table_72" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0011142 </td>
                     <td  >66_ref </td>
@@ -3101,16 +3053,24 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >1189_rand </td>
     </tr>
 </table>
-        </div>
+            </div>
+</div>
 
 
+	<h3> Partiendo toda la tabla en N archivos diferentes con la misma cantidad de registros cada uno</h3>
+		<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files 
+		en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
+		<p> En este caso, vamos a partir la tabla de clusters de enfermedades en 2 archivos </p>
+		
+		
 
+<div class="code">
+	subset_table -i tables/disease_cluster_ref_rnd -n 2 -o outputs/subset_table2
+</div>
 
-    
-
-        
+<div class="divrow">
         <div class="divcolumn">
-            <p><b>Output: </b>outputs/subset_table2/disease_cluster_ref_rnd_chunk0</p>
+            <b>Input</b>
             <table id="table_73" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
@@ -3132,12 +3092,6 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >MONDO:0009833 </td>
                     <td  >53_ref </td>
     </tr>
-</table>
-        </div>
-        
-        <div class="divcolumn">
-            <p><b>Output: </b>outputs/subset_table2/disease_cluster_ref_rnd_chunk1</p>
-            <table id="table_74" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0009594 </td>
                     <td  >54_rand </td>
@@ -3160,33 +3114,92 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
     </tr>
 </table>
         </div>
+
+
+    
+
+        
+            <div class="divcolumn">
+                <b>disease_cluster_ref_rnd_chunk1</b>
+                <table id="table_74" border="1" class= "table table-striped table-bordered table-compact" >
+   <tr>
+                    <td  >MONDO:0009594 </td>
+                    <td  >54_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0010193 </td>
+                    <td  >54_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0012176 </td>
+                    <td  >62_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0011142 </td>
+                    <td  >66_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0013969 </td>
+                    <td  >1189_rand </td>
+    </tr>
+</table>
+            </div>
+        
+            <div class="divcolumn">
+                <b>disease_cluster_ref_rnd_chunk0</b>
+                <table id="table_75" border="1" class= "table table-striped table-bordered table-compact" >
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0007172 </td>
+                    <td  >22_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0014823 </td>
+                    <td  >25_ref </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0017999 </td>
+                    <td  >53_rand </td>
+    </tr>
+   <tr>
+                    <td  >MONDO:0009833 </td>
+                    <td  >53_ref </td>
+    </tr>
+</table>
+            </div>
 </div>
 
 </div>
 </details>
 
-		<h2 id="link_from"  class="dummy" onclick="hide_show_element('link_to')">table_linker (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="link_to">
+			<h2 id="link_from"  class="dummy" onclick="hide_show_element('link_to')">table_linker (Click me)</h2>
+<details class='rep_html_det' open='' id="link_to">
 <summary style="display: none;"></summary>
+
 <div class="lvl1">
 
-    <div class="alert alert-warning" role="alert"><p>Parte del comportamiento de este binario se puede emular usando el 
-    binario "intersect_columns" con los flags adecuados, pero no sé si hay algo que no sea redudante entre los dos binarios </p></div>
+    <div class="alert alert-warning" role="alert">
+        <p>Parte del comportamiento de este binario se puede emular usando el 
+        binario "intersect_columns" con los flags adecuados, pero no sé si hay algo que no sea redudante entre los dos binarios </p>
+    </div>
     <p> Se utiliza para realizar un merge de dos tablas en base a una columna con identificadores compartidos.  </p>
-    <h3> Ejemplo básico </h3>
-    <p> Se utiliza como tabla base la que se da con el flag -i, y la que se va a mergear con el flag -l, la co. Esto sería equivalente a 
-    un <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. Para obtener un 
-    <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>, tan solo tendríamos que alternar los flags que damos a 
-    cada tabla (hacer un left join pero con la linker como input)</p>
 
-    <p> Por defecto, se espera que el identificador en la tabla input esté en la primera columna, y todo el resto de columnas de esta 
-    tabla se mantendrán. Con respecto a la tabla linker, podemos indicar la columna que contiene el identificador con el flag 
-    --id_linker (por defecto a 0), y las columnas que queremos mantener en el merge, separadas por comas, con el 
-    flag --columns2linker (por defecto a 1)</p>
-    <p> Tambien tenemos el flag -s para indicar que separador queremos para la tabla resultante (por defecto tabulación)</p>
-    
-    
+    <h3> Ejemplo básico </h3>
+        <p> Se utiliza como tabla base la que se da con el flag -i, y la que se va a mergear con el flag -l, la co. Esto sería equivalente a 
+        un <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. Para obtener un 
+        <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>, tan solo tendríamos que alternar los flags que damos a 
+        cada tabla (hacer un left join pero con la linker como input)</p>
+
+        <p> Por defecto, se espera que el identificador en la tabla input esté en la primera columna, y todo el resto de columnas de esta 
+        tabla se mantendrán. Con respecto a la tabla linker, podemos indicar la columna que contiene el identificador con el flag 
+        --id_linker (por defecto a 0), y las columnas que queremos mantener en el merge, separadas por comas, con el 
+        flag --columns2linker (por defecto a 1)</p>
+        <p> Tambien tenemos el flag -s para indicar que separador queremos para la tabla resultante (por defecto tabulación)</p>
+        
+		
 
 <div class="code">
 	table_linker -i tables/disease_cluster -l tables/disease_gene -s 	
@@ -3195,7 +3208,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_75" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_76" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3212,8 +3225,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla a enlazar</b></p>
-            <table id="table_76" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla a enlazar</b>
+            <table id="table_77" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -3232,12 +3245,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_77" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_78" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3253,15 +3266,15 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >HGNC:3527 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Ejemplo utilizando los flags --id_linker y --columns2linker </h3>                                                                            
-    <p> Utilizamos el flag --columns2linker para indicar que queremos las dos columnas de la tabla linker, no solo la primera. Usamos también
-    el flag --id_linker para indicar qué columna contiene los identificadores para el merge en la tabla linker, aunque en este caso coincida
-    con el valor por defecto</p>
-    
-    
+        <p> Utilizamos el flag --columns2linker para indicar que queremos las dos columnas de la tabla linker, no solo la primera. Usamos también
+        el flag --id_linker para indicar qué columna contiene los identificadores para el merge en la tabla linker, aunque en este caso coincida
+        con el valor por defecto</p>
+        
+        
 
 <div class="code">
 	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --id_linker 1
@@ -3270,7 +3283,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_78" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_79" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3287,8 +3300,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla a enlazar</b></p>
-            <table id="table_79" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla a enlazar</b>
+            <table id="table_80" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -3307,12 +3320,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_80" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_81" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3330,13 +3343,13 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >tRNA </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
     <h3> Manteniendo solo registros comunes </h3>                                                                            
-    <p> Para mantener solo los registros comunes a ambas tablas podemos usar el flag --drop. Esto sería equivalente a un <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a></p>
-    
-    
+        <p> Para mantener solo los registros comunes a ambas tablas podemos usar el flag --drop. Esto sería equivalente a un <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a></p>
+        
+		
 
 <div class="code">
 	table_linker -i tables/disease_cluster -l tables/disease_gene --columns2linker 2,3 --drop
@@ -3345,7 +3358,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_81" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_82" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3362,8 +3375,8 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla a enlazar</b></p>
-            <table id="table_82" border="1" class= "table table-striped table-bordered table-compact" >
+            <b>Tabla a enlazar</b>
+            <table id="table_83" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
@@ -3382,12 +3395,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 </table>
         </div>
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_83" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_84" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
                     <td  >19_ref </td>
@@ -3401,25 +3414,23 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >tRNA </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>                                                                            
 </details>
 
-		<h2 id="tag_from"  class="dummy" onclick="hide_show_element('tag_to')">tag_table (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="tag_to">
+			<h2 id="tag_from"  class="dummy" onclick="hide_show_element('tag_to')">tag_table (Click me)</h2>
+<details class='rep_html_det' open='' id="tag_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
     <p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
 
     <h3> Ejemplo básico utilizando un string con tags separador por comas</h3>
-    <p> Se pasa la tabla a la que se quiere añadir los tags con el flag -i y un string con los tags separados por comas al flag -t </p>
-
-    
-    
+        <p> Se pasa la tabla a la que se quiere añadir los tags con el flag -i y un string con los tags separados por comas al flag -t </p>
+        
+		
 
 <div class="code">
 	tag_table -i tables/cluster_stats -t red1,colapsada,traducida
@@ -3428,7 +3439,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_84" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_85" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3463,14 +3474,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
     </tr>
 </table>
         </div>
-
 
 
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_85" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_86" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >red1 </td>
                     <td  >colapsada </td>
@@ -3528,16 +3539,16 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >147578 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 
     <h3> Ejemplo pasando el nombre de un archivo como tag al flag -t </h3>
-    <p> Si en vez de pasarle un string separado por comas con los tags, se le pasa el nombre de un archivo, cmdtabs puede reconocerlo y en ese
-    caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en este caso con el flag -s cual es el separador en ese archvio</p>
+        <p> Si en vez de pasarle un string separado por comas con los tags, se le pasa el nombre de un archivo, cmdtabs puede reconocerlo y en ese
+        caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en este caso con el flag -s cual es el separador en ese archvio</p>
 
-    
-    
+        
+		
 
 <div class="code">
 	tag_table -i tables/cluster_stats -t tables/tracker -s 	
@@ -3546,7 +3557,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_86" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_87" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3583,23 +3594,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-            <table id="table_87" border="1" class= "table table-striped table-bordered table-compact" >
-   <tr>
-                    <td  >MERGED_net_no_raw_cpm </td>
-                    <td  >MERGED </td>
-                    <td  >no </td>
-                    <td  >no </td>
-                    <td  >cpm </td>
-    </tr>
-</table>
-        </div>
-
-
-    
-
-        <div class="divcolumn">
-            <b>Output</b>
+            <b>Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b>
             <table id="table_88" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
@@ -3607,6 +3602,22 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >no </td>
                     <td  >no </td>
                     <td  >cpm </td>
+    </tr>
+</table>
+        </div>
+
+    
+
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_89" border="1" class= "table table-striped table-bordered table-compact" >
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
                     <td  >cl_num </td>
                     <td  >1988 </td>
     </tr>
@@ -3674,15 +3685,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >147578 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
-
     <h3> Pasar más de un archivo separado por comas al flag -t </h3>
-    <p> Si le pasamos varios archivos separados por comas, leerá y utilizará cada uno de ellos para añadir los tags</p>
+        <p> Si le pasamos varios archivos separados por comas, leerá y utilizará cada uno de ellos para añadir los tags</p>
 
-    
-    
+        
+		
 
 <div class="code">
 	tag_table -i tables/cluster_stats -t tables/tracker,tables/tracker -s 	
@@ -3691,7 +3701,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_89" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_90" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >cl_num </td>
                     <td  >1988 </td>
@@ -3728,23 +3738,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
         <div class="divcolumn">
-            <p><b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b></p>
-            <table id="table_90" border="1" class= "table table-striped table-bordered table-compact" >
-   <tr>
-                    <td  >MERGED_net_no_raw_cpm </td>
-                    <td  >MERGED </td>
-                    <td  >no </td>
-                    <td  >no </td>
-                    <td  >cpm </td>
-    </tr>
-</table>
-        </div>
-
-
-    
-
-        <div class="divcolumn">
-            <b>Output</b>
+            <b>Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)</b>
             <table id="table_91" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MERGED_net_no_raw_cpm </td>
@@ -3752,6 +3746,22 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >no </td>
                     <td  >no </td>
                     <td  >cpm </td>
+    </tr>
+</table>
+        </div>
+
+    
+
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_92" border="1" class= "table table-striped table-bordered table-compact" >
+   <tr>
+                    <td  >MERGED_net_no_raw_cpm </td>
+                    <td  >MERGED </td>
+                    <td  >no </td>
+                    <td  >no </td>
+                    <td  >cpm </td>
                     <td  >MERGED_net_no_raw_cpm </td>
                     <td  >MERGED </td>
                     <td  >no </td>
@@ -3859,24 +3869,24 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >147578 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>
 </details>
 
-		<h2 id="trnsf_from"  class="dummy" onclick="hide_show_element('trnsf_to')">transform_to_latex (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="trnsf_to">
+			<h2 id="trnsf_from"  class="dummy" onclick="hide_show_element('trnsf_to')">transform_to_latex (Click me)</h2>
+<details class='rep_html_det' open='' id="trnsf_to">
 <summary style="display: none;"></summary>
+
 <div class="lvl1">
 
 	<p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
 	<h3> Ejemplo básico </h3>
-	<p> Se da la tabla con el flag -i </p>
+		<p> Se da la tabla con el flag -i </p>
 
-	
-	
+		
+		
 
 <div class="code">
 	transform_to_latex -i tables/cluster_genes_dis_desagg_3cols
@@ -3885,7 +3895,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_92" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_93" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3910,12 +3920,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_93" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_94" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >\hline  </td>
     </tr>
@@ -3932,14 +3942,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >zz & 4 & 110 \\ \hline </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 	<h3> Añadiendo el backbone </h3>
-	<p> Si se quiere obtener un backbone algo más detallado con el que luego rellenar los campos restantes, se puede utilizar el parámetro --whole o -w </p>
+		<p> Si se quiere obtener un backbone algo más detallado con el que luego rellenar los campos restantes, se puede utilizar el parámetro --whole o -w </p>
 
-	
-	
+		
+		
 
 <div class="code">
 	transform_to_latex -i tables/cluster_genes_dis_desagg_3cols --whole
@@ -3948,7 +3958,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_94" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_95" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -3973,12 +3983,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
         </div>
 
 
-
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_95" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_96" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >\begin{table}[!htbp] </td>
     </tr>
@@ -4016,24 +4026,23 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >\end{table} </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>
 </details>
 
-		<h2 id="trnsp_from"  class="dummy" onclick="hide_show_element('trnsp_to')">transpose_table (Click me)</h2>
-			
-			<details class='rep_html_det' open='' id="trnsp_to">
+			<h2 id="trnsp_from"  class="dummy" onclick="hide_show_element('trnsp_to')">transpose_table (Click me)</h2>
+<details class='rep_html_det' open='' id="trnsp_to">
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
 	<p> Se utiliza para transponer una tabla  </p>
 	<h3> Ejemplo básico </h3>
-	<p> Se transpone la tabla que se da con el flag -i </p>
+		<p> Se transpone la tabla que se da con el flag -i </p>
 
-	
-	
+		
+		
 
 <div class="code">
 	transpose_table -i tables/cluster_genes_dis_desagg_3cols
@@ -4042,7 +4051,7 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
 <div class="divrow">
         <div class="divcolumn">
             <b>Input</b>
-            <table id="table_96" border="1" class= "table table-striped table-bordered table-compact" >
+            <table id="table_97" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >1 </td>
@@ -4065,14 +4074,14 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
     </tr>
 </table>
         </div>
-
 
 
     
 
-        <div class="divcolumn">
-            <b>Output</b>
-            <table id="table_97" border="1" class= "table table-striped table-bordered table-compact" >
+        
+            <div class="divcolumn">
+                <b>Output</b>
+                <table id="table_98" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >as </td>
                     <td  >as </td>
@@ -4092,11 +4101,12 @@ tabla en el momento de carga así como de manera previa a la escritura de la mis
                     <td  >110 </td>
     </tr>
 </table>
-        </div>
+            </div>
 </div>
 
 </div>
 </details>
+
 </div>
 </body>
 

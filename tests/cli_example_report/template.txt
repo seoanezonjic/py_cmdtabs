@@ -1,85 +1,87 @@
 <% 
+import sys, copy
 import py_cmdtabs
-sect = 0
+
+def show_n_exec(table_name, args, meth, skip_input=False, out='std', supp_tables=[]):
+	results = plotter.renderize_child_template(plotter.get_internal_template('show_n_exec'), 
+				table_name=table_name, out_type= out, args=args, library=py_cmdtabs, 
+				method=meth, skip_input=skip_input, supp_tables = supp_tables
+			)
+	return results
+
+def create_tool_section(tool_name, title_id, container_id):
+	title = plotter.create_title(tool_name, id=title_id, hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=container_id, clickable_text = '(Click me)')	
+	content = plotter.renderize_child_template(plotter.get_internal_template(tool_name), show_n_exec = show_n_exec )
+	container = plotter.create_collapsable_container(container_id, content, display="visible")
+	return f'{title}\n{container}\n'
+
 %>
-<style>
-.divPar {
-	background-color: rgba(173, 216, 230, 0.3);
-}
-.divImpar {
-	background-color: rgba(47, 180, 80, 0.21);
-}
-</style>
 
 <div style="width: 95%; padding:20px;">
 	<% plotter.set_header() %>
 	<h1> Operation with tables </h1>
 
-		${ plotter.create_title(f'Pautas generales', id=f'gen_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'gen_to', clickable_text = '(Click me)') }
-			<% sect +=1; gen_cont = plotter.renderize_child_template(plotter.get_internal_template('general'), sect=sect) %>
-			${plotter.create_collapsable_container(f'gen_to', gen_cont, display="visible") }
-	
-		${ plotter.create_title(f'aggregate_column_data', id=f'agg_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'agg_to', clickable_text = '(Click me)') }	
-			<% sect +=1; agg_cont = plotter.renderize_child_template(plotter.get_internal_template('aggregate_column_data'), lib=py_cmdtabs, meth="aggregate_column_data", sect=sect) %>
-			${plotter.create_collapsable_container(f'agg_to', agg_cont, display="visible") }
+		<h2> Pautas generales </h2>
+			<p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
+			<p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
+			pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
+			pero también se pueden cargar comprimidas en gzip utilizando el flag '--compressed_in'. Por ejemplo:</p>
 
-		${ plotter.create_title(f'column_filter', id=f'colfil_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'colfil_to', clickable_text = '(Click me)') }
-			<% sect +=1; colfil_cont = plotter.renderize_child_template(plotter.get_internal_template('column_filter'), lib=py_cmdtabs, meth="column_filter", sect=sect) %>
-			${plotter.create_collapsable_container(f'colfil_to', colfil_cont, display="visible") }
+			<div class='code'>
+				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in -o desaggregated.txt
+			</div>
 
-		${ plotter.create_title(f'create_metric_table', id=f'metr_from', hlevel=2, css_class='dummy',  indexable=True, clickable=True, t_id=f'metr_to', clickable_text = '(Click me)') }
-			<% sect +=1; metr_cont = plotter.renderize_child_template(plotter.get_internal_template('create_metric_table'), lib=py_cmdtabs, meth="create_metric_table", sect=sect) %>
-			${plotter.create_collapsable_container(f'metr_to', metr_cont, display="visible") }
+			<p> Además, para aquellos comandos que solo necesiten una tabla de entrada (como 'aggregate_column_data', 'desaggregate_column_data' o 'transpose_table',
+			pero no 'intersect_columns'), se puede utilizar un guión '-' con el flag de input para indicar que el contenido de la tabla proviene por stdout (por ejemplo fruto de un pipe de un
+			comando anterior), pudiendo venir también comprimido. Por ejemplo: </p>
 
-		${ plotter.create_title(f'desaggregate_column_data', id=f'desagg_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'desagg_to', clickable_text = '(Click me)') }
-			<% sect +=1; desagg_cont = plotter.renderize_child_template(plotter.get_internal_template('desaggregate_column_data'), lib=py_cmdtabs, meth="desaggregate_column_data", sect=sect) %>
-			${plotter.create_collapsable_container(f'desagg_to', desagg_cont, display="visible") }
+			<div class='code'>
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in
+			</div>
 
-		${ plotter.create_title(f'excel_to_tabular', id=f'excel_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'excel_to', clickable_text = '(Click me)') }
-			<% sect +=1; excel_cont = plotter.renderize_child_template(plotter.get_internal_template('excel_to_tabular'), lib=py_cmdtabs, meth="excel_to_tabular", sect=sect) %>
-			${plotter.create_collapsable_container(f'excel_to', excel_cont, display="visible") }
+			<p> En los scripts que devuelvan algún tipo de output (generalmente con el flag -o), de manera similar, también se puede utilizar el flag --compressed_out 
+			para que el resultado se devuelva comprimido en gzip. Además, si no se indica un flag de output (omitiendo '-o archivo_salida') y el script solo devuelve una tabla,
+			el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que puede aprovecharse para pipear en otro script.  Por ejemplo:</p>
 
-		${ plotter.create_title(f'filter_by_list', id=f'filt_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'filt_to', clickable_text = '(Click me)') }
-			<% sect +=1; filt_cont = plotter.renderize_child_template(plotter.get_internal_template('filter_by_list'), lib=py_cmdtabs, meth="filter_by_list", sect=sect) %>
-			${plotter.create_collapsable_container(f'filt_to', filt_cont, display="visible") }
+			<div class='code'>
+				desaggregate_column_data -i patients_and_phens.txt -x 2 --compressed_out | script_que_utiliza_datos_comprimidos
+			</div>
 
-		${ plotter.create_title(f'get_columns', id=f'getcol_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'getcol_to', clickable_text = '(Click me)') }
-			<% sect +=1; getcol_cont = plotter.renderize_child_template(plotter.get_internal_template('get_columns'), lib=py_cmdtabs, meth="get_columns", sect=sect) %>
-			${plotter.create_collapsable_container(f'getcol_to', getcol_cont, display="visible") }
+			<p>Se pueden usar ambos flags a la vez, de manera que se pueda recibir una tabla comprimida y devolverla también comprimida. Por ejemplo:</p>
+			<div class='code'>
+				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in --compressed_out -o desaggregated.gz
+			</div>
 
-		${ plotter.create_title(f'intersect_columns', id=f'inter_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'inter_to', clickable_text = '(Click me)') }
-			<% sect +=1; inter_cont = plotter.renderize_child_template(plotter.get_internal_template('intersect_columns'), lib=py_cmdtabs, meth="intersect_columns", sect=sect) %>
-			${plotter.create_collapsable_container(f'inter_to', inter_cont, display="visible") }
+			<p>O utilizando pipes: </p>
+			<div class='code'>
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
+			</div>
 
-		${ plotter.create_title(f'merge_tabular', id=f'merge_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'merge_to', clickable_text = '(Click me)') }
-			<% sect +=1; merge_cont = plotter.renderize_child_template(plotter.get_internal_template('merge_tabular'), lib=py_cmdtabs, meth="merge_tabular", sect=sect) %>
-			${plotter.create_collapsable_container(f'merge_to', merge_cont, display="visible") }
+			<p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
+			tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
 
-		${ plotter.create_title(f'records_count', id=f'recs_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'recs_to', clickable_text = '(Click me)') }
-			<% sect +=1; recs_cont = plotter.renderize_child_template(plotter.get_internal_template('records_count'), lib=py_cmdtabs, meth="records_count", sect=sect) %>
-			${plotter.create_collapsable_container(f'recs_to', recs_cont, display="visible") }
-
-		${ plotter.create_title(f'standard_name_replacer', id=f'repl_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'repl_to', clickable_text = '(Click me)') }
-			<% sect +=1; repl_cont = plotter.renderize_child_template(plotter.get_internal_template('standard_name_replacer'), lib=py_cmdtabs, meth="standard_name_replacer", sect=sect) %>
-			${plotter.create_collapsable_container(f'repl_to', repl_cont, display="visible") }
-
-		${ plotter.create_title(f'subset_table', id=f'subs_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'subs_to', clickable_text = '(Click me)') }
-			<% sect +=1; subs_cont = plotter.renderize_child_template(plotter.get_internal_template('subset_table'), lib=py_cmdtabs, meth="subset_table", sect=sect) %>
-			${plotter.create_collapsable_container(f'subs_to', subs_cont, display="visible") }
-
-		${ plotter.create_title(f'table_linker', id=f'link_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'link_to', clickable_text = '(Click me)') }
-			<% sect +=1; link_cont = plotter.renderize_child_template(plotter.get_internal_template('table_linker'), lib=py_cmdtabs, meth="table_linker", sect=sect) %>
-			${plotter.create_collapsable_container(f'link_to', link_cont, display="visible") }
-
-		${ plotter.create_title(f'tag_table', id=f'tag_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'tag_to', clickable_text = '(Click me)') }
-			<% sect +=1; tag_cont = plotter.renderize_child_template(plotter.get_internal_template('tag_table'), lib=py_cmdtabs, meth="tag_table", sect=sect) %>
-			${plotter.create_collapsable_container(f'tag_to', tag_cont, display="visible") }
-
-		${ plotter.create_title(f'transform_to_latex', id=f'trnsf_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'trnsf_to', clickable_text = '(Click me)') }
-			<% sect +=1; trnsf_cont = plotter.renderize_child_template(plotter.get_internal_template('transform_to_latex'), lib=py_cmdtabs, meth="transform_to_latex", sect=sect) %>
-			${plotter.create_collapsable_container(f'trnsf_to', trnsf_cont, display="visible") }
-
-		${ plotter.create_title(f'transpose_table', id=f'trnsp_from', hlevel=2, css_class='dummy', indexable=True, clickable=True, t_id=f'trnsp_to', clickable_text = '(Click me)') }
-			<% sect +=1; trnsp_cont = plotter.renderize_child_template(plotter.get_internal_template('transpose_table'), lib=py_cmdtabs, meth="transpose_table", sect=sect) %>
-			${plotter.create_collapsable_container(f'trnsp_to', trnsp_cont, display="visible") }
+		<% 
+			# tool name, html title id, html container id
+			tools = [
+				['aggregate_column_data', 'agg_from', 'agg_to'],
+				['column_filter', 'colfil_from', 'colfil_to'],
+				['create_metric_table', 'metr_from', 'metr_to'],
+				['desaggregate_column_data', 'desagg_from', 'desagg_to'],
+				['excel_to_tabular', 'excel_from', 'excel_to'],
+				['filter_by_list', 'filter_from', 'filter_to'],
+				['get_columns', 'getcol_from', 'getcol_to'],
+				['intersect_columns', 'inter_from', 'inter_to'],
+				['merge_tabular', 'merge_from', 'merge_to'],
+				['records_count', 'recs_from', 'recs_to'],
+				['standard_name_replacer', 'repl_from', 'repl_to'],
+				['subset_table', 'subs_from', 'subs_to'],
+				['table_linker', 'link_from', 'link_to'],
+				['tag_table', 'tag_from', 'tag_to'],
+				['transform_to_latex', 'trnsf_from', 'trnsf_to'],
+				['transpose_table', 'trnsp_from', 'trnsp_to']
+			]
+		%>
+		% for tool_name, title_id, container_id in tools:
+			${create_tool_section(tool_name, title_id, container_id)}
+		% endfor	
 </div>
