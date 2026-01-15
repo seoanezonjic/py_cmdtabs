@@ -293,3 +293,55 @@ def transpose_table(args=None):
                         help="Path to output file")
     opts = parser.parse_args(args)
     main_transpose_table(opts)
+
+def cmdtabs(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-c", "--columns", dest="columns", default=[0], type=list_based_0,
+                        help="Index of columns in base 1 to compare")
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+                     	  help="Indicate if files have header")
+    parser.add_argument("-I", "--index_file", dest="index_file", default=None,
+                        help="Path to index file")
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    parser.add_argument("-s", "--separator", dest="separator", default="\t", type=unescaped_str,
+                        help="Input table column character separator")
+    parser.add_argument("-t", "--tags", dest="tags", default= [],
+                        help="Strings or files (only first line will be used) sepparated by commas", type=list_str)
+    parser.add_argument("-u", "--remove_untranslated", dest="remove_untranslated", default=False, action='store_true',
+                        help="Activate this flag for outputting the untranslated entries")
+    parser.add_argument("-w", "--whole", dest="whole", default=False, action='store_true',
+                        help="Indicate if you want the whole table and tabular environment to be returned with the table transformed")
+
+    parser.add_argument("--aggregate", dest="aggregate", default=False, action='store_true',
+                        help="Aggregate table columns")
+    parser.add_argument("--agg_ref_col_index", dest="agg_col_index",
+                  	    help="Column index (1 based) to use as reference", type=list_based_0)
+    parser.add_argument("--agg_col", dest="col_aggregate",
+                        help="Column(s) index (1 based) to extract data and join for each id in column index (if more than one, comma separated)", type=list_based_0)
+    parser.add_argument("--agg_mode", dest="agg_mode", default="concatenate",
+                        help="Mode to perform aggregation. Current available: max,min,mean,median,sum,std,var,IQR,PC25,PC75,count & concatenate. Default (concatenate) is string concatenation by defined separator. More than one aggregation mode can be used separated by commas")       
+    parser.add_argument("--count", dest="count", default=False, action='store_true',
+                        help="Count records, use with -c to select columns")
+    parser.add_argument("--desaggregate", dest="desaggregate", default=False, action='store_true',
+                        help="Desaggregate table columns")
+    parser.add_argument("--desagg_col", dest="desagg_col",
+  	                    help="Column index (1 based) to use as reference", type=list_based_0)
+    parser.add_argument("--excel_cols", dest="excColumns2extract", default=[0], type=list_based_0,
+                        help="Column position to extract (1 based). Default 1. Use 0 to extract all columns")
+    parser.add_argument("--excel_rows", dest="excRows2extract", default=[-1], type=list_based_0,
+                        help="Row positions to extract (1 based). Default 0, which means all rows will be extracted")  
+    parser.add_argument("--excel_sheet_number", dest="excSheet_number", default=0, type=based_0,
+                        help="Sheet number to work with. Default 1")
+    parser.add_argument("--file_type", dest="file_type", default='text',
+                        help="Default text. Other options;excel")
+    parser.add_argument("--from", dest="frm", default=0, type=based_0,
+                        help="Column in index file to take reference value. Default 1. Numeration is 1 based")
+    parser.add_argument("--to", dest="to", default=1, type=based_0,
+                        help="Column in index file to take the value that will be used in substitution. Default 2. Numeration is 1 based")
+    parser.add_argument("--latex", dest="to_latex", default=False, action='store_true',
+                        help="Write table in latex code")
+    opts = parser.parse_args(args)
+    main_cmdtabs(opts)
