@@ -82,7 +82,7 @@ def create_metric_table(args=None):
     add_common_options(parser, flags_to_skip=["--input_file"])
     parser.add_argument("metric_file", metavar='M',
       help="File with tabulated metrics")
-    parser.add_argument("attributes", metavar='A',
+    parser.add_argument("attributes", metavar='A', type=list_str,
       help="String with comma separated attributes")
     parser.add_argument("output_file", metavar='O',
       help="Output file path")
@@ -347,5 +347,10 @@ def cmdtabs(args=None):
                         help="Column in index file to take the value that will be used in substitution. Default 2. Numeration is 1 based")
     parser.add_argument("--latex", dest="to_latex", default=False, action='store_true',
                         help="Write table in latex code")
+    parser.add_argument("--sample_attributes", dest="sample_attributes", default=[], type=list_str,
+                        help="Define sample atributtes (comma separated list) to colapse a long table in a wide metric table")
+    parser.add_argument("--corrupted", dest="corrupted",
+                        help="File where corrupted metrics are stored")
+
     opts = parser.parse_args(args)
     main_cmdtabs(opts)
