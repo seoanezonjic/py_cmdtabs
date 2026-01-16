@@ -99,11 +99,57 @@ def main_create_metric_table(options):
 
     if options.corrupted != None and len(corrupt_recs) > 0: CmdTabs.write_output_data(corrupt_recs, options.corrupted)
 
+def main_subset_table(options):
+    warn('This is deprecated. Use:', DeprecationWarning, stacklevel=2)
+    warn('  cmdtabs -i input_table --offset 3,4 -H', DeprecationWarning, stacklevel=2)
+    warn('  cmdtabs -i input_table --split_out --sp_chunk_size 4 -o FOLDER/FILE_NAME', DeprecationWarning, stacklevel=2)
+    warn('  cmdtabs -i input_table --split_out --sp_file_number 2 -o FOLDER/FILE_NAME', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file)
+    if options.chunk_size == 0 and options.number_of_files == 0: # subset the table from start_line to chunk_lines
+      subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
+      CmdTabs.write_output_data(subset_table, options.output_file)
+    else:
+      os.makedirs(options.output_file, exist_ok=True)
+      file_name = os.path.basename(options.input_file).split('.')[0]
+      header = [input_table[0]] if options.header else []
+      if options.number_of_files > 0: # split the table in N files with the same number of lines
+        CmdTabs.split_by_nFiles(input_table, options.number_of_files, options.output_file, file_name, header = header)
+      elif options.chunk_size > 0: # split the table in chunks of K lines in different files
+        CmdTabs.split_by_chunk(input_table, options.chunk_size, options.output_file, file_name, header = header)
+
+def main_get_columns(options):
+    warn('This is deprecated. Use:', DeprecationWarning, stacklevel=2)
+    warn('  cmdtabs -i input_table --extract_cols 1,3-5', DeprecationWarning, stacklevel=2)
+    warn('  cmdtabs -i input_table -H --extract_cols col-1,col-3%-%col-5', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    input_data = CmdTabs.load_input_data(options.input_file, options.sep)
+    columns = CmdTabs.parse_column_indices(options.columns2extract.split(","), has_header=options.header, table=input_data)
+    output_table = CmdTabs.filter_columns(input_data, columns)
+    CmdTabs.write_output_data(output_table, options.output_file, options.sep)
+
+def main_column_filter(options):
+    warn('This is deprecated. Use:', DeprecationWarning, stacklevel=2)
+    warn('  cmdtabs -i input_table --extract_cols 1,2 --ext_col_match 1 --ext_keywords KEYWORD --ext_search_mode c --ext_match_mode c', DeprecationWarning, stacklevel=2)
+    table_file = options.input_file
+    if table_file == None: table_file = options.table_file # legacy option kept by compatibility
+    if table_file == None: sys.exit('Tabulated file not specified') 
+    set_class_attributes(options)
+    file_names = glob.glob(table_file)
+    input_files = CmdTabs.load_several_files(file_names, options.separator)
+    # TODO: Add to cmdtabs script iterate several files add header for the following method
+    filtered_table = CmdTabs.merge_and_filter_tables(input_files, vars(options))
+    CmdTabs.write_output_data(filtered_table)
+
+
 # ADDED TO CMDTABS FUNCTION AND not DEPRECATED
 # ------------------------------------------------------------
 
 # not ADDED TO CMDTABS FUNCTION
 # ------------------------------------------------------------
+# TODO: Add to cmdtabs script and remove all redundant behaviour
 def main_filter_by_list(options):
     terms2befiltered = CmdTabs.load_input_data(options.terms2befiltered)
     terms2befiltered = list(map(list, zip(*terms2befiltered )))[0]
@@ -141,41 +187,6 @@ def main_filter_by_list(options):
                 ratio_lines_removed = round(100*(len(file_filteredfile[file2befiltered])/len(loaded_files[file2befiltered])),2)
                 print(f"{file2befiltered}\t{ratio_lines_removed}")
 
-def main_column_filter(options):
-    table_file = options.input_file
-    if table_file == None: table_file = options.table_file # legacy option kept by compatibility
-    if table_file == None: sys.exit('Tabulated file not specified') 
-    set_class_attributes(options)
-    file_names = glob.glob(table_file)
-    input_files = CmdTabs.load_several_files(file_names, options.separator)
-    filtered_table = CmdTabs.merge_and_filter_tables(input_files, vars(options))
-    CmdTabs.write_output_data(filtered_table)
-
-def main_get_columns(options):
-    set_class_attributes(options)
-    input_data = CmdTabs.load_input_data(options.input_file, options.sep)
-    columns = options.columns2extract
-    if options.header: 
-        cols_header_dict = dict([(col_name, str(idx+1)) for idx, col_name in enumerate(input_data[0])])
-        cols_to_get = columns.split(",")
-        cols_to_get_processed = []
-        try:
-          for col in cols_to_get:
-              if "%-%" not in col:
-                  cols_to_get_processed.append(cols_header_dict[col])
-              else:
-                  start_col, end_col = col.split("%-%")
-                  start_col = cols_header_dict[start_col]
-                  end_col = cols_header_dict[end_col]
-                  cols_to_get_processed.append(f"{start_col}-{end_col}")
-        except KeyError as e:
-          raise KeyError(f"Column '{e.args[0]}' not found in header. Available columns: {', '.join(cols_header_dict.keys())}")
-        columns = ",".join(cols_to_get_processed)
-  
-    columns = CmdTabs.parse_column_indices(",", columns)
-    output_table = [[row[column] for column in columns] for row in input_data]
-    CmdTabs.write_output_data(output_table, options.output_file, options.sep)
-
 def main_intersect_columns(options):
     set_class_attributes(options)
 
@@ -209,39 +220,6 @@ def main_intersect_columns(options):
         result = a_only + b_only
       CmdTabs.write_output_data(result, None, options.sep)
 
-def main_merge_tabular(options):
-    set_class_attributes(options)
-    files = CmdTabs.load_files(options.files)
-    merged = CmdTabs.merge_files(files, options.fill_character)
-    CmdTabs.write_output_data(merged)
-
-def main_subset_table(options):
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    if options.chunk_size == 0 and options.number_of_files == 0: # subset the table from start_line to chunk_lines
-      subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
-      CmdTabs.write_output_data(subset_table, options.output_file)
-    else:
-      os.makedirs(options.output_file, exist_ok=True)
-      file_basename = os.path.basename(options.input_file).split('.')[0]
-      if options.number_of_files > 0: # split the table in N files with the same number of lines
-        chunk_size = len(input_table) // options.number_of_files
-        if len(input_table) % options.number_of_files > 0: chunk_size += 1
-        chunk_counter = 0
-        header = [input_table[0]] if options.header else []
-        init_line = 1 if options.header else 0
-        for idx in range(init_line, len(input_table), chunk_size):
-            CmdTabs.write_output_data(header+input_table[idx:idx+chunk_size], os.path.join(options.output_file, f"{file_basename}_chunk{chunk_counter}"))
-            chunk_counter += 1
-
-      elif options.chunk_size > 0: # split the table in chunks of K lines in different files
-        chunk_counter = 0
-        header = [input_table[0]] if options.header else []
-        init_line = 1 if options.header else 0
-        for idx in range(init_line, len(input_table), options.chunk_size):
-            CmdTabs.write_output_data(header+input_table[idx:idx+options.chunk_size], os.path.join(options.output_file, f"{file_basename}_chunk{chunk_counter}"))
-            chunk_counter += 1 
-
 def main_table_linker(options):
     set_class_attributes(options)
     input_linker = CmdTabs.load_input_data(options.linker_file, sep=options.sep)
@@ -253,22 +231,11 @@ def main_table_linker(options):
     linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep, options.header)
     CmdTabs.write_output_data(linked_table, options.output_file, sep=options.sep)
 
-def main_table_splitter(options):
+def main_merge_tabular(options):
     set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    file_basename = os.path.basename(options.input_file).split('.')[0]
-    os.makedirs(options.output_folder, exist_ok=True)
-    lines_to_write = []
-    chunk_counter = 0
-    for idx, row in enumerate(input_table):
-        lines_to_write.append(row)
-        if (idx+1) % options.chunk_size == 0:
-          CmdTabs.write_output_data(lines_to_write, os.path.join(options.output_folder, f"{file_basename}_chunk{chunk_counter}"))
-          lines_to_write = []
-          chunk_counter += 1
-    if len(lines_to_write) > 0:
-        CmdTabs.write_output_data(lines_to_write, os.path.join(options.output_folder, f"{file_basename}_chunk{chunk_counter}"))
-
+    files = CmdTabs.load_files(options.files)
+    merged = CmdTabs.merge_files(files, options.fill_character)
+    CmdTabs.write_output_data(merged)
 
 ########################################################
 ## Unifiying script CMDTABS
@@ -283,6 +250,12 @@ def main_cmdtabs(opts):
     table = CmdTabs.extract_rows(table, opts.excRows2extract)
   else:
     table = CmdTabs.load_input_data(opts.input_file, sep=opts.separator)
+
+  if len(opts.offset) > 0: table = CmdTabs.subset_table(table, int(opts.offset[0]) - 1, int(opts.offset[1]), opts.header) # [subset] subset file
+  
+  if len(opts.extract_cols) > 0: # [get_columns] [column_filter]
+     cols = CmdTabs.parse_column_indices(opts.extract_cols, has_header = opts.header, table=table) #[get_columns]
+     table = CmdTabs.filter_columns(table, cols, opts.ext_col_match, opts.ext_keywords, opts.ext_search_mode, opts.ext_match_mode, opts.ext_reverse) #[column_filter]
 
   if opts.transposed: table = CmdTabs.transpose(table) # TRANSFORMATION [transpose_table]
   # STATS
@@ -307,11 +280,23 @@ def main_cmdtabs(opts):
     translation_index = CmdTabs.index_array(input_index, opts.frm, opts.to)
     table, _ = CmdTabs.name_replaces(table, opts.separator, opts.columns, translation_index, opts.remove_untranslated)
   
+  if opts.uniq: table = CmdTabs.get_uniq(table)
+
   if opts.to_latex: # [transform_to_latex]
     table_name = os.path.basename(opts.input_file).split('.')[0] if opts.input_file != '-' else 'tableX'
     table = CmdTabs.transform_to_latex(table, opts.header, opts.whole, table_name)
     output_sep = ""
   
+  ## OUTPUT
   CmdTabs.compressed_output = opts.compressed_out
-  CmdTabs.write_output_data(table, opts.output_file, sep=output_sep)
+  if opts.split_out: # [subset]
+    os.makedirs(opts.output_file, exist_ok=True)
+    file_name = os.path.basename(opts.input_file).split('.')[0]
+    header = [table[0]] if opts.header else []
+    if opts.sp_chunk_size > 0: # [subset] split by chunk size
+      CmdTabs.split_by_chunk(table, opts.sp_chunk_size, opts.output_file, file_name, header = header)
+    elif opts.sp_file_number > 0: # [subset] split by file number
+      CmdTabs.split_by_nFiles(table, opts.sp_file_number, opts.output_file, file_name, header = header)
+  else:
+    CmdTabs.write_output_data(table, opts.output_file, sep=output_sep)
   

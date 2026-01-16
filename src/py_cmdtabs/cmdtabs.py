@@ -70,10 +70,7 @@ class CmdTabs:
 		if col_filter != None and keywords != None:
 			keys_per_col = keywords.split('%')
 			if len(keys_per_col) != len(col_filter): os.abort('Number of keywords not equal to number of filtering columns') 
-			i = 0
-			for col in col_filter:
-					pattern[col] = keys_per_col[i].split('&')
-					i += 1
+			for i, col in enumerate(col_filter): pattern[col] = keys_per_col[i].split('&')
 		return pattern
 
 	def index_array(array, col_from=0, col_to=1, header=False):
@@ -115,12 +112,28 @@ class CmdTabs:
 				query[metric_name] = metric
 		return metric_names, indexed_metrics
 
-	def parse_column_indices(sep, col_string):
+	def parse_column_indices(col_str_idxs, has_header= False, table=None):
+		if has_header: 
+			cols_header_dict = dict([(col_name, str(idx+1)) for idx, col_name in enumerate(table[0])])
+			cols_to_get_processed = []
+			try:
+				for col in col_str_idxs:
+					if "%-%" not in col:
+						cols_to_get_processed.append(cols_header_dict[col])
+					else:
+						start_col, end_col = col.split("%-%")
+						start_col = cols_header_dict[start_col]
+						end_col = cols_header_dict[end_col]
+						cols_to_get_processed.append(f"{start_col}-{end_col}")
+			except KeyError as e:
+				raise KeyError(f"Column '{e.args[0]}' not found in header. Available columns: {', '.join(cols_header_dict.keys())}")
+			col_str_idxs = cols_to_get_processed
+
 		cols = []
-		for col in col_string.split(sep):
+		for col in col_str_idxs:
 			if "-" in col: # Range of columns (both ends included)
 				start, end = col.split("-")
-				range_cols = [int(i) - 1 for i in range(int(start), int(end) + 1)]
+				range_cols = [i - 1 for i in range(int(start), int(end) + 1)]
 				cols.extend(range_cols)
 			else: # Single column
 				cols.append(int(col) - 1)
@@ -264,23 +277,23 @@ class CmdTabs:
 			n_row += 1
 		return taged_file
 
-	def filter(line, all_patterns, search_mode, match_mode, reverse = False	):
-		filter = False	
+	def match_pattern(line, all_patterns, search_mode, match_mode, reverse = False	):
+		match_pat = False	
 		for col, patterns in all_patterns.items():
 			is_match = False	
 			for pattern in patterns:
 				is_match = CmdTabs.expanded_match(line[col], pattern, match_mode)
 				if is_match: break	  
 			if is_match and search_mode == 's':
-				filter = False	
+				match_pat = False	
 				break
 			elif not is_match and search_mode == 'c':
-				filter = True
+				match_pat = True
 				break
 			elif not is_match:
-				filter = True
-		if reverse: filter = not filter
-		return filter
+				match_pat = True
+		if reverse: match_pat = not match_pat
+		return match_pat
 
 	def expanded_match(string, pattern, match_mode):
 		is_match = False
@@ -288,12 +301,12 @@ class CmdTabs:
 		if string == pattern and match_mode == 'c': is_match = True 
 		return is_match
 
-	def filter_columns(input_table, options):
-		pattern = CmdTabs.build_pattern(options['col_filter'], options['keywords'])
+	def filter_columns(input_table, cols_to_show, cols_to_match = None, keywords = None, search_mode = None, match_mode = None, reverse = False):
+		pattern = CmdTabs.build_pattern(cols_to_match, keywords)
 		filtered_table = []
 		for line in input_table:
-			if not pattern or not CmdTabs.filter(line, pattern, options['search_mode'], options['match_mode'], options['reverse']):
-				filtered_table.append(CmdTabs.extract_fields(line, options['cols_to_show']) )
+			if not pattern or not CmdTabs.match_pattern(line, pattern, search_mode, match_mode, reverse):
+				filtered_table.append(CmdTabs.extract_fields(line, cols_to_show) )
 		return filtered_table
 
 	def extract_fields(arr_sub, indexes):
@@ -337,7 +350,8 @@ class CmdTabs:
 					header = file.pop(0)
 				else:
 					file.pop(0)
-			fields = CmdTabs.filter_columns(file, options)
+			
+			fields = CmdTabs.filter_columns(file, options['cols_to_show'], options['col_filter'], options['keywords'], options['search_mode'], options['match_mode'], options['reverse'])
 			filtered_table.extend(fields) 
 		if options.get('uniq') != None and options['uniq']: filtered_table = CmdTabs.get_uniq(filtered_table)
 		if len(header) > 0:
@@ -406,26 +420,6 @@ class CmdTabs:
 		common = [[r] for r in common_set]
 		return common, a_only, b_only
 
-	def write_output_data(output_data, output_path=None, sep="\t"):
-		open_file = gzip.open if CmdTabs.compressed_output else open
-		if CmdTabs.transposed:
-			output_data = CmdTabs.transpose(output_data)
-			
-		if output_path != None:
-			with open_file(output_path, 'wt') as out_file:
-				for line in output_data:
-					out_file.write(sep.join([str(l) for l in line]) + "\n")
-		else:
-			if CmdTabs.compressed_output:
-				columns_joined = []
-				for line in output_data:
-					columns_joined.append(sep.join([str(l) for l in line]))
-				all_joined = "\n".join(columns_joined) + "\n"
-				sys.stdout.buffer.write(gzip.compress(bytes(all_joined, 'utf-8')))
-			else:
-				for line in output_data:
-					print(sep.join([str(l) for l in line]))
-
 	def transpose(table):
 		transposed_table = list(map(list, zip(*table)))
 		return transposed_table
@@ -455,3 +449,39 @@ class CmdTabs:
 		else:
 			final_table = latex_table
 		return final_table
+
+	def write_output_data(output_data, output_path=None, sep="\t"):
+		open_file = gzip.open if CmdTabs.compressed_output else open
+		if CmdTabs.transposed:
+			output_data = CmdTabs.transpose(output_data)
+			
+		if output_path != None:
+			with open_file(output_path, 'wt') as out_file:
+				for line in output_data:
+					out_file.write(sep.join([str(l) for l in line]) + "\n")
+		else:
+			if CmdTabs.compressed_output:
+				columns_joined = []
+				for line in output_data:
+					columns_joined.append(sep.join([str(l) for l in line]))
+				all_joined = "\n".join(columns_joined) + "\n"
+				sys.stdout.buffer.write(gzip.compress(bytes(all_joined, 'utf-8')))
+			else:
+				for line in output_data:
+					print(sep.join([str(l) for l in line]))
+
+	def split_by_nFiles(input_table, file_number, output_folder, file_name='table', header = []):
+		chunk_size = len(input_table) // file_number
+		init_line = 1 if len(header) > 0 else 0
+		if len(input_table) % file_number > 0: chunk_size += 1
+		chunk_counter = 0
+		for idx in range(init_line, len(input_table), chunk_size):
+			CmdTabs.write_output_data(header+input_table[idx:idx+chunk_size], os.path.join(output_folder, f"{file_name}_chunk{chunk_counter}"))
+			chunk_counter += 1
+
+	def split_by_chunk(input_table, chunk_size, output_folder, file_name='table', header = []):
+		init_line = 1 if len(header) > 0 else 0
+		chunk_counter = 0
+		for idx in range(init_line, len(input_table), chunk_size):
+			CmdTabs.write_output_data(header+input_table[idx:idx+chunk_size], os.path.join(output_folder, f"{file_name}_chunk{chunk_counter}"))
+			chunk_counter += 1 

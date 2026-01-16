@@ -8,7 +8,7 @@ from py_cmdtabs.main_modules import *
 
 ## TYPES
 def based_0(string): return int(string) - 1
-def list_based_0(string): return CmdTabs.parse_column_indices(",", string)
+def list_based_0(string): return CmdTabs.parse_column_indices(string.split(','))
 def list_str(values): return values.split(',')
 def unescaped_str(arg_str): return codecs.decode(str(arg_str), 'unicode_escape') 
 
@@ -351,6 +351,27 @@ def cmdtabs(args=None):
                         help="Define sample atributtes (comma separated list) to colapse a long table in a wide metric table")
     parser.add_argument("--corrupted", dest="corrupted",
                         help="File where corrupted metrics are stored")
-
+    parser.add_argument("--offset", dest="offset", default=[], type=list_str,
+                        help="To subset N rows from table. Indicate as 'start_row,number_row' where start_row es the line to begin the extraction (1 based) and number_row is the amount of lines to extract")
+    parser.add_argument("--split_out", dest="split_out", default=False, action='store_true',
+                        help="Split output table in several files")
+    parser.add_argument("--sp_chunk_size", dest="sp_chunk_size", default= 0, type=int,
+                        help="To split the ouput table in chunks on K lines in different files.")
+    parser.add_argument("--sp_file_number", dest="sp_file_number", default= 0, type=int,
+                        help="To split the output table in N files with the same number of lines.")
+    parser.add_argument("--extract_cols", dest="extract_cols", default=[], type=list_str,
+                        help="Columns to extract from table, comma separated (based 1)")
+    parser.add_argument("--ext_col_match", dest="ext_col_match", type=list_based_0,
+                        help="Select columns where search keywords. Format: x,y,z..")
+    parser.add_argument("--ext_keywords", dest="ext_keywords",
+                        help="Keywords for select rows. Format: key1_col1&key2_col1%%key1_col2&key2_col2")
+    parser.add_argument("--ext_search_mode", dest="ext_search_mode", default='c', choices=['c', 's'],
+                        help="c for match in every columns set, s some match in some column. Default c")
+    parser.add_argument("--ext_match_mode", dest="ext_match_mode", default='i', choices=['i', 'c'],
+                        help="i string must include the keyword, c for fullmatch. Default i")
+    parser.add_argument("--ext_reverse", dest="ext_reverse", default=False, action='store_true',
+                        help="Select not matching")
+    parser.add_argument("--uniq", dest="uniq", default=False, action='store_true',
+                        help="Make rows unique")
     opts = parser.parse_args(args)
     main_cmdtabs(opts)
