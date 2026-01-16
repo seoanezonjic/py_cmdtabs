@@ -11,12 +11,88 @@ def set_class_attributes(options):
     CmdTabs.compressed_output = opts["compressed_out"] if opts.get("compressed_out") else False
     CmdTabs.transposed = opts["transposed"] if opts.get("transposed") else False
 
+################################################
 ## MAIN MODULES
+################################################
+
+# ADDED TO CMDTABS FUNCTION AND DEPRECATED
+# ------------------------------------------------------------
+
+def main_tag_table(options): # Added to main_cmdtabs
+    warn('This is deprecated. Use: cmdtabs --tags tables/tracker -i path_to/tag_file', DeprecationWarning, stacklevel=2)
+
+    tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file)
+    taged_table = CmdTabs.tag_file(input_table, tags, options.header)
+    CmdTabs.write_output_data(taged_table, None, options.sep)
+
+def main_transform_to_latex(options): # Added to main cmdtabs
+    warn('This is deprecated. Use: cmdtabs --latex -i input_table --whole', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file, sep=options.separator)
+    table_name = os.path.basename(options.input_file).split('.')[0] if options.input_file != '-' else 'tableX'
+    latex_table = CmdTabs.transform_to_latex(input_table, options.header, options.whole, table_name)
+    CmdTabs.write_output_data(latex_table, options.output_file, sep="")
+
+def main_transpose_table(options): # Added to main cmdtabs
+    warn('This is deprecated. Use: cmdtabs --transposed input_table', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
+    CmdTabs.write_output_data(transposed_table, options.output_file)
+
+def main_standard_name_replacer(options): # Added to main cmdtabs
+    warn('This is deprecated. Use: cmdtabs -I dictionary_index -c 1 --from 1 --to 2 -u -i input_table', DeprecationWarning, stacklevel=2)
+
+    input_index = CmdTabs.load_input_data(options.index_file)
+    translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
+
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file, options.input_separator)
+    tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, translation_index, options.remove_untranslated)
+    CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)
+
 def main_aggregate_column_data(options): # Added to main cmdtabs
+    warn('This is deprecated. Use: cmdtabs --aggregate -i input_table --agg_ref_col_index 1,2 --agg_col 3,4', DeprecationWarning, stacklevel=2)
+
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
     agg_data = CmdTabs.aggregate_column(input_table, options.col_index, options.col_aggregate, options.sep, options.agg_mode)
     CmdTabs.write_output_data(agg_data)
+
+def main_desaggregate_column_data(options): # Added to main cmdtabs
+    warn('This is deprecated. Use: cmdtabs --desaggregate -i input_table --desagg_col 3,4 --desagg_sep ","', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file)
+    desagg_data = CmdTabs.desaggregate_column(input_table, options.col_index, options.sep)
+    CmdTabs.write_output_data(desagg_data)
+
+def main_records_count(options): # Added to main cmdtabs
+    warn('This is deprecated. Use: cmdtabs -i input_table --count-cols 2', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    input_table = CmdTabs.load_input_data(options.input_file)
+    counts = CmdTabs.records_count(input_table, options.col_index)
+    CmdTabs.write_output_data(counts)
+
+def main_excel_to_tabular(options): # Added to main_cmdtabs
+    warn('This is deprecated. Use: cmdtabs -i input_table --file_type excel --excel_cols 1,2,3 --excel_sheet_number 1', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
+    storage = CmdTabs.extract_columns(sheet, options.columns2extract)
+    storage = CmdTabs.extract_rows(storage, options.rows2extract)
+    CmdTabs.write_output_data(storage, options.output_file)
+
+
+# ADDED TO CMDTABS FUNCTION AND not DEPRECATED
+# ------------------------------------------------------------
+
+# not ADDED TO CMDTABS FUNCTION
+# ------------------------------------------------------------
 
 def main_column_filter(options):
     table_file = options.input_file
@@ -39,19 +115,6 @@ def main_create_metric_table(options):
 
     if options.corrupted != None and len(corrupted_records) > 0:
         CmdTabs.write_output_data(corrupted_records, options.corrupted)
-
-def main_desaggregate_column_data(options): # Added to main cmdtabs
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    desagg_data = CmdTabs.desaggregate_column(input_table, options.col_index, options.sep)
-    CmdTabs.write_output_data(desagg_data)
-
-def main_excel_to_tabular(options): # Added to main_cmdtabs
-    set_class_attributes(options)
-    sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
-    storage = CmdTabs.extract_columns(sheet, options.columns2extract)
-    storage = CmdTabs.extract_rows(storage, options.rows2extract)
-    CmdTabs.write_output_data(storage, options.output_file)
 
 def main_filter_by_list(options):
     terms2befiltered = CmdTabs.load_input_data(options.terms2befiltered)
@@ -154,21 +217,6 @@ def main_merge_tabular(options):
     merged = CmdTabs.merge_files(files, options.fill_character)
     CmdTabs.write_output_data(merged)
 
-def main_records_count(options): # Added to main cmdtabs
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    counts = CmdTabs.records_count(input_table, options.col_index)
-    CmdTabs.write_output_data(counts)
-
-def main_standard_name_replacer(options): # Added to main cmdtabs
-    input_index = CmdTabs.load_input_data(options.index_file)
-    translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
-
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file, options.input_separator)
-    tabular_output_translated, _ = CmdTabs.name_replaces(input_table, options.input_separator, options.columns, translation_index, options.remove_untranslated)
-    CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)
-
 def main_subset_table(options):
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
@@ -199,7 +247,6 @@ def main_subset_table(options):
       subset_table = CmdTabs.subset_table(input_table, options.start_line, options.chunk_lines, options.header)
       CmdTabs.write_output_data(subset_table, options.output_file)
 
-
 def main_table_linker(options):
     set_class_attributes(options)
     input_linker = CmdTabs.load_input_data(options.linker_file, sep=options.sep)
@@ -227,35 +274,14 @@ def main_table_splitter(options):
     if len(lines_to_write) > 0:
         CmdTabs.write_output_data(lines_to_write, os.path.join(options.output_folder, f"{file_basename}_chunk{chunk_counter}"))
 
-def main_tag_table(options): # Added to main_cmdtabs
-    warn('This is deprecated. Use: cmdtabs --tags tables/tracker -i path_to/tag_file', DeprecationWarning, stacklevel=2)
 
-    tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file)
-    taged_table = CmdTabs.tag_file(input_table, tags, options.header)
-    CmdTabs.write_output_data(taged_table, None, options.sep)
-
-def main_transform_to_latex(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs --latex -i input_table --whole', DeprecationWarning, stacklevel=2)
-
-    set_class_attributes(options)
-    input_table = CmdTabs.load_input_data(options.input_file, sep=options.separator)
-    table_name = os.path.basename(options.input_file).split('.')[0] if options.input_file != '-' else 'tableX'
-    latex_table = CmdTabs.transform_to_latex(input_table, options.header, options.whole, table_name)
-    CmdTabs.write_output_data(latex_table, options.output_file, sep="")
-
-def main_transpose_table(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs --transposed input_table', DeprecationWarning, stacklevel=2)
-
-    set_class_attributes(options)
-    transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
-    CmdTabs.write_output_data(transposed_table, options.output_file)
-
+########################################################
+## Unifiying script CMDTABS
+########################################################
 
 def main_cmdtabs(opts):
   output_sep = "\t"
-  set_class_attributes(opts)
+  CmdTabs.compressed_input = opts.compressed_in
   if opts.file_type == 'excel': #[excel2table]
     sheet = CmdTabs.get_table_from_excel(opts.input_file, opts.excSheet_number)
     table = CmdTabs.extract_columns(sheet, opts.excColumns2extract)
@@ -265,21 +291,21 @@ def main_cmdtabs(opts):
 
   if opts.transposed: table = CmdTabs.transpose(table) # TRANSFORMATION [transpose_table]
   # STATS
-  if opts.count: table = CmdTabs.records_count(input_table, opts.columns) # [records_count]
+  if opts.count_cols != None: table = CmdTabs.records_count(table, opts.count_cols) # [records_count]
   # TRANSFORMATIONS
-  if opts.aggregate: table = CmdTabs.aggregate_column(table, opts.agg_col_index, opts.agg_column, opts.separator, opts.agg_mode) # [aggregate_table]
-  if opts.desaggregate: table = CmdTabs.desaggregate_column(table, opts.desagg_col, opts.separator) # [desaggregate_table]
+  if opts.aggregate: table = CmdTabs.aggregate_column(table, opts.agg_col_index, opts.col_aggregate, opts.agg_sep, opts.agg_mode) # [aggregate_table]
+  if opts.desaggregate: table = CmdTabs.desaggregate_column(table, opts.desagg_col, opts.desagg_sep) # [desaggregate_table]
   if len(opts.tags) > 0: # [tag_table]
     tags = CmdTabs.load_and_parse_tags(opts.tags, opts.separator) # Warining the following 2 lines must not be within set_class_attributes
     table = CmdTabs.tag_file(table, tags, opts.header)
   if opts.index_file != None: # [standard_name_replacer]
-    # Warining the following 2 lines must not be within set_class_attributes
-    input_index = CmdTabs.load_input_data(options.index_file)
-    translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
+    input_index = CmdTabs.load_input_data(opts.index_file)
+    translation_index = CmdTabs.index_array(input_index, opts.frm, opts.to)
     table, _ = CmdTabs.name_replaces(table, opts.separator, opts.columns, translation_index, opts.remove_untranslated)
   if opts.to_latex: # [transform_to_latex]
     table_name = os.path.basename(opts.input_file).split('.')[0] if opts.input_file != '-' else 'tableX'
     table = CmdTabs.transform_to_latex(table, opts.header, opts.whole, table_name)
     output_sep = ""
+  CmdTabs.compressed_output = opts.compressed_out
   CmdTabs.write_output_data(table, opts.output_file, sep=output_sep)
   

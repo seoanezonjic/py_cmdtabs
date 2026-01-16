@@ -322,13 +322,17 @@ def cmdtabs(args=None):
     parser.add_argument("--agg_col", dest="col_aggregate",
                         help="Column(s) index (1 based) to extract data and join for each id in column index (if more than one, comma separated)", type=list_based_0)
     parser.add_argument("--agg_mode", dest="agg_mode", default="concatenate",
-                        help="Mode to perform aggregation. Current available: max,min,mean,median,sum,std,var,IQR,PC25,PC75,count & concatenate. Default (concatenate) is string concatenation by defined separator. More than one aggregation mode can be used separated by commas")       
-    parser.add_argument("--count", dest="count", default=False, action='store_true',
-                        help="Count records, use with -c to select columns")
+                        help="Mode to perform aggregation. Current available: max,min,mean,median,sum,std,var,IQR,PC25,PC75,count & concatenate. Default (concatenate) is string concatenation by defined separator. More than one aggregation mode can be used separated by commas")
+    parser.add_argument("--agg_sep", dest="agg_sep", default=",",
+                        help="Character separator when collapse data")
+    parser.add_argument("--count-cols", dest="count_cols", default=None, type=list_based_0,
+                        help="Index of columns in base 1 to count")
     parser.add_argument("--desaggregate", dest="desaggregate", default=False, action='store_true',
                         help="Desaggregate table columns")
     parser.add_argument("--desagg_col", dest="desagg_col",
   	                    help="Column index (1 based) to use as reference", type=list_based_0)
+    parser.add_argument("--desagg_sep", dest="desagg_sep", default=",",
+                        help="Character separator when to split string column")
     parser.add_argument("--excel_cols", dest="excColumns2extract", default=[0], type=list_based_0,
                         help="Column position to extract (1 based). Default 1. Use 0 to extract all columns")
     parser.add_argument("--excel_rows", dest="excRows2extract", default=[-1], type=list_based_0,
