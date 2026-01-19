@@ -18,7 +18,7 @@ def set_class_attributes(options):
 # ADDED TO CMDTABS FUNCTION AND DEPRECATED
 # ------------------------------------------------------------
 def main_tag_table(options): # Added to main_cmdtabs
-    warn('This is deprecated. Use: cmdtabs --tags tables/tracker -i path_to/tag_file', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs --tags tables/tracker -i path_to/tag_file')
 
     tags = CmdTabs.load_and_parse_tags(options.tags, options.sep)
     set_class_attributes(options)
@@ -27,7 +27,7 @@ def main_tag_table(options): # Added to main_cmdtabs
     CmdTabs.write_output_data(taged_table, None, options.sep)
 
 def main_transform_to_latex(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs --latex -i input_table --whole', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs --latex -i input_table --whole')
 
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file, sep=options.separator)
@@ -36,14 +36,14 @@ def main_transform_to_latex(options): # Added to main cmdtabs
     CmdTabs.write_output_data(latex_table, options.output_file, sep="")
 
 def main_transpose_table(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs --transposed input_table', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs --transposed input_table')
 
     set_class_attributes(options)
     transposed_table = CmdTabs.transpose(CmdTabs.load_input_data(options.input_file))
     CmdTabs.write_output_data(transposed_table, options.output_file)
 
 def main_standard_name_replacer(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs -I dictionary_index -c 1 --from 1 --to 2 -u -i input_table', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs -I dictionary_index -c 1 --from 1 --to 2 -u -i input_table')
 
     input_index = CmdTabs.load_input_data(options.index_file)
     translation_index = CmdTabs.index_array(input_index, options.frm, options.to)
@@ -54,7 +54,7 @@ def main_standard_name_replacer(options): # Added to main cmdtabs
     CmdTabs.write_output_data(tabular_output_translated, options.output_file, options.input_separator)
 
 def main_aggregate_column_data(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs --aggregate -i input_table --agg_ref_col_index 1,2 --agg_col 3,4', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs --aggregate -i input_table --agg_ref_col_index 1,2 --agg_col 3,4')
 
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
@@ -62,7 +62,7 @@ def main_aggregate_column_data(options): # Added to main cmdtabs
     CmdTabs.write_output_data(agg_data)
 
 def main_desaggregate_column_data(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs --desaggregate -i input_table --desagg_col 3,4 --desagg_sep ","', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs --desaggregate -i input_table --desagg_col 3,4 --desagg_sep ","')
 
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
@@ -70,7 +70,7 @@ def main_desaggregate_column_data(options): # Added to main cmdtabs
     CmdTabs.write_output_data(desagg_data)
 
 def main_records_count(options): # Added to main cmdtabs
-    warn('This is deprecated. Use: cmdtabs -i input_table --count-cols 2', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs -i input_table --count-cols 2')
 
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
@@ -78,7 +78,7 @@ def main_records_count(options): # Added to main cmdtabs
     CmdTabs.write_output_data(counts)
 
 def main_excel_to_tabular(options): # Added to main_cmdtabs
-    warn('This is deprecated. Use: cmdtabs -i input_table --file_type excel --excel_cols 1,2,3 --excel_sheet_number 1', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs -i input_table --file_type excel --excel_cols 1,2,3 --excel_sheet_number 1')
 
     set_class_attributes(options)
     sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
@@ -87,7 +87,7 @@ def main_excel_to_tabular(options): # Added to main_cmdtabs
     CmdTabs.write_output_data(storage, options.output_file)
 
 def main_create_metric_table(options):
-    warn('This is deprecated. Use: cmdtabs -i input_table --sample_attributes sample_attr-comma-separated', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs -i input_table --sample_attributes sample_attr-comma-separated')
 
     set_class_attributes(options)
     metric_file = CmdTabs.load_input_data(options.metric_file)
@@ -99,10 +99,10 @@ def main_create_metric_table(options):
     if options.corrupted != None and len(corrupt_recs) > 0: CmdTabs.write_output_data(corrupt_recs, options.corrupted)
 
 def main_subset_table(options):
-    warn('This is deprecated. Use:', DeprecationWarning, stacklevel=2)
-    warn('  cmdtabs -i input_table --offset 3,4 -H', DeprecationWarning, stacklevel=2)
-    warn('  cmdtabs -i input_table --split_out --sp_chunk_size 4 -o FOLDER/FILE_NAME', DeprecationWarning, stacklevel=2)
-    warn('  cmdtabs -i input_table --split_out --sp_file_number 2 -o FOLDER/FILE_NAME', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use:')
+    warn('  cmdtabs -i input_table --offset 3,4 -H')
+    warn('  cmdtabs -i input_table --split_out --sp_chunk_size 4 -o FOLDER/FILE_NAME')
+    warn('  cmdtabs -i input_table --split_out --sp_file_number 2 -o FOLDER/FILE_NAME')
 
     set_class_attributes(options)
     input_table = CmdTabs.load_input_data(options.input_file)
@@ -119,9 +119,9 @@ def main_subset_table(options):
         CmdTabs.split_by_chunk(input_table, options.chunk_size, options.output_file, file_name, header = header)
 
 def main_get_columns(options):
-    warn('This is deprecated. Use:', DeprecationWarning, stacklevel=2)
-    warn('  cmdtabs -i input_table --extract_cols 1,3-5', DeprecationWarning, stacklevel=2)
-    warn('  cmdtabs -i input_table -H --extract_cols col-1,col-3%-%col-5', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use:')
+    warn('  cmdtabs -i input_table --extract_cols 1,3-5')
+    warn('  cmdtabs -i input_table -H --extract_cols col-1,col-3%-%col-5')
 
     set_class_attributes(options)
     input_data = CmdTabs.load_input_data(options.input_file, options.sep)
@@ -130,8 +130,8 @@ def main_get_columns(options):
     CmdTabs.write_output_data(output_table, options.output_file, options.sep)
 
 def main_column_filter(options):
-    warn('This is deprecated. Use:', DeprecationWarning, stacklevel=2)
-    warn('  cmdtabs -i input_table --extract_cols 1,2 --ext_col_match 1 --ext_keywords KEYWORD --ext_search_mode c --ext_match_mode c', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use:')
+    warn('  cmdtabs -i input_table --extract_cols 1,2 --ext_col_match 1 --ext_keywords KEYWORD --ext_search_mode c --ext_match_mode c')
     table_file = options.input_file
     if table_file == None: table_file = options.table_file # legacy option kept by compatibility
     if table_file == None: sys.exit('Tabulated file not specified') 
@@ -143,7 +143,7 @@ def main_column_filter(options):
     CmdTabs.write_output_data(filtered_table)
 
 def main_filter_by_list(options):
-    warn('This is deprecated. Use: cmdtabs -i input_table --ext_col_match 1 --ext_keyword_file table_with_keywords --ext_stats --ext_reverse', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs -i input_table --ext_col_match 1 --ext_keyword_file table_with_keywords --ext_stats --ext_reverse')
 
     terms2befiltered = CmdTabs.load_input_data(options.terms2befiltered)
     terms2befiltered = list(map(list, zip(*terms2befiltered )))[0]
@@ -182,7 +182,7 @@ def main_filter_by_list(options):
                 print(f"{file2befiltered}\t{ratio_lines_removed}")
 
 def main_table_linker(options):
-    warn('This is deprecated. Use: cmdtabs_merge --tables input_table1,input_table2 --columns2add 1,2', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs_merge --tables input_table1,input_table2 --columns2add 1,2')
 
     set_class_attributes(options)
     input_linker = CmdTabs.load_input_data(options.linker_file, sep=options.sep)
@@ -195,7 +195,7 @@ def main_table_linker(options):
     CmdTabs.write_output_data(linked_table, options.output_file, sep=options.sep)
 
 def main_merge_tabular(options):
-    warn("This is deprecated. Use: cmdtabs_merge --tables input_table1,input_table2,input_table3 --columns2add '1,2,3;1,2' --union --fill_character 'NA'", DeprecationWarning, stacklevel=2)
+    warn("This is deprecated. Use: cmdtabs_merge --tables input_table1,input_table2,input_table3 --columns2add '1,2,3;1,2' --union --fill_character 'NA'")
     
     set_class_attributes(options)
     files = CmdTabs.load_files(options.files)
@@ -203,7 +203,7 @@ def main_merge_tabular(options):
     CmdTabs.write_output_data(merged)
 
 def main_intersect_columns(options):
-    warn('This is deprecated. Use: cmdtabs_merge -a table_a -b table_b -A 1 -B 1 -s "\t" --keep ab --full ', DeprecationWarning, stacklevel=2)
+    warn('This is deprecated. Use: cmdtabs_merge -a table_a -b table_b -A 1 -B 1 -s "\\t" --keep ab --full ')
 
 
     set_class_attributes(options)
