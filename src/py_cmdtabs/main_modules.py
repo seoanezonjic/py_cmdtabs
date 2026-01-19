@@ -17,7 +17,6 @@ def set_class_attributes(options):
 
 # ADDED TO CMDTABS FUNCTION AND DEPRECATED
 # ------------------------------------------------------------
-
 def main_tag_table(options): # Added to main_cmdtabs
     warn('This is deprecated. Use: cmdtabs --tags tables/tracker -i path_to/tag_file', DeprecationWarning, stacklevel=2)
 
@@ -143,14 +142,9 @@ def main_column_filter(options):
     filtered_table = CmdTabs.merge_and_filter_tables(input_files, vars(options))
     CmdTabs.write_output_data(filtered_table)
 
-
-# ADDED TO CMDTABS FUNCTION AND not DEPRECATED
-# ------------------------------------------------------------
-
-# not ADDED TO CMDTABS FUNCTION
-# ------------------------------------------------------------
-# TODO: Add to cmdtabs script and remove all redundant behaviour
 def main_filter_by_list(options):
+    warn('This is deprecated. Use: cmdtabs -i input_table --ext_col_match 1 --ext_keyword_file table_with_keywords --ext_stats --ext_reverse', DeprecationWarning, stacklevel=2)
+
     terms2befiltered = CmdTabs.load_input_data(options.terms2befiltered)
     terms2befiltered = list(map(list, zip(*terms2befiltered )))[0]
 
@@ -187,7 +181,31 @@ def main_filter_by_list(options):
                 ratio_lines_removed = round(100*(len(file_filteredfile[file2befiltered])/len(loaded_files[file2befiltered])),2)
                 print(f"{file2befiltered}\t{ratio_lines_removed}")
 
+def main_table_linker(options):
+    warn('This is deprecated. Use: cmdtabs_merge --tables input_table1,input_table2 --columns2add 1,2', DeprecationWarning, stacklevel=2)
+
+    set_class_attributes(options)
+    input_linker = CmdTabs.load_input_data(options.linker_file, sep=options.sep)
+    indexed_linker = CmdTabs.index_array(input_linker, options.id_linker, options.columns2linker, options.header)
+    if CmdTabs.transposed:
+      input_table = CmdTabs.load_input_data(options.input_file, options.sep)
+    else:
+      input_table = CmdTabs.load_input_data(options.input_file, options.sep, 2)
+    linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep, options.header)
+    CmdTabs.write_output_data(linked_table, options.output_file, sep=options.sep)
+
+def main_merge_tabular(options):
+    warn("This is deprecated. Use: cmdtabs_merge --tables input_table1,input_table2,input_table3 --columns2add '1,2,3;1,2' --union --fill_character 'NA'", DeprecationWarning, stacklevel=2)
+    
+    set_class_attributes(options)
+    files = CmdTabs.load_files(options.files)
+    merged = CmdTabs.merge_files(files, options.fill_character)
+    CmdTabs.write_output_data(merged)
+
 def main_intersect_columns(options):
+    warn('This is deprecated. Use: cmdtabs_merge -a table_a -b table_b -A 1 -B 1 -s "\t" --keep ab --full ', DeprecationWarning, stacklevel=2)
+
+
     set_class_attributes(options)
 
     input_data_a = CmdTabs.load_input_data(options.a_file, options.sep)
@@ -203,39 +221,8 @@ def main_intersect_columns(options):
       print("b: " + str(len(b_only)))
       print("c: " + str(len(common)))
     else:
-      # As the groups are list with nested list with only one element: [['str1'], ['str2']..] the full mode need to access to 0 element to be use as key in full_X_rec
-      if options.keep == 'c':
-        result = common
-        if options.full: result = [full_a_rec[r[0]] + full_b_rec[r[0]] for r in common]
-      elif options.keep == 'a':
-        result = a_only
-        if options.full: result = [full_a_rec[r[0]] for r in a_only]
-      elif options.keep == 'b':
-        result = b_only
-        if options.full: result = [full_b_rec[r[0]] for r in b_only]
-      elif options.keep == 'ab':
-        if options.full:
-          a_only = [full_a_rec[r[0]] for r in a_only]
-          b_only = [full_b_rec[r[0]] for r in b_only]
-        result = a_only + b_only
+      result = CmdTabs.get_subset(common, a_only, b_only, full_a_rec, full_b_rec, keep_subset=options.keep, full=options.full)
       CmdTabs.write_output_data(result, None, options.sep)
-
-def main_table_linker(options):
-    set_class_attributes(options)
-    input_linker = CmdTabs.load_input_data(options.linker_file, sep=options.sep)
-    indexed_linker = CmdTabs.index_array(input_linker, options.id_linker, options.columns2linker, options.header)
-    if CmdTabs.transposed:
-      input_table = CmdTabs.load_input_data(options.input_file, options.sep)
-    else:
-      input_table = CmdTabs.load_input_data(options.input_file, options.sep, 2)
-    linked_table = CmdTabs.link_table(indexed_linker, input_table, options.drop_line, options.sep, options.header)
-    CmdTabs.write_output_data(linked_table, options.output_file, sep=options.sep)
-
-def main_merge_tabular(options):
-    set_class_attributes(options)
-    files = CmdTabs.load_files(options.files)
-    merged = CmdTabs.merge_files(files, options.fill_character)
-    CmdTabs.write_output_data(merged)
 
 ########################################################
 ## Unifiying script CMDTABS
@@ -253,9 +240,15 @@ def main_cmdtabs(opts):
 
   if len(opts.offset) > 0: table = CmdTabs.subset_table(table, int(opts.offset[0]) - 1, int(opts.offset[1]), opts.header) # [subset] subset file
   
-  if len(opts.extract_cols) > 0: # [get_columns] [column_filter]
-     cols = CmdTabs.parse_column_indices(opts.extract_cols, has_header = opts.header, table=table) #[get_columns]
-     table = CmdTabs.filter_columns(table, cols, opts.ext_col_match, opts.ext_keywords, opts.ext_search_mode, opts.ext_match_mode, opts.ext_reverse) #[column_filter]
+  if len(opts.extract_cols) > 0 or opts.ext_keyword_file != None: # [get_columns] [column_filter]
+    n_rows  = len(table)
+    cols = CmdTabs.parse_column_indices(opts.extract_cols, has_header = opts.header, table=table) #[get_columns]
+    if opts.ext_keyword_file != None:# [filter_by_list]
+      keywords = [ row[0] for row in CmdTabs.load_input_data(opts.ext_keyword_file) ] # Flatten nested list to simple list
+    else:
+      keywords = opts.ext_keywords
+    table = CmdTabs.filter_columns(table, cols, opts.ext_col_match, keywords, opts.ext_search_mode, opts.ext_match_mode, opts.ext_reverse) #[column_filter]
+    if opts.ext_stats: print(round(100*(len(table)/n_rows),2)) # [filter_by_list]
 
   if opts.transposed: table = CmdTabs.transpose(table) # TRANSFORMATION [transpose_table]
   # STATS
@@ -299,4 +292,35 @@ def main_cmdtabs(opts):
       CmdTabs.split_by_nFiles(table, opts.sp_file_number, opts.output_file, file_name, header = header)
   else:
     CmdTabs.write_output_data(table, opts.output_file, sep=output_sep)
+  
+
+########################################################
+## cmdtabs script for table merging
+########################################################
+
+def main_cmdtabs_merge(opts):
+  output_sep = "\t"
+  CmdTabs.compressed_input = opts.compressed_in
+  table = None  
+  if opts.a_file != None and opts.b_file != None:
+    input_data_a = CmdTabs.load_input_data(opts.a_file, opts.separator)
+    input_data_b = CmdTabs.load_input_data(opts.b_file, opts.separator)
+    a_records, full_a_rec = CmdTabs.load_records(input_data_a, opts.a_cols, opts.full)
+    b_records, full_b_rec = CmdTabs.load_records(input_data_b, opts.b_cols, opts.full)
+    common, a_only, b_only = CmdTabs.get_groups(a_records, b_records)
+    if opts.count:
+      print("a: " + str(len(a_only)))
+      print("b: " + str(len(b_only)))
+      print("c: " + str(len(common)))
+      exit()
+    else:
+      table = CmdTabs.get_subset(common, a_only, b_only, full_a_rec, full_b_rec, keep_subset=opts.keep, full=opts.full)
+  elif opts.tables != None :
+    main_table = opts.tables.pop(0)
+    table = CmdTabs.load_input_data(main_table, sep=opts.separator) # [table_linker]
+    columns2add = [[cols.pop(0), cols] for cols in opts.columns2add]
+    CmdTabs.merge_tables2mainTab(table, opts.tables, columns2add, sep = opts.separator, 
+                              fill_character= opts.fill_character, header = opts.header, union=opts.union) # [table_linker]
+  CmdTabs.compressed_output = opts.compressed_out
+  CmdTabs.write_output_data(table, opts.output_file, sep=output_sep)
   

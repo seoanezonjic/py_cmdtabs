@@ -68,23 +68,26 @@ class CmdTabs:
 	def build_pattern(col_filter, keywords):
 		pattern = defaultdict(lambda: False	)
 		if col_filter != None and keywords != None:
-			keys_per_col = keywords.split('%')
-			if len(keys_per_col) != len(col_filter): os.abort('Number of keywords not equal to number of filtering columns') 
-			for i, col in enumerate(col_filter): pattern[col] = keys_per_col[i].split('&')
+			if isinstance(keywords, str): # search keywords from given string as species the % and & characters. % is delimiter of keywrod per column and & us delimiter of keywrods in th same column
+				keys_per_col = keywords.split('%')
+				if len(keys_per_col) != len(col_filter): os.abort('Number of keywords not equal to number of filtering columns') 
+				for i, col in enumerate(col_filter): pattern[col] = keys_per_col[i].split('&')
+			elif isinstance(keywords, list): # search keywords from given list (file) in any column
+				for i, col in enumerate(col_filter): pattern[col] = keywords
 		return pattern
 
-	def index_array(array, col_from=0, col_to=1, header=False):
-		indexed_array = defaultdict(lambda: False)
+	def index_array(table, col_from=0, col_to=1, header=False):
+		index = defaultdict(lambda: False)
 		if type(col_to) != list:
 			f = lambda x: x[col_to]
 		else: 
 			f = lambda x: [x[c] for c in col_to]
 		if header: 
-			head = array.pop(0)
-			indexed_array['header'] = f(head)
-		for elements in array:
-			indexed_array[elements[col_from]] = f(elements)
-		return indexed_array
+			head = table.pop(0)
+			index['header'] = f(head)
+		for row in table:
+			index[row[col_from]] = f(row)
+		return index
 
 	def index_metrics(input_data, attributes):
 		n_attrib = len(attributes)
@@ -128,7 +131,7 @@ class CmdTabs:
 			except KeyError as e:
 				raise KeyError(f"Column '{e.args[0]}' not found in header. Available columns: {', '.join(cols_header_dict.keys())}")
 			col_str_idxs = cols_to_get_processed
-
+	
 		cols = []
 		for col in col_str_idxs:
 			if "-" in col: # Range of columns (both ends included)
@@ -264,6 +267,34 @@ class CmdTabs:
 				if not drop_line: linked_table.append(fields) 
 		return linked_table
 
+	def merge_tables2mainTab(main_table, table_paths, column_idxs, sep = "\t", fill_character='-', header = False, union= False):
+		table_length = len(main_table[0])
+		for i, table_path in enumerate(table_paths):
+			supp_file = CmdTabs.load_input_data(table_path, sep=sep)
+			id_col, data_cols = column_idxs[i]
+			supp_file_idx = CmdTabs.index_array(supp_file, id_col, data_cols, header = header)
+			for i,row in enumerate(main_table):
+				if i == 0 and header: # if we're in first row an is header, search for the header record in the index
+					id = 'header'
+				else:
+					id = row[0]
+				supp_data = supp_file_idx.get(id)
+				if supp_data:
+					if type(supp_data) == list:# list with several row fields
+						row.extend(supp_data)
+					else:
+						row.append(supp_data) # one single field as one single value
+				CmdTabs.row_start_fill(row, fill_character, table_length) # When there is no match, fill the gap
+			if union: # Add rows present in supp file but not in main_table
+				for item in (set(supp_file_idx.keys()) - set([r[0] for r in main_table])):
+					new_row = [item]
+					CmdTabs.row_start_fill(new_row, fill_character, table_length)
+					new_row.extend(supp_file_idx[item])
+					main_table.append(new_row)
+			table_length += len(supp_file_idx[list(supp_file_idx.keys())[0]])
+			
+		for row in main_table: CmdTabs.row_end_fill(row, fill_character, table_length) # When there is no match, fill the gap
+
 	def tag_file(input_file, tags, header):
 		taged_file = []
 		n_row = 0
@@ -310,7 +341,7 @@ class CmdTabs:
 		return filtered_table
 
 	def extract_fields(arr_sub, indexes):
-		if indexes == [-1]:
+		if indexes == []:
 			return arr_sub
 		else:
 			return [ str(arr_sub[idx]) for idx in indexes] # The str instruction is used to ensure that always we have string data (i.e: when this function is used with excel objecb it could extrac numerical data)
@@ -323,22 +354,37 @@ class CmdTabs:
 			for fields in file:
 				id = fields.pop(0) 
 				local_length = len(fields)
-				if not parent_table.get(id):
-					parent_table[id] = [fill_character] * table_length
-				elif len(parent_table[id]) < table_length:
-					diference = table_length - len(parent_table[id])
-					parent_table[id].extend( [fill_character] * diference)
+				CmdTabs.row_start_fill_dict(parent_table, id, fill_character, table_length)
 				parent_table[id].extend(fields)				
 			table_length += local_length
 			
-		parent_table_arr = []
+		parent_table_arr = [] # Fill rows that have not full length (the sum of the row lengths of the all merged tables)
 		for id, fields in parent_table.items():
-			diference = table_length - len(fields)
-			if diference > 0: fields.extend([fill_character] * diference)
+			CmdTabs.row_end_fill(fields, fill_character, table_length)
 			record = [id]
 			record.extend(fields)
 			parent_table_arr.append(record)
 		return parent_table_arr
+
+	def row_start_fill_dict(indexed_table, row_id, fill_character, table_length):
+		if not indexed_table.get(row_id):
+			indexed_table[row_id] = [fill_character] * table_length
+		elif len(indexed_table[row_id]) < table_length:
+			diference = table_length - len(indexed_table[row_id])
+			indexed_table[row_id].extend( [fill_character] * diference)
+
+	def row_start_fill(row, fill_character, table_length):
+		n_fields = len(row)
+		if n_fields == 0:
+			row = [fill_character] * table_length
+		elif n_fields < table_length:
+			diference = table_length - n_fields
+			row.extend( [fill_character] * diference)
+		return row
+
+	def row_end_fill(row, fill_character, table_length):
+		diference = table_length - len(row)
+		if diference > 0: row.extend([fill_character] * diference)
 
 	def merge_and_filter_tables(input_files, options):
 		header = []
@@ -419,6 +465,24 @@ class CmdTabs:
 		b_only = [[r] for r in b_rec if r not in common_set]
 		common = [[r] for r in common_set]
 		return common, a_only, b_only
+
+	def get_subset(common, a_only, b_only, full_a_rec, full_b_rec, keep_subset='c', full=False):
+      # As the groups are list with nested list with only one element: [['str1'], ['str2']..] the full mode need to access to 0 element to be use as key in full_X_rec
+		if keep_subset == 'c':
+			result = common
+			if full: result = [full_a_rec[r[0]] + full_b_rec[r[0]] for r in common]
+		elif keep_subset == 'a':
+			result = a_only
+			if full: result = [full_a_rec[r[0]] for r in a_only]
+		elif keep_subset == 'b':
+			result = b_only
+			if full: result = [full_b_rec[r[0]] for r in b_only]
+		elif keep_subset == 'ab':
+			if full:
+				a_only = [full_a_rec[r[0]] for r in a_only]
+				b_only = [full_b_rec[r[0]] for r in b_only]
+			result = a_only + b_only
+		return result
 
 	def transpose(table):
 		transposed_table = list(map(list, zip(*table)))

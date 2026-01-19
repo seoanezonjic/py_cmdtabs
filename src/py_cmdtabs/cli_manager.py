@@ -11,6 +11,7 @@ def based_0(string): return int(string) - 1
 def list_based_0(string): return CmdTabs.parse_column_indices(string.split(','))
 def list_str(values): return values.split(',')
 def unescaped_str(arg_str): return codecs.decode(str(arg_str), 'unicode_escape') 
+def nested_int_list(arg_str): return [ [int(col) - 1 for col in str_cols.split(',')] for str_cols in  arg_str.split(';')]
 
 ## Common options
 def add_common_options(parser, flags_to_skip = [], help_replacer={}):
@@ -112,7 +113,7 @@ def excel_to_tabular(args=None):
       help="Path to output file")
     parser.add_argument("-c", "--columns2extract", dest="columns2extract", default=[0], type=list_based_0,
       help="Column position to extract (1 based). Default 1. Use 0 to extract all columns")
-    parser.add_argument("-r", "--rows2extract", dest="rows2extract", default=[-1], type=list_based_0,
+    parser.add_argument("-r", "--rows2extract", dest="rows2extract", default=[], type=list_based_0,
       help="Row positions to extract (1 based). Default 0, which means all rows will be extracted")  
     parser.add_argument("-s", "--sheet_number", dest="sheet_number", default=0, type=based_0,
       help="Sheet number to work with. Default 1")
@@ -335,7 +336,7 @@ def cmdtabs(args=None):
                         help="Character separator when to split string column")
     parser.add_argument("--excel_cols", dest="excColumns2extract", default=[0], type=list_based_0,
                         help="Column position to extract (1 based). Default 1. Use 0 to extract all columns")
-    parser.add_argument("--excel_rows", dest="excRows2extract", default=[-1], type=list_based_0,
+    parser.add_argument("--excel_rows", dest="excRows2extract", default=[], type=list_based_0,
                         help="Row positions to extract (1 based). Default 0, which means all rows will be extracted")  
     parser.add_argument("--excel_sheet_number", dest="excSheet_number", default=0, type=based_0,
                         help="Sheet number to work with. Default 1")
@@ -365,13 +366,56 @@ def cmdtabs(args=None):
                         help="Select columns where search keywords. Format: x,y,z..")
     parser.add_argument("--ext_keywords", dest="ext_keywords",
                         help="Keywords for select rows. Format: key1_col1&key2_col1%%key1_col2&key2_col2")
+    parser.add_argument("--ext_keyword_file", dest="ext_keyword_file",
+                        help="File with one keyword per line. They will be used to search in all the specified columns in --ext_col_match")
     parser.add_argument("--ext_search_mode", dest="ext_search_mode", default='c', choices=['c', 's'],
                         help="c for match in every columns set, s some match in some column. Default c")
     parser.add_argument("--ext_match_mode", dest="ext_match_mode", default='i', choices=['i', 'c'],
                         help="i string must include the keyword, c for fullmatch. Default i")
     parser.add_argument("--ext_reverse", dest="ext_reverse", default=False, action='store_true',
                         help="Select not matching")
+    parser.add_argument("--ext_stats", dest="ext_stats", default=False, action='store_true',
+                        help="Print row extraction statistics")                        
     parser.add_argument("--uniq", dest="uniq", default=False, action='store_true',
                         help="Make rows unique")
     opts = parser.parse_args(args)
     main_cmdtabs(opts)
+
+
+def cmdtabs_merge(args=None):
+    if args == None: args = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=f'Usage: {os.path.basename(__file__)} [options]')
+    add_common_options(parser)
+    parser.add_argument("-H", "--header", dest="header", default=False, action='store_true',
+                     	  help="Indicate if files have header")
+    parser.add_argument("-o", "--output_file", dest="output_file", default=None, 
+                        help="Path to output file")
+    parser.add_argument("-s", "--separator", dest="separator", default="\t", type=unescaped_str,
+                        help="Input table column character separator")
+    parser.add_argument("-a", "--a_file", dest="a_file",
+                        help="Path to input file")
+    parser.add_argument("-b", "--b_file", dest="b_file",
+                        help="Path to input file")
+    parser.add_argument("-A", "--a_cols", dest="a_cols", default=[0], type=list_based_0,
+                        help="Index of columns in base 1 to compare")
+    parser.add_argument("-B", "--b_cols", dest="b_cols", default=[0], type=list_based_0,
+                        help="Index of columns in base 1 to compare")
+    parser.add_argument("-c", "--count", dest="count", default=False, action='store_true',
+                        help="Only compute number of matches")
+    parser.add_argument("--full", dest="full", default=False, action='store_true',
+                        help="Give full record")
+    parser.add_argument("-k", "--keep", dest="keep", default='c', choices=['a', 'b', 'c', 'ab'],
+                        help="Keep records. c for common, 'a' for specific of file a, 'b' for specific of file b and 'ab' for specific of file a AND b")
+
+    parser.add_argument("--tables", dest="tables", default=None, type=list_str,
+                        help="Path to tables, comma separated. Paths could include wildcards")
+    parser.add_argument("--fill_character", dest="fill_character", default="-",
+                        help="Character to fill when a field is empty")
+    parser.add_argument("--columns2add", dest="columns2add", default=[], type=nested_int_list,
+                        help="For each file to add to the first file, column indexes 1 based comma separated. To separate each column set, use semicolon ;")
+    parser.add_argument("--union", dest="union", default=False, action='store_true',
+                     	  help="If a row in a file has not match in the merging table is added to it")
+    opts = parser.parse_args(args)
+    main_cmdtabs_merge(opts)
+
+                      
