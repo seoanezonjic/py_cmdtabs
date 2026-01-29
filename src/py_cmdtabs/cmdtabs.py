@@ -1,13 +1,6 @@
-import sys
-import gzip
-import os
-import warnings
-import copy
+import sys, gzip, os, warnings, copy
 import os.path
-import numpy as np
 from collections import defaultdict
-import openpyxl
-import py_exp_calc.exp_calc as pxc
 
 class CmdTabs:
 	transposed = False
@@ -162,6 +155,7 @@ class CmdTabs:
 
 
 	def aggregate_column(input_table, col_index, cols_agg, sep, agg_mode="concatenate"):
+		import py_exp_calc.exp_calc as pxc
 		aggregated_data = defaultdict(lambda: False	)
 		if type(cols_agg) == int: cols_agg = [cols_agg]
 		if type(col_index) == int: col_index = [col_index]
@@ -177,6 +171,7 @@ class CmdTabs:
 		return aggregated_data_arr
 	
 	def _make_one_or_several_aggregation(aggregated_column, aggregation_modes, sep):
+		import numpy as np
 		make_aggregation = {"concatenate": lambda agg_col: sep.join(agg_col), 
 					  		"mean": np.mean, "median": np.median, "max": np.max, "min": np.min, "sum": np.sum, "std": np.std, "var": np.var,
 					  		"count": lambda agg_col: len(agg_col), "IQR": lambda agg_col: np.percentile(agg_col, 75) - np.percentile(agg_col, 25),
@@ -440,6 +435,7 @@ class CmdTabs:
 			return [ row for idx, row in enumerate(table) if idx in rows2extract ]
 
 	def get_table_from_excel(file, sheet_number):
+		import openpyxl
 		x = openpyxl.load_workbook(file)
 		sheets = x.sheetnames # list excel sheets by name
 		ws = x[sheets[sheet_number]] #select sheet by index (so, we select by sheet order)

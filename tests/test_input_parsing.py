@@ -1,7 +1,5 @@
-import unittest
-import sys
-import os
-from py_cmdtabs import CmdTabs
+import unittest, os
+from py_cmdtabs.cmdtabs import CmdTabs
 ROOT_PATH=os.path.dirname(__file__)
 DATA_TEST_PATH = os.path.join(ROOT_PATH, 'data_tests')
 

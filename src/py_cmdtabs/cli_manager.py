@@ -1,14 +1,11 @@
-import argparse
-import sys
-import os
-import codecs
-
-from py_cmdtabs.cmdtabs import CmdTabs
+import argparse, sys, os, codecs
 from py_cmdtabs.main_modules import *
 
 ## TYPES
 def based_0(string): return int(string) - 1
-def list_based_0(string): return CmdTabs.parse_column_indices(string.split(','))
+def list_based_0(string): 
+    from py_cmdtabs.cmdtabs import CmdTabs
+    return CmdTabs.parse_column_indices(string.split(','))
 def list_str(values): return values.split(',')
 def unescaped_str(arg_str): return codecs.decode(str(arg_str), 'unicode_escape') 
 def nested_int_list(arg_str): return [ [int(col) - 1 for col in str_cols.split(',')] for str_cols in  arg_str.split(';')]
