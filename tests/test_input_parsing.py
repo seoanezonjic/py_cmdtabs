@@ -12,8 +12,8 @@ class InputParsingTestCase(unittest.TestCase):
 		self.assertEqual(expected_result, pattern_test)
 
 	def test_parse_column_indices(self):
-		cols_string = "1,3,4,7"
-		col_indx_test = CmdTabs.parse_column_indices(",", cols_string)
+		cols_string = ["1", "3", "4", "7"]
+		col_indx_test = CmdTabs.parse_column_indices(cols_string)
 		expected_result = [0,2,3,6]
 		self.assertEqual(expected_result, col_indx_test)
 

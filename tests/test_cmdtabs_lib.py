@@ -99,42 +99,43 @@ class CmdTabsTestCase(unittest.TestCase):
 		expected_result = [['MERGED_net_no_raw_cpm', 'MERGED', 'no', 'no', 'cpm', 'HGNC:21143', '211_ref,4705_ref']]
 		self.assertEqual(expected_result, taged_test)
 
-	def test_filter_s_i(self):
+	def test_match_pattern_s_i(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
 		col_filter = [0, 1, 2, 3]
 		keywords = "HGNC&ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
-		filter_test = CmdTabs.filter(line, patterns, "s", "i")
+		filter_test = CmdTabs.match_pattern(line, patterns, "s", "i")
 		self.assertFalse(filter_test)
 
-	def test_filter_s_i_True(self):
+	def test_match_pattern_s_i_True(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
 		col_filter = [0, 1, 2, 3]
 		keywords = "HGNC&ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
-		filter_test = CmdTabs.filter(line, patterns, "s", "i", True)
+		filter_test = CmdTabs.match_pattern(line, patterns, "s", "i", True)
 		self.assertTrue(filter_test)
 
-	def test_filter_c_i(self):
+	def test_match_pattern_c_i(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
 		col_filter = [0, 1, 2, 3]
 		keywords = "ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
-		filter_test = CmdTabs.filter(line, patterns, "c", "i")
+		filter_test = CmdTabs.match_pattern(line, patterns, "c", "i")
 		self.assertTrue(filter_test)
 
-	def test_filter_c_c(self):
+	def test_match_pattern_c_c(self):
 		line = ["HGNC:21197", "483_ref", "1039_ref", "1071_ref"]
 		col_filter = [0, 1, 2, 3]
 		keywords = "HGNC&ref%ref%ref%ref"
 		patterns =  CmdTabs.build_pattern(col_filter, keywords)
-		filter_test = CmdTabs.filter(line, patterns, "c", "c")
+		filter_test = CmdTabs.match_pattern(line, patterns, "c", "c")
 		self.assertTrue(filter_test)
 
 	def test_filter_columns(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_desagg'))
-		options = {'col_filter' : [0], 'keywords' : "21197", 'search_mode' : "s", 'match_mode' : "i", 'reverse' : False, 'cols_to_show' : [0, 1]}
-		filter_columns_test = CmdTabs.filter_columns(input_table, options)
+		cols_to_show = [0, 1]
+		options = {'cols_to_match' : [0], 'keywords' : "21197", 'search_mode' : "s", 'match_mode' : "i", 'reverse' : False}
+		filter_columns_test = CmdTabs.filter_columns(input_table, cols_to_show, **options)
 		expected_result = [["HGNC:21197", "483_ref"], ["HGNC:21197", "1039_ref"], ["HGNC:21197", "1071_ref"]]
 		self.assertEqual(expected_result, filter_columns_test)
 
