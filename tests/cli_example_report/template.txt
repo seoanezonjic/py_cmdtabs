@@ -1,10 +1,10 @@
 <% 
 import sys, copy
-import py_cmdtabs
+import py_cmdtabs.cli_manager as cli_manager 
 
 def show_n_exec(table_name, args, meth, skip_input=False, out='std', supp_tables=[]):
 	results = plotter.renderize_child_template(plotter.get_internal_template('show_n_exec'), 
-				table_name=table_name, out_type= out, args=args, library=py_cmdtabs, 
+				table_name=table_name, out_type= out, args=args, library=cli_manager, 
 				method=meth, skip_input=skip_input, supp_tables = supp_tables
 			)
 	return results
