@@ -429,7 +429,7 @@ class CmdTabs:
 		return storage
 	
 	def extract_rows(table, rows2extract):
-		if rows2extract == [-1]:
+		if rows2extract == []:
 			return table
 		else:
 			return [ row for idx, row in enumerate(table) if idx in rows2extract ]

@@ -108,10 +108,10 @@ def excel_to_tabular(args=None):
     add_common_options(parser, flags_to_skip=["--compressed_in"], help_replacer={"--input_file": "Input xlsx file"})
     parser.add_argument("-o", "--output_file", dest="output_file",
       help="Path to output file")
-    parser.add_argument("-c", "--columns2extract", dest="columns2extract", default=[0], type=list_based_0,
-      help="Column position to extract (1 based). Default 1. Use 0 to extract all columns")
+    parser.add_argument("-c", "--columns2extract", dest="columns2extract", default=[], type=list_based_0,
+      help="Comma-separated column position(s) to extract (1 based). If not used, all columns will be extracted")
     parser.add_argument("-r", "--rows2extract", dest="rows2extract", default=[], type=list_based_0,
-      help="Row positions to extract (1 based). Default 0, which means all rows will be extracted")  
+      help="Comma-separated row position(s) to extract (1 based). If not used, all rows will be extracted")  
     parser.add_argument("-s", "--sheet_number", dest="sheet_number", default=0, type=based_0,
       help="Sheet number to work with. Default 1")
 
@@ -331,10 +331,10 @@ def cmdtabs(args=None):
   	                    help="Column index (1 based) to use as reference", type=list_based_0)
     parser.add_argument("--desagg_sep", dest="desagg_sep", default=",",
                         help="Character separator when to split string column")
-    parser.add_argument("--excel_cols", dest="excColumns2extract", default=[0], type=list_based_0,
-                        help="Column position to extract (1 based). Default 1. Use 0 to extract all columns")
+    parser.add_argument("--excel_cols", dest="excColumns2extract", default=[], type=list_based_0,
+                        help="Comma-separated column position(s) to extract (1 based). If not used, all columns will be extracted")
     parser.add_argument("--excel_rows", dest="excRows2extract", default=[], type=list_based_0,
-                        help="Row positions to extract (1 based). Default 0, which means all rows will be extracted")  
+                        help="Comma-separated row position(s) to extract (1 based). If not used, all rows will be extracted")  
     parser.add_argument("--excel_sheet_number", dest="excSheet_number", default=0, type=based_0,
                         help="Sheet number to work with. Default 1")
     parser.add_argument("--file_type", dest="file_type", default='text',
