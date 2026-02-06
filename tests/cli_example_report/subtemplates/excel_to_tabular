@@ -33,9 +33,9 @@
 		${show_n_exec(table_name, args, "cmdtabs", skip_input=True)}
 
 	<h3> Extract all columns from the first sheet </h3>
-		<p> If we wish to extract all columns without specifying all of them we can use value 0, which signals for the extraction of every column. </p>
+		<p> If we wish to extract all columns without specifying all of them we can just leave the --excel_cols argument empty, which signals for the extraction of every column. </p>
 		<%
-			args = f"-i special_files/{table_name} --file_type excel --excel_cols 0 --excel_sheet_number 1"
+			args = f"-i special_files/{table_name} --file_type excel --excel_sheet_number 1"
 		%>
 		${show_n_exec(table_name, args, "cmdtabs", skip_input=True)}
 
