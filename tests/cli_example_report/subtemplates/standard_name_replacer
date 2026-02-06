@@ -2,31 +2,29 @@
 
 <div class="lvl1">
 
-    <p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
-    y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>
+    <p> We'll use this when we have a table that contains a column with IDs (i.e., ensemblIDs and associated GO terms) and another table that we want to use as a dictionary to translate certain values for different ones (i.e., a table with ensemblIDs and their corresponding gene symbol).  </p>
 
-    <h3> Ejemplo básico </h3>
-        <p> Tenemos nuestra tabla con datos de Identificadores de MONDO y cluster/es donde se ha encontrado esa enfermedad de MONDO. Luego tenemos otro archivo
-        que nos relaciona cada identificador de MONDO con su identificador de ORPHA correspondiente. Utilizamos ese archivo para traducir los identificadores de MONDO
-        por los de ORPHA en la primera tabla</p>
+    <h3> Basic example </h3>
 
-        <p> Pasamos la primera tabla como input al flag -i y el diccionario al flag -I. Luego indicamos que queremos reemplazar los términos de la columna 1 de la tabla de entrada
-        con el flag -c, y que queremos utilizar la columna 1 del diccionario como clave de búsqueda con el flag -f (from). Finalmente, indicamos que queremos reemplazar los términos
-        de la columna 1 por los términos de la columna 2 del diccionario con el flag -t (to). </p>  
+        <p> We have a table with MONDO IDs and the cluster(s) where that MONDO disease has been found. We also have a file that correlates each MONDO ID with its corresponding ORPHA ID. We'll use the latter to translate all MONDO IDs to ORPHA IDs in the first table. </p>
+
+        <p> We'll use the -i flag to specify the input table (the first table in our case) and the -I flag for the dictionary (second table). We will then use the -c flag to select the column we want to translate, the --from flag to indicate which column from the dictionary table we want to use as the search key and the --to flag to select the column in the dictionary that contains the terms we want to use for replacing in the first table.  </p>
+
         <%
             table_name = 'disease_cluster'
-            dicctionary = 'mondo_to_orpha'
+            dictionary = 'mondo_to_orpha'
             dict_table_tex = 'Tabla diccionario para reemplazar'
-            args = f"-i tables/{table_name} -I tables/{dicctionary} -c 1 -f 1 -t 2"
+            args = f"-i tables/{table_name} -I tables/{dictionary} -c 1 --from 1 --to 2"
         %>
-		${show_n_exec(table_name, args, meth, supp_tables=[[dict_table_tex, dicctionary]])}
+		${show_n_exec(table_name, args, "cmdtabs", supp_tables=[[dict_table_tex, dictionary]])}
 
-    <h3> Eliminar los registros no traducidos </h3>
-        <p> Como hemos podido comprobar en el ejemplo anterior, si no hay un término en el diccionario para un identificador de la tabla de entrada, ese identificador se queda sin traducir.
-        Si queremos eliminar esos registros que no se han podido traducir, podemos añadir el flag -u al comando. </p>
+    <h3> Removing untranslated entries </h3>
+
+        <p> As we can observe in the previous example, if an ID term from the input file is not present in the dictionary, that ID remains untranslated. If we want to remove any untranslated entries, we can add the -u flag to the command. </p>
+
         <%
-        args = f"-i tables/{table_name} -I tables/{dicctionary} -c 1 -f 1 -t 2 -u"
+        args = f"-i tables/{table_name} -I tables/{dictionary} -c 1 --from 1 --to 2 -u"
         %>
-		${show_n_exec(table_name, args, meth, supp_tables=[[dict_table_tex, dicctionary]])}
+		${show_n_exec(table_name, args, "cmdtabs", supp_tables=[[dict_table_tex, dictionary]])}
 
 </div>                                                                            
