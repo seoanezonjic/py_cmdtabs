@@ -28,13 +28,13 @@
   background-color: #ccc; 
 }
 
-#mynetwork {
+div[id^='mynetwork_'] {
   width: 1000px;
   height: 1000px;
   background-color: #ffffff;
   border: 1px solid lightgray;
   position: relative;
-  float: left;
+  float: left; 
 }
 
 .resizable_img {  
@@ -329,15 +329,16 @@ h3 {
 <summary style="display: none;"></summary>
 
 <div class="lvl1">
-	<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
+	<p> We’ll use this in a table that contains a reference column with repeated values (i.e., an ID) to aggregate values from another column or columns based on that reference. In all instances, we will use the --aggregate flag.   </p>
 
-	<h3> Ejemplo básico con una tabla con dos columnas, una de identificador y otra de valor. </h3>
-		<p> En este caso, se agregan los valores de la segunda columna en función de los valores de la primera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos usar de referencia (en base 1) y el flag -a la columna que queremos agregar (base 1). Además, con el flag -s podemos escoger el separador que se utilice para la agregación.</p>
+	<h3> Basic example with a 2-column table, one with the ID and another one with values </h3>
+
+		<p> In this case, values from the second column will be aggregated based on the values from the first column. To do that, the -i flag references the input table, the --agg_ref_col_index flag is the column we want to use as reference (base 1) and the --agg_col flag is the column we want to aggregate (base 1). Moreover, with the --agg_sep flag, we can choose the separator we want in our aggregated column. </p>
 		
 		
 
 <div class="code">
-	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -s , -a 2
+	cmdtabs -i tables/cluster_genes_dis_desagg_3cols --aggregate --agg_ref_col_index 1 --agg_sep ',' --agg_col 2
 </div>
 
 <div class="divrow">
@@ -386,13 +387,14 @@ h3 {
             </div>
 </div>
 
-	<h3> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores </h3>
-		<p> En este caso, se agregan los valores de la segunda y tercera columnas en función de la primera columna.</p>
+	<h3> Example with a 3-column table, one being the ID and the other two corresponding to values. </h3>
+
+		<p> In this case, values from the second and third columns will be aggregated based on the first one. </p>
 		
 		
 
 <div class="code">
-	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -s , -a 2,3
+	cmdtabs -i tables/cluster_genes_dis_desagg_3cols --aggregate --agg_ref_col_index 1 --agg_sep ',' --agg_col 2,3
 </div>
 
 <div class="divrow">
@@ -443,14 +445,15 @@ h3 {
             </div>
 </div>
 
-	<h3> Teniendo 2 columnas como referencia </h3>
-		<p> Si se tuvieran dos columnas como referencia y no queremos agregarla, pero que tampoco se pierda, se puede utilizar el flag -x para pasar más de una columna 
-		como referencia (además de más de una columna como agregación). Además del método de agregación deseado.
+	<h3> Having 2 columns as reference. </h3>
+
+		<p> If we have two columns as reference and we don't want to aggregate them but we also don't want to lose them, we can use the --agg_ref_col_index flag to select more than one column as reference (as well as selecting more than one aggregation column). </p>
+
 		
 		
 
 <div class="code">
-	aggregate_column_data -i tables/cluster_genes_dis_desagg_4cols -x 1,2 -a 3,4
+	cmdtabs -i tables/cluster_genes_dis_desagg_4cols --aggregate --agg_ref_col_index 1,2 --agg_col 3,4
 </div>
 
 <div class="divrow">
@@ -507,15 +510,14 @@ h3 {
             </div>
 </div>
 
-	<h3> Ejemplo con una tabla con tres columnas, una de identificador y dos columnas de valores, y otra función de agregación </h3>
-		<p> A parte de concatenar los valores en la(s) columna(s) de interés (opción por defecto), también se pueden utilizar otros método de agregación utilizando el flag -A, como media ("mean"), mediana ("median"), valor máximo ("max") y valor mínimo ("min") </p>
-		<p> Ahora tiene otros métodos de agregación disponibles: suma ("sum"), desviación estándar ("std"), varianza ("var"), rango intercuartílico ("IQR"), percentil 25 ("PC25") y percentil 75 ("PC75"), además de conteo ("count"). </p>
-		<p> Vamos a ver un ejemplo con la media de los valores de las columnas 2 y 3, en función de la columna 1. </p>
+	<h3> Example with a 3-column table, one being the ID and the other two corresponding to value, and another aggregation function. </h3>	
+		<p> Besides concatenating values in our column(s) of interest (default mode), we can also use different methods of aggregation using the --agg_mode flag, such as calculating the average ("mean"), median ("median"), maximum ("max") and minimum values ("min"), sum ("sum"), standard deviation ("std"), variance ("var"), interquartile range ("IQR"), 25th percentile ("P25"), 75th percentile ("P75") as well as counts ("count").  </p>
+		<p> Let's see and example with the average of values from columns 2 and 3 based on column 1. </p>
 		
 		
 
 <div class="code">
-	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2,3 -A mean
+	cmdtabs -i tables/cluster_genes_dis_desagg_3cols --aggregate --agg_ref_col_index 1 --agg_col 2,3 --agg_mode mean
 </div>
 
 <div class="divrow">
@@ -566,13 +568,14 @@ h3 {
             </div>
 </div>
 
-	<h3> Ejemplo de agregación con conteos </h3>
-		<p> Nos sirve para acabar en una columna con el identificador y en la otra con la cantidad de veces que se repetía ese identificador cuando estaba en formato desagregado </p>
+	<h3> Example of aggregation of counts. </h3>
+	
+		<p> Useful to obtain a table with the ID in one column and the number of times said ID appears in the table when it was desaggregated in the other column. </p>
 		
 		
 
 <div class="code">
-	aggregate_column_data -i tables/cluster_genes_dis_desagg_3cols -x 1 -a 2 -A count
+	cmdtabs -i tables/cluster_genes_dis_desagg_3cols --aggregate --agg_ref_col_index 1 --agg_col 2 --agg_mode count
 </div>
 
 <div class="divrow">
@@ -1382,10 +1385,10 @@ h3 {
 
 <div class="lvl1">
 
-	<p> Convertir una tabla de formato excel a formato plano (CSV,TSV,etc). </p>
-	<h3> Ejemplo básico </h3>
+	<p> Convert table from excel to plain format (CSV, TSV and similar). </p>
+	<h3> Basic example </h3>
 
-		<p> En este ejemplo se muestra cómo convertir una tabla de formato excel a formato plano (CSV,TSV,etc). El archivo de excel con 2 hojas es el siguiente:</p>
+		<p> This example shows how to convert a table from excel to plain format (CSV, TSV and similar). The two-sheet excel file is as follows:</p>
 		<div class="row">
 			<div class="col-md-6">
 				<img  src="data:image/png;base64,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">
@@ -1397,13 +1400,13 @@ h3 {
 
 		
 
-		<p> Vamos a sacar las 3 primeras columnas de la primera hoja del archivo special_files/scRNAseq.xlsx y convertirlo en formato plano tabular. 
-		Para ello utilizamos el flag -i para el archivo de entrada, -c para las columnas a extraer y -s para la hoja a utilizar. <p>
+		<p> Let's extract the first three columns from the first sheet of the file special_files/scRNAseq.xlsx and convert it to plain tabular format. 
+		We will use the -i flag to specify input file, -c to select columns to extract and -s for the sheet to retrieve data from.<p>
 		
 		
 
 <div class="code">
-	excel_to_tabular -i special_files/scRNAseq.xlsx -c 1,2,3 -s 1
+	cmdtabs -i special_files/scRNAseq.xlsx --file_type excel --excel_cols 1,2,3 --excel_sheet_number 1
 </div>
 
 <div class="divrow">
@@ -1444,13 +1447,13 @@ h3 {
             </div>
 </div>
 
-	<h3> Sacando las dos primeras y dos últimas columnas de la segunda hoja </h3>
-		<p> En este caso, sacamos las dos primeras y dos últimas columnas de la segunda hoja del mismo archivo </p>
+	<h3> Extracting the first two and last two columns from the second sheet</h3>
+		<p> In this case, we extract the first two and last two columns from the second sheet in the same file </p>
 		
 		
 
 <div class="code">
-	excel_to_tabular -i special_files/scRNAseq.xlsx -c 1-2,4-5 -s 2
+	cmdtabs -i special_files/scRNAseq.xlsx --file_type excel --excel_cols 1-2,4-5 --excel_sheet_number 2
 </div>
 
 <div class="divrow">
@@ -1496,13 +1499,13 @@ h3 {
             </div>
 </div>
 
-	<h3> Sacando todas las columnas de la primera hoja </h3>
-		<p> Si queremos sacar todas las columnas, pero no sabemos de antemano cuantas son, podemos utilizar el valor 0 para indicar que queremos todas las columnas. </p>
+	<h3> Extract all columns from the first sheet </h3>
+		<p> If we wish to extract all columns without specifying all of them we can just leave the --excel_cols argument empty, which signals for the extraction of every column. </p>
 		
 		
 
 <div class="code">
-	excel_to_tabular -i special_files/scRNAseq.xlsx -c 0 -s 1
+	cmdtabs -i special_files/scRNAseq.xlsx --file_type excel --excel_sheet_number 1
 </div>
 
 <div class="divrow">
@@ -1554,14 +1557,14 @@ h3 {
 </div>
 
 
-	<h3> Sacando filas concretas</h3>
-		<p> A parte de las columnas, también se pueden elegir las filas que sacar de la tabla (por defecto, se sacan todas, pero podemos seleccionar las que queramos) </p>
-		<p> En este caso, vamos a obtener las filas 1,3 y las columnas 1,3,4 de la primera hoja</p>
+	<h3> Extracting select rows</h3>
+		<p> In addition to columns, the user can also choose which rows to extract from the table. By default, every row is extracted, but we can extract a selection. </p>
+		<p> In this case we are extracting rows 1,3 and columns 1,3,4 from the first sheet</p>
 		
 		
 
 <div class="code">
-	excel_to_tabular -i special_files/scRNAseq.xlsx -r 1,3 -c 1,3,4 -s 1
+	cmdtabs -i special_files/scRNAseq.xlsx --file_type excel --excel_rows 1,3 --excel_cols 1,3,4 --excel_sheet_number 1
 </div>
 
 <div class="divrow">
@@ -1968,16 +1971,15 @@ h3 {
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-	<p> Se utiliza para obtener un subset de la tabla original, con las columnas pedidas por el usuario </p>
-	<h3> Ejemplo básico usando índices numéricos para seleccionar las columnas de interés</h3>
-		<p> La tabla de entrada se indica con el flag -i. Las columnas a obtener se indican con el flag -c, siendo índices numéricos en base 1, separados por comas, 
-		y pudiendo utilizar un guión para seleccionar rango de columnas. </p>
-		<p> En este caso, vamos a coger las columnas 1,3,4 y 5 , que como veremos, para mostrar la funcionalidad, lo hacemos pidiendo la columna 1 y luego las columnas 3-5.</p>
+	<p> Extract a selection of columns from the original table </p>
+	<h3> Basic example using numeric indices to select columns </h3>
+		<p> Input table is provided with flag -i. Columns to extract are selected with flag -c (comma-separated 1-based numeric indices), using a hyphen (-) so select a column range. </p>
+		<p> In this case, we will extract columns 1, 3, 4 and 5. We will do so by selecting column 1 and the 3-5 interval. </p>
 		
 		
 
 <div class="code">
-	get_columns -i tables/simple_table -c 1,3-5
+	cmdtabs -i tables/simple_table --extract_cols 1,3-5
 </div>
 
 <div class="divrow">
@@ -2050,19 +2052,16 @@ h3 {
             </div>
 </div>
 
-	<h3> Utilizando los nombres de las columnas si se utiliza el flag header</h3>
-		<p> Si se activa el flag -H para indicar que la tabla tiene header, podemos pedir entonces también las columnas que nos interesan dando sus nombres separados por comas.
-		(OJO: la tabla puede tener header igualmente, que si nos interesa indicar las columnas por índices numéricos, podemos utilizar el script igualmente sin activar el flag -H,
-		tal y como hemos hecho en el ejemplo anterior)</p>
-		<p> En este caso, vamos a coger las columnas col-1,col-3,col-4 y col-5, las mismas del ejemplo anterior, pero esta vez utilizando el nombre del cabecero de cada columna. 
-		Como veremos, en el caso de indicar columnas por nombres, también podemos utilizar el guión si nos interesa obtener un rango de columnas entre esas 2, pero en este caso 
-		utilizando "%-%" como separador del rango de las dos columnas (para evitar problemas con el guión como parte de nombre de la columna, tal y como se está viendo en este 
-		ejemplo, escogido a propósito)</p>
+	<h3> Using column names if header flag is present </h3>
+		<p> If flag -H is active, it means the table has a header. If that is the case we can select columns by specifying their name, again selecting multiple by separating them by commas.
+		(NOTE: even if the table has a header, columns may be selected by numerical index without activating the -H flag, exactly as in the previous example) </p>
+		<p> In this case, we will select columns col-1, col-3, col-4 and col-5, the same as in the previous example, but this time selecting them by column name.
+		In this case it is also possible to select a range of columns, but in this case by using the "%-%" sequence of characters (as the hyphen may also be a part of the column name, as was chosen for this example) </p>
 		
 		
 
 <div class="code">
-	get_columns -i tables/simple_table -H -c col-1,col-3%-%col-5
+	cmdtabs -i tables/simple_table -H --extract_cols col-1,col-3%-%col-5
 </div>
 
 <div class="divrow">
@@ -2620,22 +2619,19 @@ h3 {
 
 <div class="lvl1">
 
-    <p> Se utiliza cuando tenemos una tabla con datos que tiene alguna columna con una serie de identificadores (ej: ensemblIDs y terminos GO asociados)
-    y tenemos otra tabla a parte que queremos utilizar como diccionario para traducir unos valores por otros (ej: tabla con EnsemblIDs y su gene symbol correspondiente)  </p>
+    <p> We'll use this when we have a table that contains a column with IDs (i.e., ensemblIDs and associated GO terms) and another table that we want to use as a dictionary to translate certain values for different ones (i.e., a table with ensemblIDs and their corresponding gene symbol).  </p>
 
-    <h3> Ejemplo básico </h3>
-        <p> Tenemos nuestra tabla con datos de Identificadores de MONDO y cluster/es donde se ha encontrado esa enfermedad de MONDO. Luego tenemos otro archivo
-        que nos relaciona cada identificador de MONDO con su identificador de ORPHA correspondiente. Utilizamos ese archivo para traducir los identificadores de MONDO
-        por los de ORPHA en la primera tabla</p>
+    <h3> Basic example </h3>
 
-        <p> Pasamos la primera tabla como input al flag -i y el diccionario al flag -I. Luego indicamos que queremos reemplazar los términos de la columna 1 de la tabla de entrada
-        con el flag -c, y que queremos utilizar la columna 1 del diccionario como clave de búsqueda con el flag -f (from). Finalmente, indicamos que queremos reemplazar los términos
-        de la columna 1 por los términos de la columna 2 del diccionario con el flag -t (to). </p>  
+        <p> We have a table with MONDO IDs and the cluster(s) where that MONDO disease has been found. We also have a file that correlates each MONDO ID with its corresponding ORPHA ID. We'll use the latter to translate all MONDO IDs to ORPHA IDs in the first table. </p>
+
+        <p> We'll use the -i flag to specify the input table (the first table in our case) and the -I flag for the dictionary (second table). We will then use the -c flag to select the column we want to translate, the --from flag to indicate which column from the dictionary table we want to use as the search key and the --to flag to select the column in the dictionary that contains the terms we want to use for replacing in the first table.  </p>
+
         
 		
 
 <div class="code">
-	standard_name_replacer -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 -f 1 -t 2
+	cmdtabs -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 --from 1 --to 2
 </div>
 
 <div class="divrow">
@@ -2693,14 +2689,15 @@ h3 {
             </div>
 </div>
 
-    <h3> Eliminar los registros no traducidos </h3>
-        <p> Como hemos podido comprobar en el ejemplo anterior, si no hay un término en el diccionario para un identificador de la tabla de entrada, ese identificador se queda sin traducir.
-        Si queremos eliminar esos registros que no se han podido traducir, podemos añadir el flag -u al comando. </p>
+    <h3> Removing untranslated entries </h3>
+
+        <p> As we can observe in the previous example, if an ID term from the input file is not present in the dictionary, that ID remains untranslated. If we want to remove any untranslated entries, we can add the -u flag to the command. </p>
+
         
 		
 
 <div class="code">
-	standard_name_replacer -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 -f 1 -t 2 -u
+	cmdtabs -i tables/disease_cluster -I tables/mondo_to_orpha -c 1 --from 1 --to 2 -u
 </div>
 
 <div class="divrow">
@@ -4108,6 +4105,7 @@ h3 {
 </details>
 
 </div>
+
 </body>
 
 </HTML>
