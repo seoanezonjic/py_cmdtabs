@@ -51,6 +51,20 @@ class InputParsingTestCase(unittest.TestCase):
 		col_indx_test_range = CmdTabs.parse_column_indices(cols_string_range, has_header=True, table=mock_table)
 		expected_result_range = [0,1,2,3]
 		self.assertEqual(expected_result_range, col_indx_test_range)
+	
+	def test_parse_column_with_numeric_and_named_indexes(self):
+		cols_string = ["1", "c"]
+		mock_table = [["a", "b", "c", "d"], ["1", "2", "3", "4"]]
+		
+		col_indx_test = CmdTabs.parse_column_indices(cols_string, has_header=True, table=mock_table)
+		expected_result = [0,2]
+		self.assertEqual(expected_result, col_indx_test)
+
+		#Testing range case
+		cols_string_range = ["1-2","c%-%d"]
+		col_indx_test_range = CmdTabs.parse_column_indices(cols_string_range, has_header=True, table=mock_table)
+		expected_result_range = [0,1,2,3]
+		self.assertEqual(expected_result_range, col_indx_test_range)
 
 	def test_load_and_parse_tags_file(self):
 		input_tags = [os.path.join(DATA_TEST_PATH, 'tracker')]
