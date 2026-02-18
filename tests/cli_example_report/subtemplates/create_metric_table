@@ -2,37 +2,26 @@
 
 <div class="lvl1">
 
-    <p> Pasa una tabla del formato long al formato wide </p>
+    <p> Changing a table from long to wide format. </p>
 
-    <p> En ocasiones, al trabajar con flujos como el de autoflow, lanzamos tareas paralelizadas con distintas conmbinaciones de trabajo, por ejemplo:
-    red (ORPHA y MONDO) y tipo de clustering (CPM y HLC) y volcamos distintas métricas en un archivo común, del estilo: </p>
+    <p> When we work with workflows like autoflow's, we sometimes launch parallelized tasks with different job combinations, like: network (ORPHA and MONDO) and 
+    clustering type (CPM and HLC) and we write all the different metrics into a common file, such as:  </p>
 
     ${ plotter.table(id='organization', text=True, header=False, row_names=False, styled='bs', attrib = {'class' : 'table table-striped table-bordered table-compact'} )}
 
-    <p>En lo que vemos que las dos primeras columnas son factores (red y tipo de clustering), la tercera es la métrica medida y la cuarta es el valor
-    que toma la misma. Que es lo que se llamaría el formato "long" de una tabla <a href="https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/">(ejemplo de casos long y wide)</a>
-    Sin embargo, para poder utilizar algunos métodos de graficado de CanvasXpress o para ver la tabla de métricas de una forma más sencilla,
-    necesitamos transformar esta tabla a un formato "wide". Es en este caso cuando se utiliza el método <code>create_metric_table</code>.</p>
+    <p> In the table above, we can see that the first two columns are factors (network and clustering type), the third one is the measured metric and the last one is its value. This format would be called the "long" format <a href="https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/">(long and wide format examples)</a>. However, in order to be able to use some graphing methods from CanvasXpress or to see the metrics table in a simpler way, we need to transform this table onto a "wide" format. To do so, we'll use the <code>create_metric_table</code> method. </p>
 
-    <h3> Ejemplo básico </h3>
-        <p>Este método es un tanto especial en cuanto a la mayoría de sus parámetros son posicionales. Por orden, los argumentos son: </p>
-        <ol>
-            <li> tabla de entrada </li>
-            <li>nombres para las columnas de los factores en la tabla de salida (separados por comas)</li>
-            <li>nombre para la tabla de salida</li>
-        </ol>
-        <p>Siendo los tres obligatorios. </p>
-        <p>Imaginando que tenemos una tabla de entrada con las columnas que representan "nombre de la red, tipo de clustering, tipo de red, métrica, valor" , 
-        el comando sería algo como:</p>
+    <h3> Basic example </h3>
+        <p> Here, we'll specify the input table in the -i flag, the output table in the -o flag and the names of the columns that will be factors in the output table (separated by commas) in the --sample_attributes flag. </p>
+        <p> Imagining we have an input file with columns that represent "network name, clustering type, network type, metric, value", the command would be as follows: </p>
         <%
             table_name = 'long_table'
             output_table = 'outputs/wide_table'
             corrupted_table = 'outputs/corrupted_table'
-            args = f"tables/{table_name} red,metodo,tipo {output_table}"
+            args = f"-i tables/{table_name} --sample_attributes network,method,type -o {output_table}"
         %>
-		${show_n_exec(table_name, args, meth, out = output_table)}
+		${show_n_exec(table_name, args, "cmdtabs", out = output_table)}
 
-
-    <h3> Definir otra tabla para volcar los registros corruptos </h3>
-        <p>Opcionalmente, se puede pasar un flag -c para devolver otra tabla con los valores corruptos, es decir, aquellos que no se han podido transformar a formato wide porque falta algún valor de los factores. </p>
+    <h3> Defining another table to dump corrupt entries into:  </h3>
+        <p> We can optionally add a -c flag to obtain another table with corrupt values that could not be transformed into a "wide" format due to having a missing value in one(some) factor(s). </p>
 </div>
