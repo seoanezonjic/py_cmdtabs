@@ -110,20 +110,7 @@ class CmdTabs:
 
 	def parse_column_indices(col_str_idxs, has_header= False, table=None):
 		if has_header: 
-			cols_header_dict = dict([(col_name, str(idx+1)) for idx, col_name in enumerate(table[0])])
-			cols_to_get_processed = []
-			try:
-				for col in col_str_idxs:
-					if "%-%" not in col:
-						cols_to_get_processed.append(cols_header_dict[col])
-					else:
-						start_col, end_col = col.split("%-%")
-						start_col = cols_header_dict[start_col]
-						end_col = cols_header_dict[end_col]
-						cols_to_get_processed.append(f"{start_col}-{end_col}")
-			except KeyError as e:
-				raise KeyError(f"Column '{e.args[0]}' not found in header. Available columns: {', '.join(cols_header_dict.keys())}")
-			col_str_idxs = cols_to_get_processed
+			col_str_idxs = CmdTabs.get_name_to_index_equivalences(col_str_idxs, table[0], idx_offset=1)
 	
 		cols = []
 		for col in col_str_idxs:
@@ -134,6 +121,28 @@ class CmdTabs:
 			else: # Single column
 				cols.append(int(col) - 1)
 		return cols
+	
+	def get_name_to_index_equivalences(string_list_to_convert, referece_string_list, idx_offset=1):
+		cols_header_dict = dict([(col_name, str(idx+idx_offset)) for idx, col_name in enumerate(referece_string_list)])
+		cols_to_get_processed = []
+		try:
+			for col in string_list_to_convert:
+				if col.isdigit(): #Single numeric column case: If the column specifier is a number, we leave as it is
+					cols_to_get_processed.append(col)
+				elif "-" in col and not "%-%" in col: #Range of numeric column case: We check if the column specifier is a range of numeric columns, if so we leave as it is
+					start_col, end_col = col.split("-")
+					if start_col.isdigit() and end_col.isdigit():
+						cols_to_get_processed.append(col)
+				elif "%-%" not in col: # Single named column case: This is the case of a single column name, we convert to number
+					cols_to_get_processed.append(cols_header_dict[col])
+				else: # Range of named columns case: This is the case of a range of column names, we convert to numbers and keep the range format
+					start_col, end_col = col.split("%-%")
+					start_col = cols_header_dict[start_col]
+					end_col = cols_header_dict[end_col]
+					cols_to_get_processed.append(f"{start_col}-{end_col}")
+		except KeyError as e:
+			raise KeyError(f"Column '{e.args[0]}' not found in header. Available columns: {', '.join(cols_header_dict.keys())}")
+		return cols_to_get_processed		
 
 	def load_and_parse_tags(tags, sep):
 		parsed_tags = []

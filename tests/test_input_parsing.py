@@ -17,6 +17,41 @@ class InputParsingTestCase(unittest.TestCase):
 		expected_result = [0,2,3,6]
 		self.assertEqual(expected_result, col_indx_test)
 
+		#Testing range case
+		cols_string_range = ["1-3"]
+		col_indx_test_range = CmdTabs.parse_column_indices(cols_string_range)
+		expected_result_range = [0,1,2]
+		self.assertEqual(expected_result_range, col_indx_test_range)
+
+	def test_parse_column_indices_header_case(self):
+		cols_string = ["a", "c"]
+		mock_table = [["a", "b", "c", "d"], ["1", "2", "3", "4"]]
+		
+		col_indx_test = CmdTabs.parse_column_indices(cols_string, has_header=True, table=mock_table)
+		expected_result = [0,2]
+		self.assertEqual(expected_result, col_indx_test)
+
+		#Testing range case
+		cols_string_range = ["a%-%c"]
+		col_indx_test_range = CmdTabs.parse_column_indices(cols_string_range, has_header=True, table=mock_table)
+		expected_result_range = [0,1,2]
+		self.assertEqual(expected_result_range, col_indx_test_range)
+
+	def test_parse_column_indices_header_case_but_using_numeric_columns_specifiers(self):
+		cols_string = ["1", "3"]
+		mock_table = [["a", "b", "c", "d"], ["1", "2", "3", "4"]]
+		
+		#Testing no range case
+		col_indx_test = CmdTabs.parse_column_indices(cols_string, has_header=True, table=mock_table)
+		expected_result = [0,2]
+		self.assertEqual(expected_result, col_indx_test)
+
+		#Testing range case
+		cols_string_range = ["1-3","4"]
+		col_indx_test_range = CmdTabs.parse_column_indices(cols_string_range, has_header=True, table=mock_table)
+		expected_result_range = [0,1,2,3]
+		self.assertEqual(expected_result_range, col_indx_test_range)
+
 	def test_load_and_parse_tags_file(self):
 		input_tags = [os.path.join(DATA_TEST_PATH, 'tracker')]
 		tag_test = CmdTabs.load_and_parse_tags(input_tags, "\t")
