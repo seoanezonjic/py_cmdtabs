@@ -2,23 +2,23 @@
 ## ${f'<div class={"divImpar" if sect % 2 == 1 else "divPar"}>'}
 <div class="lvl1">
 
-	<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
+	<p> We’ll use this in a table that contains a reference column with repeated values (i.e., an ID) to disaggregate values from another column or columns based on that reference. In all instances, we will use the --desaggregate flag. </p>
 
-	<h3> Ejemplo básico con una tabla con tres columnas, donde hay dos sin agregar y otra agregada. </h3>
-		<p> En este caso, se desagregan los valores de la tercera columna, amoldando el resto de columnas según la cantidad de valores en cada fila de la tercera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos desagregar (en base 1). Con el flag -s indicamos el separador que se ha utilizado en esa columna agregada.</p>
+	<h3> Basic example with a 3-column table where two of them are disaggregated and one is aggregated. </h3>
+		<p> In this case, values from the third column will be disaggregated, adjusting the remaining columns according to the number of values in each row of the third column. We'll used the -i flag to specify the input table, the --desagg_col flag for the column we want to disaggregate (1 based) and the --desagg_sep flag to indicate the separator used in the aggregated column. </p>
 		<%
 			table_name = 'cluster_genes_dis_agg'
-			args = f"-i tables/{table_name} -x 3 -s ,"
+			args = f"-i tables/{table_name} --desaggregate --desagg_col 3 --desagg_sep ,"
 		%>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
 
-	<h3> Ejemplo básico con una tabla con cuatro columnas, donde hay dos sin agregar y dos agregada. </h3>
-		<p> Si existe más de una columna agregada, se puede indicar con el flag -x, separándolas por comas. Se asume que todos las columnas agregadas van a tener la misma cantidad de elementos para una determinada fila (ejemplo 1 columna con pat1,pat2,pat y otra con male,male,female).</p>
+	<h3> Basic example with a 4-column table, where two of them are disaggregated and the other aggregated. </h3>
+		<p> If there is more than one aggregated column, we can specify them with the --desagg_col flag, separating them by commas. It is assumed that all aggregated columns have the same number of elements for each row (i.e. 1 column with pat1,pat2,pat3 and another with male,male,female)</p>
 		<%
 			table_name = 'cluster_genes_dis_agg2'
-			args = f"-i tables/{table_name} -x 3,4 -s ,"
+			args = f"-i tables/{table_name} --desaggregate --desagg_col 3,4 --desagg_sep ,"
 		%>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
 </div>
