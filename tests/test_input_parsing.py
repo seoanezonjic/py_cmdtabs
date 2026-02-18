@@ -37,6 +37,13 @@ class InputParsingTestCase(unittest.TestCase):
 		expected_result_range = [0,1,2]
 		self.assertEqual(expected_result_range, col_indx_test_range)
 
+		#Testing possible conflictic case
+		cols_string = ["col-a", "col-c"]
+		mock_table = [["col-a", "col-b", "col-c", "col-d"], ["1", "2", "3", "4"]]
+		col_indx_test = CmdTabs.parse_column_indices(cols_string, has_header=True, table=mock_table)
+		expected_result = [0,2]
+		self.assertEqual(expected_result, col_indx_test)		
+
 	def test_parse_column_indices_header_case_but_using_numeric_columns_specifiers(self):
 		cols_string = ["1", "3"]
 		mock_table = [["a", "b", "c", "d"], ["1", "2", "3", "4"]]

@@ -129,10 +129,12 @@ class CmdTabs:
 			for col in string_list_to_convert:
 				if col.isdigit(): #Single numeric column case: If the column specifier is a number, we leave as it is
 					cols_to_get_processed.append(col)
-				elif "-" in col and not "%-%" in col: #Range of numeric column case: We check if the column specifier is a range of numeric columns, if so we leave as it is
+				elif "-" in col and not "%-%" in col: #Range of numeric column case or named column with hyphen
 					start_col, end_col = col.split("-")
-					if start_col.isdigit() and end_col.isdigit():
+					if start_col.isdigit() and end_col.isdigit(): #We check if the column specifier is a range of numeric columns, if so we leave as it is
 						cols_to_get_processed.append(col)
+					else: #This is an edge of a named column with a hyphen in the name but not numeric range, we convert to number
+						cols_to_get_processed.append(cols_header_dict[col])
 				elif "%-%" not in col: # Single named column case: This is the case of a single column name, we convert to number
 					cols_to_get_processed.append(cols_header_dict[col])
 				else: # Range of named columns case: This is the case of a range of column names, we convert to numbers and keep the range format
