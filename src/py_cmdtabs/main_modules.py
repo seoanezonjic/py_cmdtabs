@@ -198,8 +198,8 @@ def main_merge_tabular(options):
     warn("This is deprecated. Use: cmdtabs_merge --tables input_table1,input_table2,input_table3 --columns2add '1,2,3;1,2' --union --fill_character 'NA'")
     
     set_class_attributes(options)
-    files = CmdTabs.load_files(options.files)
-    merged = CmdTabs.merge_files(files, options.fill_character)
+    files = CmdTabs.load_files(options.files, fill_character = options.fill_character)
+    merged = CmdTabs.merge_files(files, fill_character=options.fill_character)
     CmdTabs.write_output_data(merged)
 
 def main_intersect_columns(options):
@@ -303,8 +303,8 @@ def main_cmdtabs_merge(opts):
   CmdTabs.compressed_input = opts.compressed_in
   table = None  
   if opts.a_file != None and opts.b_file != None:
-    input_data_a = CmdTabs.load_input_data(opts.a_file, opts.separator)
-    input_data_b = CmdTabs.load_input_data(opts.b_file, opts.separator)
+    input_data_a = CmdTabs.load_input_data(opts.a_file, sep=opts.separator, fill_character=opts.fill_character)
+    input_data_b = CmdTabs.load_input_data(opts.b_file, sep=opts.separator, fill_character=opts.fill_character)
     a_records, full_a_rec = CmdTabs.load_records(input_data_a, opts.a_cols, opts.full)
     b_records, full_b_rec = CmdTabs.load_records(input_data_b, opts.b_cols, opts.full)
     common, a_only, b_only = CmdTabs.get_groups(a_records, b_records)

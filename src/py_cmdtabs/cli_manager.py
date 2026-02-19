@@ -182,6 +182,7 @@ def merge_tabular(args=None):
       help="Paths to tabulated files")
     
     opts = parser.parse_args(args)
+    print(opts)
     main_merge_tabular(opts)
 
 def records_count(args=None):

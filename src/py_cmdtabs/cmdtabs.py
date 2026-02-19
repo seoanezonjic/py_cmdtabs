@@ -7,7 +7,7 @@ class CmdTabs:
 	compressed_input = False
 	compressed_output = False
 
-	def load_input_data(input_path, sep="\t", limit=-1, first_only=False, add_empty_fields=True):
+	def load_input_data(input_path, sep="\t", limit=-1, first_only=False, add_empty_fields=True, fill_character = ""):
 		open_file = gzip.open if CmdTabs.compressed_input else open
 		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
 			limit -= 1
@@ -25,9 +25,10 @@ class CmdTabs:
 			#print('---', file=sys.stderr)
 			#print(repr(), file=sys.stderr)
 			fields = line.rstrip().split(sep, limit)
+			fields = [ fill_character if field == "" else field for field in fields]
 			if add_empty_fields:
 				limit_fields = 0 if limit <= 0 else limit 
-				fields = fields + ( [""] * (fields_number - len(fields) - limit_fields) )
+				fields = fields + ( [fill_character] * (fields_number - len(fields) - limit_fields) )
 			input_data_arr.append(fields)
 			if first_only:
 				break
@@ -47,14 +48,14 @@ class CmdTabs:
 			loaded_files[key_id] = CmdTabs.load_input_data(file, sep, limit, add_empty_fields=add_empty_fields)
 		return loaded_files
 
-	def load_files(files_path): #NO TEST # Cleaning an filling behaviour could be sent to load_input_data as options and use on load_several_files
+	def load_files(files_path, fill_character = '-'): #NO TEST # Cleaning an filling behaviour could be sent to load_input_data as options and use on load_several_files
 		files = {}
 		for file_name in files_path:
 			input_table = CmdTabs.load_input_data(file_name)
 			file = []
 			for fields in input_table:
 				if fields.count('') == len(fields): continue #skip blank records
-				file.append([ '-' if field == "" else field for field in fields])
+				file.append([ fill_character if field == "" else field for field in fields])
 			files[file_name] = file
 		return files
 
@@ -363,7 +364,7 @@ class CmdTabs:
 				CmdTabs.row_start_fill_dict(parent_table, id, fill_character, table_length)
 				parent_table[id].extend(fields)				
 			table_length += local_length
-			
+
 		parent_table_arr = [] # Fill rows that have not full length (the sum of the row lengths of the all merged tables)
 		for id, fields in parent_table.items():
 			CmdTabs.row_end_fill(fields, fill_character, table_length)
