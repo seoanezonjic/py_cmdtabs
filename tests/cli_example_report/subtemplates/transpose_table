@@ -1,14 +1,14 @@
 <% meth="transpose_table" %>
 <div class="lvl1">
 
-	<p> Se utiliza para transponer una tabla  </p>
-	<h3> Ejemplo básico </h3>
-		<p> Se transpone la tabla que se da con el flag -i </p>
+	<p> Used to transpose a table.  </p>
+	<h3> Basic example </h3>
+		<p> We'll transpose the specified table with the -i flag and add the --transposed flag for this binary to be used. </p>
 
 		<%
 			table_name = 'cluster_genes_dis_desagg_3cols'
-			args = f"-i tables/{table_name}"
+			args = f"--transposed -i tables/{table_name}"
 		%>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
 </div>

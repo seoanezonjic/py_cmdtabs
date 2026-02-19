@@ -1,15 +1,15 @@
 <% meth="records_count" %>
 
 <div class="lvl1">
-	<p> Se utiliza para obtener el número de ocurrencias de todos los términos en una columna de una tabla </p>
+	<p> It is used to obtain the number of occurrences of all the terms in a column of a table. </p>
 
-	<h3> Ejemplo básico </h3>
-		<p> Se indica la tabla a utilizar con el flag -i y la columna (indice basado en 1) en la que queremos obtener los conteos con el flag -x </p>
-		<p>Vamos a ver la cantidad de ocurrencias de los distintos términos en la columna 2 de la tabla 'cluster_genes_dis_agg'</p>
+	<h3> Basic example </h3>
+		<p> The input table will be specified with the -i flag and the column we want to count (1 based) will be indicated with the --count-cols flag.  </p>
+		<p> Let's see the number of occurrences of the different terms in the second column of the table 'cluster_genes_dis_agg'. </p>
 		<%
 			table_name = 'cluster_genes_dis_agg'
-			args = f"-i tables/{table_name} -x 2"
+			args = f"-i tables/{table_name} --count-cols 2"
 		%>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
 </div>

@@ -2,23 +2,23 @@
 
 <div class="lvl1">
 
-	<p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
-	<h3> Ejemplo básico </h3>
-		<p> Se da la tabla con el flag -i </p>
+	<p> It is used to convert a table in TSV, CSV, etc. format into a table with the required syntax to be added to LaTeX.  </p>
+	<h3> Basic example </h3>
+		<p> We'll specify the table to convert with the -i flag and add the --latex flag for this binary to be used. </p>
 
 		<%
 			table_name = 'cluster_genes_dis_desagg_3cols'
-			args = f"-i tables/{table_name}"
+			args = f"--latex -i tables/{table_name}"
 		%>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
-	<h3> Añadiendo el backbone </h3>
-		<p> Si se quiere obtener un backbone algo más detallado con el que luego rellenar los campos restantes, se puede utilizar el parámetro --whole o -w </p>
+	<h3> Adding the backbone </h3>
+		<p> If we want to get a more detailed backbone to fill the remaining fields, we can used the --whole or -w flag. </p>
 
 		<%
 			table_name = 'cluster_genes_dis_desagg_3cols'
-			args = f"-i tables/{table_name} --whole"
+			args = f"--latex -i tables/{table_name} --whole"
 		%>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
 </div>

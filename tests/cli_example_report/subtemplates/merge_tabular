@@ -2,24 +2,22 @@
 <div class="lvl1">
 
     <div class="alert alert-warning" role="alert">
-        <p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
-        es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p>
+        <p> Although this binary's use is a bit overlapped with "intersect_columns" and "table_linker", the difference is that it can join a indefinite number of tables (taking into account that the column to join all tables must be the first one) </p>
     </div>
-    <p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
+
+    <p> It is used to merge N tables based on their first column when they share the same IDs.  </p>
     
-    <h3> Ejemplo básico </h3>
-        <p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
-        separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
-        por defecto está a "-" </p>
-        <p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+    <h3> Basic example </h3>
+        <p> In this script, we'll use the --tables flag to specify all input tables, separated by commas (,). The --columns2add flag will be used to indicate the column indexes (1 based) of each file added to the first one (therefore, we will not specify the first table's columns), separating the columns in each set by commas and each set of columns (pet table) by a semicolon (;). The --fill_character flag will be used to specify which character we want the empty fields to be filled with. Lastly, we'll use the --union flag to also add the rows that do not have a match to the merging table (first table). </p>
+        <p> In this case, we'll join tables  <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> and <code>tables/mondo_to_orpha</code> and we will fill the empty fields with "NA". </p>
         <%
             first_table = 'disease_cluster'
             second_table = 'disease_gene'
             third_table = 'mondo_to_orpha'
             second_table_tex = 'Segunda tabla'
             third_table_tex = 'Tercera tabla'
-            args = f"tables/{first_table} tables/{second_table} tables/{third_table} --fill_character 'NA'"
+            args = f"--tables tables/{first_table},tables/{second_table},tables/{third_table} --columns2add '1,2,3;1,2' --union --fill_character 'NA'"
         %>
-		${show_n_exec(first_table, args, meth, supp_tables=[[second_table_tex, second_table], [third_table_tex, third_table]])}
+		${show_n_exec(first_table, args, "cmdtabs_merge", supp_tables=[[second_table_tex, second_table], [third_table_tex, third_table]])}
 
 </div>                                                                        
