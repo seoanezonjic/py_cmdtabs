@@ -1,39 +1,36 @@
 <% meth="tag_table" %>
 <div class="lvl1">
 
-    <p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
+    <p> This binary adds one or more tags (i.e. additional factors of a variable and their value) to all rows in a table. </p>
 
-    <h3> Ejemplo básico utilizando un string con tags separador por comas</h3>
-        <p> Se pasa la tabla a la que se quiere añadir los tags con el flag -i y un string con los tags separados por comas al flag -t </p>
+    <h3> Basic example using a string with comma separated tags </h3>
+        <p> We'll specify the table we want the tags added to with the -i flag and a string with comma separated tags with the --tags flag </p>
         <%
             table_name = 'cluster_stats'
-            tags = 'red1,colapsada,traducida'
-            args = f"-i tables/{table_name} -t {tags}"
+            tags = 'network1,collapsed,translated'
+            args = f"-i tables/{table_name} --tags {tags}"
         %>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
 
-    <h3> Ejemplo pasando el nombre de un archivo como tag al flag -t </h3>
-        <p> Si en vez de pasarle un string separado por comas con los tags, se le pasa el nombre de un archivo, cmdtabs puede reconocerlo y en ese
-        caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en este caso con el flag -s cual es el separador en ese archvio</p>
-
+    <h3> Example giving the name of a file to the -t (--tags) flag </h3>
+        <p> If a file name is specified with the --tags flag instead of a comma separated string, cmdtabs can recognize it a load the file to use it as tags. In this case, the -x flag will be used to specify said file separator. </p>
         <%
             table_name = 'cluster_stats'
             tag_file = 'tracker'
             supp_table_text = "Tabla usada en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)"
-            args = f"-i tables/{table_name} -t tables/{tag_file} -s \t"
+            args = f"-i tables/{table_name} --tags tables/{tag_file} -s '\t'"
         %>
-		${show_n_exec(table_name, args, meth, supp_tables=[[supp_table_text, tag_file]])}
+		${show_n_exec(table_name, args, "cmdtabs", supp_tables=[[supp_table_text, tag_file]])}
 
-    <h3> Pasar más de un archivo separado por comas al flag -t </h3>
-        <p> Si le pasamos varios archivos separados por comas, leerá y utilizará cada uno de ellos para añadir los tags</p>
-
+    <h3> Specifying more that one file separated by commas to the --tags flag </h3>
+        <p> If we indicate a few files separated by commas to the --tags flag, cmdtabs will read and use each one of them to add the tags. </p>
         <%
             table_name = 'cluster_stats'
             tag_file = 'tracker'
             supp_table_text = "Tablas usadas en el flag -t con los tags a añadir a la tabla de entrada (1 fila con los valores separados por tabulación)"
-            args = f"-i tables/{table_name} -t tables/{tag_file},tables/{tag_file} -s \t"
+            args = f"-i tables/{table_name} --tags tables/{tag_file},tables/{tag_file} -s '\t'"
         %>
-		${show_n_exec(table_name, args, meth, supp_tables=[[supp_table_text, tag_file]])}
+		${show_n_exec(table_name, args, "cmdtabs", supp_tables=[[supp_table_text, tag_file]])}
 
 </div>
