@@ -7,12 +7,15 @@ class CmdTabs:
 	compressed_input = False
 	compressed_output = False
 
-	def load_input_data(input_path, sep="\t", limit=-1, first_only=False, add_empty_fields=True, fill_character = ""):
-		open_file = gzip.open if CmdTabs.compressed_input else open
+	def load_input_data(input_path, sep="\t", limit=-1, first_only=False, add_empty_fields=True, fill_character = "", autodetect_compression=False):
+		is_compressed = CmdTabs.compressed_input
+		if autodetect_compression: is_compressed = input_path.endswith('.gz')
+		
+		open_file = gzip.open if is_compressed else open
 		if limit > 0: # THis is due to ruby compute de cuts in other way and this fix enables ruby mode. Think if adapt to python way
 			limit -= 1
 		if input_path == '-':
-			if CmdTabs.compressed_input: 
+			if is_compressed: 
 				input_data = gzip.decompress(sys.stdin.buffer.read()).decode().strip().split('\n')
 			else: 
 				input_data = sys.stdin
