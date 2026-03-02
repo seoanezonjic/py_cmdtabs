@@ -347,6 +347,8 @@ def cmdtabs(args=None):
                         help="Write table in latex code")
     parser.add_argument("--sample_attributes", dest="sample_attributes", default=[], type=list_str,
                         help="Define sample atributtes (comma separated list) to colapse a long table in a wide metric table")
+    parser.add_argument("--long_to_wide", dest="long_to_wide", default=False, action='store_true',
+                        help="To transform a long table in a wide table. The id column will be the column/s of sample attributes if specified, or the first column if not. The key columns will be the columns between the id column and the value column, that will be the last column of the table")
     parser.add_argument("--corrupted", dest="corrupted",
                         help="File where corrupted metrics are stored")
     parser.add_argument("--offset", dest="offset", default=[], type=list_str,

@@ -241,6 +241,16 @@ class CmdTabs:
 		corrupted_records.insert(0, allTags) # Add header
 		return table_output, corrupted_records
 	
+	def long_to_wide(table, id_col, key_col, value_col):
+		import pandas as pd
+		col_names = [ f"col{idx}" for idx in range(len(table[0]))]
+		df = pd.DataFrame(table, columns=col_names)
+		df_wide = df.pivot_table(index=df.columns[id_col].tolist(),
+						    columns=df.columns[key_col].tolist(), 
+							values=df.columns[value_col].tolist(), aggfunc='first').reset_index()
+		metric_names = [metric_name for metric_name in df_wide.columns.get_level_values(1) if metric_name != '']
+		return df_wide.values.tolist(), metric_names
+	
 	def name_replaces(tabular_input, sep, cols_to_replace, indexed_file_index, remove_uns=False):
 		translated_fields = []
 		untranslated_fields = []

@@ -254,11 +254,21 @@ def main_cmdtabs(opts):
   # STATS
   if opts.count_cols != None: table = CmdTabs.records_count(table, opts.count_cols) # [records_count]
   # TRANSFORMATIONS
-  if len(opts.sample_attributes) > 0: #[create_metric_table]
+  if len(opts.sample_attributes) > 0 and not opts.long_to_wide: #[create_metric_table]
     samples_tag = opts.sample_attributes.pop(0)
     metric_names, indexed_metrics = CmdTabs.index_metrics(table, opts.sample_attributes)
     table, corrupt_recs = CmdTabs.create_table(indexed_metrics, samples_tag, opts.sample_attributes, metric_names)
     if opts.corrupted != None and len(corrupt_recs) > 0: CmdTabs.write_output_data(corrupt_recs, opts.corrupted)
+
+  if opts.long_to_wide == True: 
+    id_col = list(range(len(opts.sample_attributes))) if len(opts.sample_attributes) > 0 else [0] # id col será el rango de las columnas de atributos si se han especificado, sino la primera columna
+    value_col = [len(table[0]) - 1]
+    key_cols = [len(table[0]) - 2]
+    table, metric_names = CmdTabs.long_to_wide(table, id_col, key_cols, value_col) # [long_to_wide]
+    header = opts.sample_attributes + metric_names
+    table = [header] + table
+    CmdTabs.write_output_data(table, opts.output_file, sep=output_sep)
+
 
   if opts.aggregate: table = CmdTabs.aggregate_column(table, opts.agg_col_index, opts.col_aggregate, opts.agg_sep, opts.agg_mode) # [aggregate_table]
 
