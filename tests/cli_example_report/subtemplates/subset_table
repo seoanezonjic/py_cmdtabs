@@ -1,41 +1,42 @@
 <% meth="subset_table" %>
 <div class="lvl1">
 
-	<p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
-	<h3> Ejemplo básico </h3>
+	
+	<p> This binary is used to get a subset from the input table, starting from row X and taking Y rows from there. </p>
+	<h3> Basic example </h3>
 		<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
 		y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
 		header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
-		<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
+		<p> The input table is specified with the -i flag. The row were we'll start subsetting our table and the number of rows we want to extract from that point will be specified with the --offset flag (1 based), separating both numbers by a comma. We can also add the -H or --header flag.</p>
+		<p> In this case, we'll get 4 rows from the metrics table, starting from row 3 and keeping the header. </p>
 		<%
 			table_name = 'metrics_table'
-			args = f"-i tables/{table_name} -s 3 -l 4 -H"
+			args = f"-i tables/{table_name} --offset 3,4 -H"
 		%>
-		${show_n_exec(table_name, args, meth)}
+		${show_n_exec(table_name, args, "cmdtabs")}
 
 
-	<h3> Partiendo toda la tabla en distintos archivos con K líneas cada uno</h3>
-		<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
-			el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
-		<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
-		ya que la tabla inicial tiene 10 registros) </p>
+	<h3> Subsetting the whole table in different files with K lines per file. </h3>
+		<p> If we want to subset the table in different files, each one containing K number of lines, we can use the --sp_chunk_size flag, indicating the number of lines we want per file, keeping in mind that we will also need to add the --split_out flag. The -o flag is used to state the ouput directory where the files will be stored. </p>
+		<p> In this case, we'll separate the disease clusters table in different files, each one of them containing 4 lines (we'll see that the last one only has 2 due to the input table having 10 entries). </p>
 		<%
 			table_name = 'disease_cluster_ref_rnd'
-			args = f"-i tables/{table_name} -k 4 -o outputs/subset_table"
+			args = f"-i tables/{table_name} --split_out --sp_chunk_size 4 -o outputs/subset_table"
 			output_table = 'outputs/subset_table/*'
 		%>
-		${show_n_exec(table_name, args, meth, out=output_table)}
+		${show_n_exec(table_name, args, "cmdtabs", out=output_table)}
 
 
-	<h3> Partiendo toda la tabla en N archivos diferentes con la misma cantidad de registros cada uno</h3>
-		<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files 
-		en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
-		<p> En este caso, vamos a partir la tabla de clusters de enfermedades en 2 archivos </p>
+	<h3> Subsetting the whole table in N different files with the same number of entries in each one </h3>
+		<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
+		<p> If we want to subset the table in a fixed number of N files, each one of them containing the same number of entries, we can use the --sp_file_number flag, indicating the number of files you want. Just like before, we will also have to add the --split_out flag. The -o output flag will also indicated where we will store the files. </p>
+		
+		<p> In this case, we will separate the disease clusters table in 2 files. </p>
 		<%
 			table_name = 'disease_cluster_ref_rnd'
-			args = f"-i tables/{table_name} -n 2 -o outputs/subset_table2"
+			args = f"-i tables/{table_name} --split_out --sp_file_number 2 -o outputs/subset_table2"
 			output_table2 = 'outputs/subset_table2/*'
 		%>
-		${show_n_exec(table_name, args, meth, out=output_table2)}
+		${show_n_exec(table_name, args, "cmdtabs", out=output_table2)}
 
 </div>

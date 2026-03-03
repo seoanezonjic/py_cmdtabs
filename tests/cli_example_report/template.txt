@@ -21,45 +21,39 @@ def create_tool_section(tool_name, title_id, container_id):
 	<% plotter.set_header() %>
 	<h1> Operation with tables </h1>
 
-		<h2> Pautas generales </h2>
-			<p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
-			<p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
-			pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
-			pero también se pueden cargar comprimidas en gzip utilizando el flag '--compressed_in'. Por ejemplo:</p>
+		<h2> General guidelines </h2>
+			<p> Although it will be further explain in each corresponding binary section, there are a series of guidelines that work for the majority of commands. </p>
+			<p> For the binaries that are given an input table flag (in most cases with the -i flag, but in other cases such as intersect_columns with the -a and -b flags), these tables can be provided in plain text format, but they can also be loaded compressed in gzip format using the --compressed_in flag. For example: </p>
 
 			<div class='code'>
-				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in -o desaggregated.txt
+				cmdtabs --desaggregate -i patients_and_phens.gz --desagg_col 2 --compressed_in -o desaggregated.txt
 			</div>
 
-			<p> Además, para aquellos comandos que solo necesiten una tabla de entrada (como 'aggregate_column_data', 'desaggregate_column_data' o 'transpose_table',
-			pero no 'intersect_columns'), se puede utilizar un guión '-' con el flag de input para indicar que el contenido de la tabla proviene por stdout (por ejemplo fruto de un pipe de un
-			comando anterior), pudiendo venir también comprimido. Por ejemplo: </p>
+			<p> Additionally, for commands that require only a single input table (such as aggregate_column_data, desaggregate_column_data, or transpose_table, but not intersect_columns), a dash - can be used with the input flag to indicate that the table content comes from stdout (for example, as the result of piping from a previous command), and it may also be compressed. For example: </p>
 
 			<div class='code'>
-				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | cmdtabs --desaggregate -i - --desagg_col 2 --compressed_in
 			</div>
 
-			<p> En los scripts que devuelvan algún tipo de output (generalmente con el flag -o), de manera similar, también se puede utilizar el flag --compressed_out 
-			para que el resultado se devuelva comprimido en gzip. Además, si no se indica un flag de output (omitiendo '-o archivo_salida') y el script solo devuelve una tabla,
-			el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que puede aprovecharse para pipear en otro script.  Por ejemplo:</p>
+			<p> In scripts that produce some type of output (generally using the -o flag), similarly, the --compressed_out flag can be used so that the result is returned compressed in gzip format. Additionally, if no output flag is specified (omitting -o output_file) and the script returns only a single table, the content is sent to stdout instead of being written to a file, so it can be piped into another script. For example: </p>
 
 			<div class='code'>
-				desaggregate_column_data -i patients_and_phens.txt -x 2 --compressed_out | script_que_utiliza_datos_comprimidos
+				cmdtabs --desaggregate -i patients_and_phens.txt --desagg_col 2 --compressed_out | script_que_utiliza_datos_comprimidos
+
 			</div>
 
-			<p>Se pueden usar ambos flags a la vez, de manera que se pueda recibir una tabla comprimida y devolverla también comprimida. Por ejemplo:</p>
+			<p> Both flags may be used at the same time, recieving and returning a compressed table. For example:  </p>
 			<div class='code'>
-				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in --compressed_out -o desaggregated.gz
+				cmdtabs --desaggregate -i patients_and_phens.gz --desagg_col 2 --compressed_in --compressed_out -o desaggregated.gz
 			</div>
 
-			<p>O utilizando pipes: </p>
+			<p> We can also use pipes: </p>
 			<div class='code'>
-				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | cmdtabs --desaggregate -i - --desagg_col 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
+
 			</div>
 
-			<p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
-			tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
-
+			<p> Finally, the --transposed flag can be used in all scripts that load and/or write tables. When used, the table will be transposed at load time as well as immediately before being written.  </p>
 		<% 
 			# tool name, html title id, html container id
 			tools = [
