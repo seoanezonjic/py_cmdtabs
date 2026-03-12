@@ -18,6 +18,18 @@ class CmdTabsTestCase(unittest.TestCase):
 								  ["161_ref_OMIM:270200", "HGNC:391,HGNC:2194,HGNC:2518", "0.919617,0.790036,0.0628028"]]
 		self.assertEqual(expected_result_3_cols, aggregated_test_3_cols)
 
+	def test_aggregate_column_count(self):
+		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_desagg'))
+		aggrgated_test = CmdTabs.aggregate_column(input_table, [0], [1], ", ", "count") 
+		expected_result = [['HGNC:21197', "3"], ['HGNC:21143', "2"]]
+		self.assertEqual(expected_result, aggrgated_test)
+
+	def test_aggregate_column_concatenate_count(self):
+		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_desagg'))
+		aggrgated_test = CmdTabs.aggregate_column(input_table, [0], [1], ", ", "concatenate,count") 
+		expected_result = [['HGNC:21197', "483_ref, 1039_ref, 1071_ref|3"], ['HGNC:21143', "211_ref, 4705_ref|2"]]
+		self.assertEqual(expected_result, aggrgated_test)		
+
 	def test_desaggregate_column(self):
 		input_table = CmdTabs.load_input_data(os.path.join(DATA_TEST_PATH, 'cluster_genes_dis_agg'))
 		desaggregated_test = CmdTabs.desaggregate_column(input_table, [1], ',')
