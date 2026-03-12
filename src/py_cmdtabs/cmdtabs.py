@@ -194,7 +194,7 @@ class CmdTabs:
 		aggregated_values = []
 		for aggregator in aggregation_modes.split(','):
 			aggregated_column_copy = aggregated_column.copy()
-			if aggregator != "concatenate": aggregated_column_copy = [float(item) for item in aggregated_column_copy]
+			if aggregator not in ["concatenate", "len"]: aggregated_column_copy = [float(item) for item in aggregated_column_copy]
 			agg_value = str(make_aggregation[aggregator](aggregated_column_copy))
 			aggregated_values.append(agg_value)
 		return "|".join(aggregated_values)
