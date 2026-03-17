@@ -14,8 +14,8 @@
             first_table = 'disease_cluster'
             second_table = 'disease_gene'
             third_table = 'mondo_to_orpha'
-            second_table_tex = 'Segunda tabla'
-            third_table_tex = 'Tercera tabla'
+            second_table_tex = 'Second table'
+            third_table_tex = 'Third table'
             args = f"--tables tables/{first_table},tables/{second_table},tables/{third_table} --columns2add '1,2,3;1,2' --union --fill_character 'NA'"
         %>
 		${show_n_exec(first_table, args, "cmdtabs_merge", supp_tables=[[second_table_tex, second_table], [third_table_tex, third_table]])}
