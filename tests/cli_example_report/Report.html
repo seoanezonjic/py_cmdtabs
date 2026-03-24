@@ -284,45 +284,39 @@ h3 {
 	
 	<h1> Operation with tables </h1>
 
-		<h2> Pautas generales </h2>
-			<p>Aunque se explicarán más en detalle en cada sección del binario correspondiente, existen una serie de pautas generales que funcionan para una gran mayoría de los comandos.</p>
-			<p>Para los binarios a los que se les pase algún flag de tabla de entrada (en la mayoría de casos con el flag -i, 
-			pero en otros casos como en 'intersect_columns' con los flags -a y -b), dichas tablas pueden venir en formato de texto plano, 
-			pero también se pueden cargar comprimidas en gzip utilizando el flag '--compressed_in'. Por ejemplo:</p>
+		<h2> General guidelines </h2>
+			<p> Although it will be further explain in each corresponding binary section, there are a series of guidelines that work for the majority of commands. </p>
+			<p> For the binaries that are given an input table flag (in most cases with the -i flag, but in other cases such as intersect_columns with the -a and -b flags), these tables can be provided in plain text format, but they can also be loaded compressed in gzip format using the --compressed_in flag. For example: </p>
 
 			<div class='code'>
-				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in -o desaggregated.txt
+				cmdtabs --desaggregate -i patients_and_phens.gz --desagg_col 2 --compressed_in -o desaggregated.txt
 			</div>
 
-			<p> Además, para aquellos comandos que solo necesiten una tabla de entrada (como 'aggregate_column_data', 'desaggregate_column_data' o 'transpose_table',
-			pero no 'intersect_columns'), se puede utilizar un guión '-' con el flag de input para indicar que el contenido de la tabla proviene por stdout (por ejemplo fruto de un pipe de un
-			comando anterior), pudiendo venir también comprimido. Por ejemplo: </p>
+			<p> Additionally, for commands that require only a single input table (such as aggregate_column_data, desaggregate_column_data, or transpose_table, but not intersect_columns), a dash - can be used with the input flag to indicate that the table content comes from stdout (for example, as the result of piping from a previous command), and it may also be compressed. For example: </p>
 
 			<div class='code'>
-				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | cmdtabs --desaggregate -i - --desagg_col 2 --compressed_in
 			</div>
 
-			<p> En los scripts que devuelvan algún tipo de output (generalmente con el flag -o), de manera similar, también se puede utilizar el flag --compressed_out 
-			para que el resultado se devuelva comprimido en gzip. Además, si no se indica un flag de output (omitiendo '-o archivo_salida') y el script solo devuelve una tabla,
-			el contenido se devuelve al stdout en vez de ser escrito en archivo, por lo que puede aprovecharse para pipear en otro script.  Por ejemplo:</p>
+			<p> In scripts that produce some type of output (generally using the -o flag), similarly, the --compressed_out flag can be used so that the result is returned compressed in gzip format. Additionally, if no output flag is specified (omitting -o output_file) and the script returns only a single table, the content is sent to stdout instead of being written to a file, so it can be piped into another script. For example: </p>
 
 			<div class='code'>
-				desaggregate_column_data -i patients_and_phens.txt -x 2 --compressed_out | script_que_utiliza_datos_comprimidos
+				cmdtabs --desaggregate -i patients_and_phens.txt --desagg_col 2 --compressed_out | script_que_utiliza_datos_comprimidos
+
 			</div>
 
-			<p>Se pueden usar ambos flags a la vez, de manera que se pueda recibir una tabla comprimida y devolverla también comprimida. Por ejemplo:</p>
+			<p> Both flags may be used at the same time, recieving and returning a compressed table. For example:  </p>
 			<div class='code'>
-				desaggregate_column_data -i patients_and_phens.gz -x 2 --compressed_in --compressed_out -o desaggregated.gz
+				cmdtabs --desaggregate -i patients_and_phens.gz --desagg_col 2 --compressed_in --compressed_out -o desaggregated.gz
 			</div>
 
-			<p>O utilizando pipes: </p>
+			<p> We can also use pipes: </p>
 			<div class='code'>
-				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | desaggregate_column_data -i - -x 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
+				cat patients_and_phens.txt | script_que_devuelve_datos_comprimidos | cmdtabs --desaggregate -i - --desagg_col 2 --compressed_in --compressed_out | script_que_utiliza_datos_comprimidos
+
 			</div>
 
-			<p>Finalmente, el flag --transposed se puede utilizar en todos aquellos scripts que carguen y/o escriban tablas, y al utilizarlo, se aplicará la transposición de la 
-			tabla en el momento de carga así como de manera previa a la escritura de la misma. </p>
-
+			<p> Finally, the --transposed flag can be used in all scripts that load and/or write tables. When used, the table will be transposed at load time as well as immediately before being written.  </p>
 		
 			<h2 id="agg_from"  class="dummy" onclick="hide_show_element('agg_to')">aggregate_column_data (Click me)</h2>
 <details class='rep_html_det' open='' id="agg_to">
@@ -632,28 +626,21 @@ h3 {
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-    <p> Se utiliza para filtrar registros de una o más tablas en funcion a una o varias keywords en una o más columnas  </p>
+    <p> We'll use it to filter entries from one or more tables based on one or a few keywords in one or more columns. </p>
 
-    <h3> Ejemplo básico </h3>
-        <p> Este script permite filtrar registros de una o varias tablas (si se usa el wildcard * en un path a archivo del flag -i se pueden cargar varias tablas y aplicar todo lo de este apartado para varias tablas,
-        aunque en estos ejemplos se mostrará el caso solo para una tabla) en función de una o varias keywords aplicada a una o más columnas, por lo que es un script
-        bastante versatil y completo, aunque pueda parecer complejo. Se enseñarán varios ejemplos aumentando la complejidad del caso para entender mejor su funcionamiento. </p>
+    <h3> Basic example </h3>
+        <p> This script enables filtering entries from one or more tables. If the wildcard * is used in the file path with the -i flag, multiple tables can be selected, and everything described in this chapter can be applied to those tables (although the examples below demonstrate each case using a single table). Filtering can be performed based on one or more keywords and applied to one or more columns. Despite its complex appearance, the script is highly versatile and comprehensive. Several examples are provided below, with increasing complexity, to help you better understand how to use it. </p>
 
-        <p> Los argumentos más básicos que se usarán siempre serán la tabla de entrada (flag -i), las columnas que se devolverán (flag -c), 
-        la columna que contiene las keywords (flag -f), la keyword/s a buscar (flag -k),  -m o --match_mode para indicar si queremos que la keyword esté incluida (opción "i") en la columna
-        (es decir match parcial) o que esté al completo (opción "c"), es decir, match completo. Finalmente con el flag -s o --search se indica (cuando queremos match en varias columnas)
-        si queremos que el match sea completo (opción "c"), es decir, que se cumpla la keyword buscada en cada columna, o algún (some) match en alguna columna (opción "s") </p>.
+        <p> The basic arguments that are always required are: the input table (-i flag); the columns to be returned (--extract_cols); the column containing the keywords (--ext_col_match); the keyword(s) to search for (--ext_keywords); and the match mode (--ext_match_mode) , which specifies whether the keyword should be included in the column as a partial match (option "i") or as an exact match (option "c"). Finally, the --ext_search_mode option is used when matching across multiple columns. It allows you to specify whether the match must be satisfied in all columns (option "c") or only in some of them (option "s"). </p>
 
-        <p> Lo más esencial es entender como se construye el string de keywords de búsqueda. El patrón es el siguiente:
-        <code>key1_col1&key2_col1%key1_col2&key2_col2</code> donde cada keyword se separa por un "&" (quieres un keyword u otro en una determinada columna) y cada columna por un "%"</p>
+        <p> The most essential part is understanding how the keyword search string is built. The pattern is as follows: <code>key1_col1&key2_col1%key1_col2&key2_col2</code> where each keyword is separated by a "&" (when you want a keyword or another in a specific column) and each column by a "%". </p>
 
-        <p> Vamos empezar con un caso básico en el que vamos a quedarnos con aquellos registros que contengan la keyword <code>MONDO:0017999</code> (en flag -k) en la columna 1 (flag -f) de 
-        la tabla <code>long_disease_cluster</code> (flag -i). Además queremos que sea el match completo de la palabra (-m c) y nos retorne las columnas 1 y 2 de los registros resultantes (flag -c)</p>
+        <p> We'll start with a basic example in which we'll keep the entries that contain the keyword <code>MONDO:0017999</code> (--ext_keywords) in column 1 (--ext_col_match) from the input table <code>long_disease_cluster</code> (-i flag). Moreover, we want the match to be complete (--ext_match_mode c) and we want to get columns 1 and 2 from the result (--extract_cols) </p>
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 1 -k MONDO:0017999 -s c -m c
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 1 --ext_keywords MONDO:0017999 --ext_search_mode c --ext_match_mode c
 </div>
 
 <div class="divrow">
@@ -738,15 +725,14 @@ h3 {
             </div>
 </div>
 
-    <h3> Match completo en TODAS las columnas indicadas (dos keys, una en cada columna) </h3>
-        <p>Como vemos visto, el ejemplo anterior nos devuelve varios MONDOs que cumplen la condición de match completo en la columna 1. Vamos a ampliar el caso anterior para que solo nos 
-        devuelva el MONDO que en la segunda columna (flag -f) tiene el cluster '53_ref'</p>
+    <h3> Complete match in ALL specified columns (two keys, one in each column) </h3>
+        <p> As we observed, the previous example returns a few MONDO terms that meet the condition of a complete match in column 1. We'll extend the previous case to only get the MONDO term that has cluster "53_ref" in the second column (--ext_col_match) </p>
 
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%53_ref -s c -m c
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 1,2 --ext_keywords MONDO:0017999%53_ref --ext_search_mode c --ext_match_mode c
 </div>
 
 <div class="divrow">
@@ -766,14 +752,14 @@ h3 {
             </div>
 </div>
 
-    <h3> Buscar dos (o más registros) en una misma columna (match exacto) </h3>
-    <p>Vamos a obtener las filas que contienen o bien "MONDO:0008995" o bien "MONDO:0013969".</p>
+    <h3> Searching two (or more entries) in the same column (complete match) </h3>
+    <p> We'll get the rows that contain either "MONDO:0008995" or "MONDO:0013969". </p>
 
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 1 -k MONDO:0008995&MONDO:0013969 -s c -m c
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 1 --ext_keywords MONDO:0008995&MONDO:0013969 --ext_search_mode c --ext_match_mode c
 </div>
 
 <div class="divrow">
@@ -797,14 +783,14 @@ h3 {
             </div>
 </div>
 
-    <h3> Match parcial en la segunda columna </h3>
-        <p>Vamos a obtener las filas que contengan el substring "ref" en la segunda columna (cambiando el flag -m o --mode a i (de include)).</p>
+    <h3> Partial match in the second column </h3>
+        <p> We'll get the rows that contain the substring "ref" in the second column (changing the --ext_match_mode flag to i (include)) </p>
 
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 2 -k ref -s c -m i
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 2 --ext_keywords ref --ext_search_mode c --ext_match_mode i
 </div>
 
 <div class="divrow">
@@ -844,15 +830,14 @@ h3 {
             </div>
 </div>
 
-    <h3> Match parcial reverso en la segunda columna </h3>
-        <p>Si lo que nos interesa no es obtener los registros que cumplen el patrón, sino los que no lo cumplen, podemos usar el flag -r o --reverse. 
-        Esto es válido tanto para un match completo como parcial. En este caso vamos a enseñar el mismo ejemplo que el anterior, pero con el caso reverso, por lo que en vez
-        de obtener los registros que contienen "ref", obtendremos los que no lo contienen ("rand")</p>
+    <h3> Reverse partial match in the second column </h3>
+       <p> If what we want is not obtaining the entries that match the pattern, but those that do not, we can use the --ext_reverse flag.
+       This situation is valid for both complete and patial matches. In this case, we will use the same example as before adding the reverse condition. This way, instead of obtaining entries that contain "ref", we will get those that don't have it ("rand").  </p>
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 2 -k ref -s c -m i --reverse
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 2 --ext_keywords ref --ext_search_mode c --ext_match_mode i --ext_reverse
 </div>
 
 <div class="divrow">
@@ -896,14 +881,14 @@ h3 {
             </div>
 </div>
 
-    <h3> Match parcial en TODAS las columnas especificadas (dos columnas) </h3>
-        <p> En el caso que filtrabamos por MONDO:0017999 en la primera columna, vimos que encontrabamos 3 clústeres, 36_rand, 53_ref y 53_rand. 
-        En este caso, para quedarnos con distintos subsets, podemos utilizar el match parcial. Por ejemplo, para quedarnos con los MONDO:0017999 del cluster 53 </p> 
+    <h3> Partial match in ALL specified columns (two columns) </h3> 
+        <p> In the previous case where we filtered by MONDO:0017999 in the first column, we found 3 clusters: 36_rand, 53_ref and 53_rand.
+        In this case, to only get the different subsets, we can use the partial match. For example, to only get with MONDO:0017999 from cluster 53. </p>
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%53 -s c -m i
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 1,2 --ext_keywords MONDO:0017999%53 --ext_search_mode c --ext_match_mode i
 </div>
 
 <div class="divrow">
@@ -927,12 +912,12 @@ h3 {
             </div>
 </div>
 
-        <p> Y para quedarnos con los MONDO:0017999 de clusteres random </p> 
+        <p> And to only get MONDO:0017999 from random clusters </p> 
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0017999%rand -s c -m i
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 1,2 --ext_keywords MONDO:0017999%rand --ext_search_mode c --ext_match_mode i
 </div>
 
 <div class="divrow">
@@ -957,18 +942,16 @@ h3 {
 </div>
     
 
-    <h3> Match exacto en ALGUNA de las columnas especificadas (dos columnas) </h3>
-        <p>Hasta ahora hemos estado viendo como hacer matches que se cumplan en todas las columnas. Si queremos buscar keywords en varias columnas pero que el patrón se cumpla solo en 
-        ALGUNA de las columnas, podemos cambiar el -s o --search a "s" (some)</p>
+    <h3> Complete match in SOME of the specified columns (two columns) </h3>
+        <p> So far, we've seen how to make matches that happen in all columns. If we want to search for keywords in more than one column but we want the pattern to only be found in SOME of the columns, we can change the --ext_search_mode flag to "s" (some). </p>
 
-        <p>Por ejemplo, si queremos quedarnos con los registros que contengan MONDO:0008995 o MONDO:0013969 en la primera columna o 22_rand o 66_ref en la segunda columna,
-        podemos hacer lo siguiente:</p>
+        <p> For example, if we want to keet the entries that contain MONDO:0008995 or MONDO:0013969 in the first column or 22_rand or 66_ref in the second column, we can do as follows: </p>
 
         
         
 
 <div class="code">
-	column_filter -i tables/long_disease_cluster -c 1,2 -f 1,2 -k MONDO:0008995&MONDO:0013969%22_rand&66_ref -s s -m c
+	cmdtabs -i tables/long_disease_cluster --extract_cols 1,2 --ext_col_match 1,2 --ext_keywords MONDO:0008995&MONDO:0013969%22_rand&66_ref --ext_search_mode s --ext_match_mode c
 </div>
 
 <div class="divrow">
@@ -1008,10 +991,10 @@ h3 {
 
 <div class="lvl1">
 
-    <p> Pasa una tabla del formato long al formato wide </p>
+    <p> Changing a table from long to wide format. </p>
 
-    <p> En ocasiones, al trabajar con flujos como el de autoflow, lanzamos tareas paralelizadas con distintas conmbinaciones de trabajo, por ejemplo:
-    red (ORPHA y MONDO) y tipo de clustering (CPM y HLC) y volcamos distintas métricas en un archivo común, del estilo: </p>
+    <p> When we work with workflows like autoflow's, we sometimes launch parallelized tasks with different job combinations, like: network (ORPHA and MONDO) and 
+    clustering type (CPM and HLC) and we write all the different metrics into a common file, such as:  </p>
 
     <table id="table_19" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
@@ -1067,26 +1050,16 @@ h3 {
     </tr>
 </table>
 
-    <p>En lo que vemos que las dos primeras columnas son factores (red y tipo de clustering), la tercera es la métrica medida y la cuarta es el valor
-    que toma la misma. Que es lo que se llamaría el formato "long" de una tabla <a href="https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/">(ejemplo de casos long y wide)</a>
-    Sin embargo, para poder utilizar algunos métodos de graficado de CanvasXpress o para ver la tabla de métricas de una forma más sencilla,
-    necesitamos transformar esta tabla a un formato "wide". Es en este caso cuando se utiliza el método <code>create_metric_table</code>.</p>
+    <p> In the table above, we can see that the first two columns are factors (network and clustering type), the third one is the measured metric and the last one is its value. This format would be called the "long" format <a href="https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/">(long and wide format examples)</a>. However, in order to be able to use some graphing methods from CanvasXpress or to see the metrics table in a simpler way, we need to transform this table onto a "wide" format. To do so, we'll use the <code>create_metric_table</code> method. </p>
 
-    <h3> Ejemplo básico </h3>
-        <p>Este método es un tanto especial en cuanto a la mayoría de sus parámetros son posicionales. Por orden, los argumentos son: </p>
-        <ol>
-            <li> tabla de entrada </li>
-            <li>nombres para las columnas de los factores en la tabla de salida (separados por comas)</li>
-            <li>nombre para la tabla de salida</li>
-        </ol>
-        <p>Siendo los tres obligatorios. </p>
-        <p>Imaginando que tenemos una tabla de entrada con las columnas que representan "nombre de la red, tipo de clustering, tipo de red, métrica, valor" , 
-        el comando sería algo como:</p>
+    <h3> Basic example </h3>
+        <p> Here, we'll specify the input table in the -i flag, the output table in the -o flag and the names of the columns that will be factors in the output table (separated by commas) in the --sample_attributes flag. You may also redirect corrupted fields to a file with the --corrupted flag.</p>
+        <p> Imagining we have an input file with columns that represent "network name, clustering type, network type, metric, value", the command would be as follows: </p>
         
 		
 
 <div class="code">
-	create_metric_table tables/long_table red,metodo,tipo outputs/wide_table
+	cmdtabs -i tables/long_table --sample_attributes network,method,type -o outputs/wide_table --corrupted outputs/corrupted_table
 </div>
 
 <div class="divrow">
@@ -1160,9 +1133,9 @@ h3 {
                 <b>Output</b>
                 <table id="table_21" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
-                    <td  >red </td>
-                    <td  >metodo </td>
-                    <td  >tipo </td>
+                    <td  >network </td>
+                    <td  >method </td>
+                    <td  >type </td>
                     <td  >cl_num </td>
                     <td  >cl_size_mean </td>
     </tr>
@@ -1198,9 +1171,8 @@ h3 {
             </div>
 </div>
 
-
-    <h3> Definir otra tabla para volcar los registros corruptos </h3>
-        <p>Opcionalmente, se puede pasar un flag -c para devolver otra tabla con los valores corruptos, es decir, aquellos que no se han podido transformar a formato wide porque falta algún valor de los factores. </p>
+    <h3> Defining another table to dump corrupt entries into:  </h3>
+        <p> We can optionally add a -c flag to obtain another table with corrupt values that could not be transformed into a "wide" format due to having a missing value in one(some) factor(s). </p>
 </div>
 </details>
 
@@ -1209,15 +1181,15 @@ h3 {
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-	<p> Se utiliza en una tabla para dada una columna como referencia, que tenga valores repetidos, por ejemplo un identificador, agregarte el/los valores de otra(s) columna(s) en función de la de referencia. </p>
+	<p> We’ll use this in a table that contains a reference column with repeated values (i.e., an ID) to disaggregate values from another column or columns based on that reference. In all instances, we will use the --desaggregate flag. </p>
 
-	<h3> Ejemplo básico con una tabla con tres columnas, donde hay dos sin agregar y otra agregada. </h3>
-		<p> En este caso, se desagregan los valores de la tercera columna, amoldando el resto de columnas según la cantidad de valores en cada fila de la tercera columna. Para ello el flag -i hace referencia a la tabla de entrada, el flag -x a la columna que queremos desagregar (en base 1). Con el flag -s indicamos el separador que se ha utilizado en esa columna agregada.</p>
+	<h3> Basic example with a 3-column table where two of them are disaggregated and one is aggregated. </h3>
+		<p> In this case, values from the third column will be disaggregated, adjusting the remaining columns according to the number of values in each row of the third column. We'll used the -i flag to specify the input table, the --desagg_col flag for the column we want to disaggregate (1 based) and the --desagg_sep flag to indicate the separator used in the aggregated column. </p>
 		
 		
 
 <div class="code">
-	desaggregate_column_data -i tables/cluster_genes_dis_agg -x 3 -s ,
+	cmdtabs -i tables/cluster_genes_dis_agg --desaggregate --desagg_col 3 --desagg_sep ,
 </div>
 
 <div class="divrow">
@@ -1289,13 +1261,13 @@ h3 {
 </div>
 
 
-	<h3> Ejemplo básico con una tabla con cuatro columnas, donde hay dos sin agregar y dos agregada. </h3>
-		<p> Si existe más de una columna agregada, se puede indicar con el flag -x, separándolas por comas. Se asume que todos las columnas agregadas van a tener la misma cantidad de elementos para una determinada fila (ejemplo 1 columna con pat1,pat2,pat y otra con male,male,female).</p>
+	<h3> Basic example with a 4-column table, where two of them are disaggregated and the other aggregated. </h3>
+		<p> If there is more than one aggregated column, we can specify them with the --desagg_col flag, separating them by commas. It is assumed that all aggregated columns have the same number of elements for each row (i.e. 1 column with pat1,pat2,pat3 and another with male,male,female)</p>
 		
 		
 
 <div class="code">
-	desaggregate_column_data -i tables/cluster_genes_dis_agg2 -x 3,4 -s ,
+	cmdtabs -i tables/cluster_genes_dis_agg2 --desaggregate --desagg_col 3,4 --desagg_sep ,
 </div>
 
 <div class="divrow">
@@ -2141,25 +2113,20 @@ h3 {
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-    <div class="alert alert-warning" role="alert">
-        <p>Ojo al usar este binario, ya que intersect_columns indexa las columnas de IDS (es decir, obtiene los valores únicos) 
-        previa unión de las tablas (lo que te haría perder registros si repites mismos valores en esa columna). Para una funcionalidad parecida a esto (que te una dos tablas en
-        función de una columna que actúe como enlazadora) pero sin perder registros se puede usar <a href='#link_from'>table_linker</a>.</p>
+        <div class="alert alert-warning" role="alert">
+        <p> Be careful when using this binary, since intersect_columns indexes the ID columns (that is, it retrieves the unique values) after merging the tables — which would cause you to lose records if you repeat the same values in that column. For similar functionality (i.e., merging two tables based on a column that acts as a key) but without losing records, you can use table linker.  <a href='#link_from'>table_linker</a>.</p>
     </div>
 
-    <p> Un script muy versatil en torno a la unión de dos tablas</p>
+    <p> A versatile script to merge two tables. </p>
 
-    <h3> Ejemplo básico </h3>
-        <p> El caso más básico será obtener los registros comunes de dos columnas de dos tablas distintas. Para este caso (además de todos los siguientes) el funcionamiento es simple:
-        tenemos los flag -a y -b para indicar las dos tablas de interés, y los flags -A y -B para indicar las columnas de interés en las respectivas tablas. El flag -s nos servirá para 
-        indicar el separador (tabulador por defecto). Por defecto se obtienen los identificadores que estén en las dos tablas (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), que es el valor por defecto del flag --keep, 
-        aunque luego veremos otros casos de uso</p>
-        <p> Vamos a ver un ejemplo con dos tablas , ambas con una columna que tienen identificadores de enfermedad de MONDO, para encontrar los registros comunes entre ambas tablas.</p>
+    <h3> Basic example </h3>
+        <p> The most basic case will be retrieving common entried from two columns of two different tables. In this case (and all the following ones) the mechanism is simple: we'll have the -a and -b flags to specify the two input tables, and the -A and -B flags to indicate the columns from each respective table. We'll use the -s flag to specify the separator (by default: tab). The default mode will be obtaining the IDs that are present in both tables (<a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>), which is the default mode of the --keep flag. However, we'll also take a look at some different use cases.
+        <p> Now we'll see an example with two tables, both of them containing a column with MONDO disease IDs, to find the common entries between them. </p>
         
 		
 
 <div class="code">
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t
+	cmdtabs_merge -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s '	'
 </div>
 
 <div class="divrow">
@@ -2209,24 +2176,23 @@ h3 {
                 <b>Output</b>
                 <table id="table_45" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
-                    <td  >MONDO:0008995 </td>
+                    <td  >MONDO:0010193 </td>
     </tr>
    <tr>
-                    <td  >MONDO:0010193 </td>
+                    <td  >MONDO:0008995 </td>
     </tr>
 </table>
             </div>
 </div>
 
 
-    <h3> Obtener el resto de columnas para los registros comunes encontrados </h3>
-        <p> Si no nos interesa obtener solo los registros comunes de las dos tablas en esa columna, sino también obtener el resto de columnas de ambas tablas, podemos
-        usar el flag -full</p>
+    <h3> Retrieving the rest of the columns for the common entries found </h3>
+        <p> If we don't only want to get the common entries from both tables in that column, but algo get the rest of the columns from both tables, we can use the --full flag </p>
         
 		
 
 <div class="code">
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s \t --keep c --full
+	cmdtabs_merge -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 -s '	' --keep c --full
 </div>
 
 <div class="divrow">
@@ -2276,38 +2242,33 @@ h3 {
                 <b>Output</b>
                 <table id="table_48" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
-                    <td  >MONDO:0008995 </td>
-                    <td  >19_ref </td>
-                    <td  >MONDO:0008995 </td>
-                    <td  >HGNC:16873 </td>
-                    <td  >mRNA </td>
-    </tr>
-   <tr>
                     <td  >MONDO:0010193 </td>
                     <td  >54_ref </td>
                     <td  >MONDO:0010193 </td>
                     <td  >HGNC:3527 </td>
                     <td  >tRNA </td>
     </tr>
+   <tr>
+                    <td  >MONDO:0008995 </td>
+                    <td  >19_ref </td>
+                    <td  >MONDO:0008995 </td>
+                    <td  >HGNC:16873 </td>
+                    <td  >mRNA </td>
+    </tr>
 </table>
             </div>
 </div>
 
-    <h3> Obtener registros específicos de tabla </h3>
-        <p>Hemos visto antes un ejemplo de <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, que es el caso por defecto. 
-        Con el binario de <a href="#link_from">table_linker</a> podemos también podemos utilizar los casos de  <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a>. 
-        y <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a>. </p>
+    <h3> Retrieving specific entries from a table </h3>
+        <p> We've just seen an example of <a href="https://www.w3schools.com/Sql/sql_join_inner.asp">inner join</a>, which is the default mode. With the <a href="#link_from">table_linker</a> binary, we can also use the <a href="https://www.w3schools.com/Sql/sql_join_left.asp">left join</a> and <a href="https://www.w3schools.com/Sql/sql_join_right.asp">right join</a> cases. </p>
 
-        <p> No obstante, con intersect_columns podemos podemos obtener los registros específicos de una tabla, ya sea la A o la B, utilizando el flag --keep.
-        Por ejemplo, si queremos quedarnos con los registros que son específicos de la tabla A, podemos usar el flag --keep a. Y si además nos interesa quedarnos 
-        con el resto de columnas de la tabla A para los registros específicos de esta tabla, también podemos usar el flag --full. En el próximo ejemplo, enseñamos como devolver
-        los registros específicos de la tabla A , pero sin devolver el resto de columnas (que podríamos hacer con el flag --full)</p>
+        <p> However, we can keep specific entries from a table, whether it is A or B, using the --keep flag with intersect_columns. For example, if we want to keep specific entries from table A, we can use --keep a. If we also want to keep the rest of the columns from table A for the specific entries, we can also use the --full flag. In the next example, we'll show how to return the specific entries from table A without returning the rest of the columns (we could do it by adding the --full flag). 
 
         
 		
 
 <div class="code">
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep a
+	cmdtabs_merge -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep a
 </div>
 
 <div class="divrow">
@@ -2363,14 +2324,13 @@ h3 {
             </div>
 </div>
 
-        <p> De la misma manera, si queremos quedarnos con los registros específicos de la tabla B, podemos usar el flag --keep b. Finalmente, si queremos los registros 
-        específicos de la tabla A y los específicos de la tabla B, podemos usar el flag --keep ab (este caso sería el complementario de --keep c, en el que se obtenían 
-        los comunes de ambos). Vamos a mostrar este caso, devolviendo además el resto de columnas de las 2 tablas para esos registros</p>
+        <p> In the same way, if we want to keep specific entried from table B, we can use the --keep b flag. Finally, if we want the specific entries from tables A and B, we can use the --keep ab flag (in this case, it would be the complementary of --keep c, where we would get common entries to both). We'll show this case, returning the rest of the columns from both tables for those entries. </p>
+
         
 		
 
 <div class="code">
-	intersect_columns -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep ab --full
+	cmdtabs_merge -a tables/disease_cluster -b tables/disease_gene -A 1 -B 1 --keep ab --full
 </div>
 
 <div class="divrow">
@@ -2441,21 +2401,19 @@ h3 {
 <div class="lvl1">
 
     <div class="alert alert-warning" role="alert">
-        <p>Aunque este binario tenga cierto solapamiento de uso con "intersect_columns" y "table_linker" la diferencia que veo
-        es que puede unir N cantidad indefinida de tablas (basándose en que la columna para realizar la unión de todas las tablas sea siempre la primera) </p>
+        <p> Although this binary's use is a bit overlapped with "intersect_columns" and "table_linker", the difference is that it can join a indefinite number of tables (taking into account that the column to join all tables must be the first one) </p>
     </div>
-    <p> Se utiliza para realizar un merge de N cantidad de tablas en base a su primera columna con identificadores compartidos.  </p>
+
+    <p> It is used to merge N tables based on their first column when they share the same IDs.  </p>
     
-    <h3> Ejemplo básico </h3>
-        <p> En este script, el argumento para las tablas de entrada es posicional (pudiendo unir N cantidad de tablas), con los paths a las tablas a unir
-        separadas por espacios. Tiene un argumento, --fill_character, que se utiliza para rellenar los campos vacíos (aquellos registros que en una tabla tienen datos pero en otra no), que
-        por defecto está a "-" </p>
-        <p> En este caso, se unen las tablas <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> y <code>tables/mondo_to_orpha</code>, y se rellenan los campos vacíos con "NA". </p>
+    <h3> Basic example </h3>
+        <p> In this script, we'll use the --tables flag to specify all input tables, separated by commas (,). The --columns2add flag will be used to indicate the column indexes (1 based) of each file added to the first one (therefore, we will not specify the first table's columns), separating the columns in each set by commas and each set of columns (pet table) by a semicolon (;). The --fill_character flag will be used to specify which character we want the empty fields to be filled with. Lastly, we'll use the --union flag to also add the rows that do not have a match to the merging table (first table). </p>
+        <p> In this case, we'll join tables  <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> and <code>tables/mondo_to_orpha</code> and we will fill the empty fields with "NA". </p>
         
 		
 
 <div class="code">
-	merge_tabular tables/disease_cluster tables/disease_gene tables/mondo_to_orpha --fill_character 'NA'
+	cmdtabs_merge --tables tables/disease_cluster,tables/disease_gene,tables/mondo_to_orpha --columns2add '1,2,3;1,2' --union --fill_character 'NA'
 </div>
 
 <div class="divrow">
@@ -2478,7 +2436,7 @@ h3 {
         </div>
 
         <div class="divcolumn">
-            <b>Segunda tabla</b>
+            <b>Second table</b>
             <table id="table_56" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0010193 </td>
@@ -2498,7 +2456,7 @@ h3 {
 </table>
         </div>
         <div class="divcolumn">
-            <b>Tercera tabla</b>
+            <b>Third table</b>
             <table id="table_57" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
                     <td  >MONDO:0008995 </td>
@@ -2557,16 +2515,16 @@ h3 {
 <summary style="display: none;"></summary>
 
 <div class="lvl1">
-	<p> Se utiliza para obtener el número de ocurrencias de todos los términos en una columna de una tabla </p>
+	<p> It is used to obtain the number of occurrences of all the terms in a column of a table. </p>
 
-	<h3> Ejemplo básico </h3>
-		<p> Se indica la tabla a utilizar con el flag -i y la columna (indice basado en 1) en la que queremos obtener los conteos con el flag -x </p>
-		<p>Vamos a ver la cantidad de ocurrencias de los distintos términos en la columna 2 de la tabla 'cluster_genes_dis_agg'</p>
+	<h3> Basic example </h3>
+		<p> The input table will be specified with the -i flag and the column we want to count (1 based) will be indicated with the --count-cols flag.  </p>
+		<p> Let's see the number of occurrences of the different terms in the second column of the table 'cluster_genes_dis_agg'. </p>
 		
 		
 
 <div class="code">
-	records_count -i tables/cluster_genes_dis_agg -x 2
+	cmdtabs -i tables/cluster_genes_dis_agg --count-cols 2
 </div>
 
 <div class="divrow">
@@ -2755,17 +2713,19 @@ h3 {
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-	<p> Se utiliza para obtener un subset de la tabla original, empezando por la fila X y cogiendo Y filas desde ahí. </p>
-	<h3> Ejemplo básico </h3>
+	
+	<p> This binary is used to get a subset from the input table, starting from row X and taking Y rows from there. </p>
+	<h3> Basic example </h3>
 		<p> La tabla de entrada se indica con el flag -i. La fila por la que se empieza con el flag -s o --start_line (indice basado en 1) 
 		y la cantidad de filas que se extraen desde ese punto con el flag -l o --lines_to_subset. Además, si la tabla original tiene un
 		header y se quiere mantener en la tabla subseteada, se puede utilizar el flag -H o --header  </p>
-		<p> En este caso, vamos a coger 4 filas de la tabla de métricas, empezando por la fila 3 y manteniendo el header. </p>
+		<p> The input table is specified with the -i flag. The row were we'll start subsetting our table and the number of rows we want to extract from that point will be specified with the --offset flag (1 based), separating both numbers by a comma. We can also add the -H or --header flag.</p>
+		<p> In this case, we'll get 4 rows from the metrics table, starting from row 3 and keeping the header. </p>
 		
 		
 
 <div class="code">
-	subset_table -i tables/metrics_table -s 3 -l 4 -H
+	cmdtabs -i tables/metrics_table --offset 3,4 -H
 </div>
 
 <div class="divrow">
@@ -2931,16 +2891,14 @@ h3 {
 </div>
 
 
-	<h3> Partiendo toda la tabla en distintos archivos con K líneas cada uno</h3>
-		<p> Si se quiere partir la tabla en distintos archivos, cada uno con K líneas, se puede utilizar el flag -k o --chunk_size en vez de los flags -s y -l. En este caso
-			el flag de output -o indica la carpeta donde se guardarán los archivos. </p>
-		<p> En este caso, vamos a partir la tabla de clusters de enfermedades en distintos archivos, cada uno con 4 líneas (veremos que el ultimo se queda con 2, 
-		ya que la tabla inicial tiene 10 registros) </p>
+	<h3> Subsetting the whole table in different files with K lines per file. </h3>
+		<p> If we want to subset the table in different files, each one containing K number of lines, we can use the --sp_chunk_size flag, indicating the number of lines we want per file, keeping in mind that we will also need to add the --split_out flag. The -o flag is used to state the ouput directory where the files will be stored. </p>
+		<p> In this case, we'll separate the disease clusters table in different files, each one of them containing 4 lines (we'll see that the last one only has 2 due to the input table having 10 entries). </p>
 		
 		
 
 <div class="code">
-	subset_table -i tables/disease_cluster_ref_rnd -k 4 -o outputs/subset_table
+	cmdtabs -i tables/disease_cluster_ref_rnd --split_out --sp_chunk_size 4 -o outputs/subset_table
 </div>
 
 <div class="divrow">
@@ -3054,15 +3012,16 @@ h3 {
 </div>
 
 
-	<h3> Partiendo toda la tabla en N archivos diferentes con la misma cantidad de registros cada uno</h3>
-		<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files 
-		en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
-		<p> En este caso, vamos a partir la tabla de clusters de enfermedades en 2 archivos </p>
+	<h3> Subsetting the whole table in N different files with the same number of entries in each one </h3>
+		<p> Si se quiere partir la tabla en una cantidad fija de N archivos , cada uno de ellos con la misma cantidad de registros, se puede utilizar el flag -n o --number_of_files en vez de los flags -s y -l o --chunk_size. En este caso el flag de output -o también indica la carpeta donde se guardarán los archivos. </p>
+		<p> If we want to subset the table in a fixed number of N files, each one of them containing the same number of entries, we can use the --sp_file_number flag, indicating the number of files you want. Just like before, we will also have to add the --split_out flag. The -o output flag will also indicated where we will store the files. </p>
+		
+		<p> In this case, we will separate the disease clusters table in 2 files. </p>
 		
 		
 
 <div class="code">
-	subset_table -i tables/disease_cluster_ref_rnd -n 2 -o outputs/subset_table2
+	cmdtabs -i tables/disease_cluster_ref_rnd --split_out --sp_file_number 2 -o outputs/subset_table2
 </div>
 
 <div class="divrow">
@@ -3422,15 +3381,15 @@ h3 {
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-    <p> Añade una o varias etiquetas (ej: factores adicionales de una variable y su valor) a todas las filas de una tabla</p>
+    <p> This binary adds one or more tags (i.e. additional factors of a variable and their value) to all rows in a table. </p>
 
-    <h3> Ejemplo básico utilizando un string con tags separador por comas</h3>
-        <p> Se pasa la tabla a la que se quiere añadir los tags con el flag -i y un string con los tags separados por comas al flag -t </p>
+    <h3> Basic example using a string with comma separated tags </h3>
+        <p> We'll specify the table we want the tags added to with the -i flag and a string with comma separated tags with the --tags flag </p>
         
 		
 
 <div class="code">
-	tag_table -i tables/cluster_stats -t red1,colapsada,traducida
+	cmdtabs -i tables/cluster_stats --tags network1,collapsed,translated
 </div>
 
 <div class="divrow">
@@ -3480,58 +3439,58 @@ h3 {
                 <b>Output</b>
                 <table id="table_86" border="1" class= "table table-striped table-bordered table-compact" >
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_num </td>
                     <td  >1988 </td>
     </tr>
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_size_min </td>
                     <td  >1 </td>
     </tr>
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_size_max </td>
                     <td  >296 </td>
     </tr>
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_size_median </td>
                     <td  >3.0 </td>
     </tr>
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_size_mean </td>
                     <td  >4.667505030181086 </td>
     </tr>
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_nodes_mean </td>
                     <td  >1.0 </td>
     </tr>
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_nodes </td>
                     <td  >9279 </td>
     </tr>
    <tr>
-                    <td  >red1 </td>
-                    <td  >colapsada </td>
-                    <td  >traducida </td>
+                    <td  >network1 </td>
+                    <td  >collapsed </td>
+                    <td  >translated </td>
                     <td  >cl_pairs </td>
                     <td  >147578 </td>
     </tr>
@@ -3540,15 +3499,13 @@ h3 {
 </div>
 
 
-    <h3> Ejemplo pasando el nombre de un archivo como tag al flag -t </h3>
-        <p> Si en vez de pasarle un string separado por comas con los tags, se le pasa el nombre de un archivo, cmdtabs puede reconocerlo y en ese
-        caso cargar el contenido del archivo para utilizarlo como tags. Se especifica en este caso con el flag -s cual es el separador en ese archvio</p>
-
+    <h3> Example giving the name of a file to the -t (--tags) flag </h3>
+        <p> If a file name is specified with the --tags flag instead of a comma separated string, cmdtabs can recognize it a load the file to use it as tags. In this case, the -x flag will be used to specify said file separator. </p>
         
 		
 
 <div class="code">
-	tag_table -i tables/cluster_stats -t tables/tracker -s 	
+	cmdtabs -i tables/cluster_stats --tags tables/tracker -s '	'
 </div>
 
 <div class="divrow">
@@ -3685,14 +3642,13 @@ h3 {
             </div>
 </div>
 
-    <h3> Pasar más de un archivo separado por comas al flag -t </h3>
-        <p> Si le pasamos varios archivos separados por comas, leerá y utilizará cada uno de ellos para añadir los tags</p>
-
+    <h3> Specifying more that one file separated by commas to the --tags flag </h3>
+        <p> If we indicate a few files separated by commas to the --tags flag, cmdtabs will read and use each one of them to add the tags. </p>
         
 		
 
 <div class="code">
-	tag_table -i tables/cluster_stats -t tables/tracker,tables/tracker -s 	
+	cmdtabs -i tables/cluster_stats --tags tables/tracker,tables/tracker -s '	'
 </div>
 
 <div class="divrow">
@@ -3878,15 +3834,15 @@ h3 {
 
 <div class="lvl1">
 
-	<p> Se utiliza para convertir una tabla en formato TSV,CSV, etc en una tabla con la sintaxis necesaria para ser añadida a LaTeX  </p>
-	<h3> Ejemplo básico </h3>
-		<p> Se da la tabla con el flag -i </p>
+	<p> It is used to convert a table in TSV, CSV, etc. format into a table with the required syntax to be added to LaTeX.  </p>
+	<h3> Basic example </h3>
+		<p> We'll specify the table to convert with the -i flag and add the --latex flag for this binary to be used. </p>
 
 		
 		
 
 <div class="code">
-	transform_to_latex -i tables/cluster_genes_dis_desagg_3cols
+	cmdtabs --latex -i tables/cluster_genes_dis_desagg_3cols
 </div>
 
 <div class="divrow">
@@ -3942,14 +3898,14 @@ h3 {
             </div>
 </div>
 
-	<h3> Añadiendo el backbone </h3>
-		<p> Si se quiere obtener un backbone algo más detallado con el que luego rellenar los campos restantes, se puede utilizar el parámetro --whole o -w </p>
+	<h3> Adding the backbone </h3>
+		<p> If we want to get a more detailed backbone to fill the remaining fields, we can used the --whole or -w flag. </p>
 
 		
 		
 
 <div class="code">
-	transform_to_latex -i tables/cluster_genes_dis_desagg_3cols --whole
+	cmdtabs --latex -i tables/cluster_genes_dis_desagg_3cols --whole
 </div>
 
 <div class="divrow">
@@ -4034,15 +3990,15 @@ h3 {
 <summary style="display: none;"></summary>
 <div class="lvl1">
 
-	<p> Se utiliza para transponer una tabla  </p>
-	<h3> Ejemplo básico </h3>
-		<p> Se transpone la tabla que se da con el flag -i </p>
+	<p> Used to transpose a table.  </p>
+	<h3> Basic example </h3>
+		<p> We'll transpose the specified table with the -i flag and add the --transposed flag for this binary to be used. </p>
 
 		
 		
 
 <div class="code">
-	transpose_table -i tables/cluster_genes_dis_desagg_3cols
+	cmdtabs --transposed -i tables/cluster_genes_dis_desagg_3cols
 </div>
 
 <div class="divrow">

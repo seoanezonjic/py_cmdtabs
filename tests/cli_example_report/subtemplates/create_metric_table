@@ -12,13 +12,13 @@
     <p> In the table above, we can see that the first two columns are factors (network and clustering type), the third one is the measured metric and the last one is its value. This format would be called the "long" format <a href="https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/">(long and wide format examples)</a>. However, in order to be able to use some graphing methods from CanvasXpress or to see the metrics table in a simpler way, we need to transform this table onto a "wide" format. To do so, we'll use the <code>create_metric_table</code> method. </p>
 
     <h3> Basic example </h3>
-        <p> Here, we'll specify the input table in the -i flag, the output table in the -o flag and the names of the columns that will be factors in the output table (separated by commas) in the --sample_attributes flag. </p>
+        <p> Here, we'll specify the input table in the -i flag, the output table in the -o flag and the names of the columns that will be factors in the output table (separated by commas) in the --sample_attributes flag. You may also redirect corrupted fields to a file with the --corrupted flag.</p>
         <p> Imagining we have an input file with columns that represent "network name, clustering type, network type, metric, value", the command would be as follows: </p>
         <%
             table_name = 'long_table'
             output_table = 'outputs/wide_table'
             corrupted_table = 'outputs/corrupted_table'
-            args = f"-i tables/{table_name} --sample_attributes network,method,type -o {output_table}"
+            args = f"-i tables/{table_name} --sample_attributes network,method,type -o {output_table} --corrupted {corrupted_table}"
         %>
 		${show_n_exec(table_name, args, "cmdtabs", out = output_table)}
 
