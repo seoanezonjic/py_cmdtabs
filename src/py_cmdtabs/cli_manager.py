@@ -377,6 +377,8 @@ def cmdtabs(args=None):
                         help="Print row extraction statistics")                        
     parser.add_argument("--uniq", dest="uniq", default=False, action='store_true',
                         help="Make rows unique")
+    parser.add_argument("--sort_rows_by", dest="sort_rows_by", default=None,
+                        help="Sort rows of the table ([a]scending or [d]escending or custom) by given columns, like: 0,a;1,d;2,d score,a;name,d pats,pat1|pat2|pat3 pats,path_sort_file")
     opts = parser.parse_args(args)
     main_cmdtabs(opts)
 

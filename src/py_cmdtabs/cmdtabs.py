@@ -534,12 +534,50 @@ class CmdTabs:
 		else:
 			final_table = latex_table
 		return final_table
+	
+	def get_custom_sorts(cols, modes):
+		direct_transform = {}
+		inverse_transform = {}
+		for idx, mode in enumerate(modes):
+			if mode not in ["a", "d"]:
+				if os.path.exists(mode):
+					content = open(mode).read().split("\n")
+					direct_transform[cols[idx]] = {col: pos for pos,col in enumerate(content)}
+					inverse_transform[cols[idx]] = {pos: col for pos,col in enumerate(content)}
+				else:
+					direct_transform[cols[idx]] = {col: pos for pos,col in  enumerate(mode.split("|"))}
+					inverse_transform[cols[idx]] = {pos: col for pos,col in  enumerate(mode.split("|"))}
+		return direct_transform, inverse_transform
 
-	def write_output_data(output_data, output_path=None, sep="\t"):
+
+	def sort_table(table, sort_rows_by, has_header):
+		import pandas
+		header = table[0] if has_header else []
+		sorted_table = [header] if has_header else [] 
+		start_idx = 1 if has_header else 0
+
+		cols_to_sort = sort_rows_by.split(';')
+		cols, modes = list(zip(*[col.split(',') for col in cols_to_sort]))
+		cols = [int(col_idx) if col_idx.isdigit() else header.index(col_idx) for col_idx in cols]
+		cols = [f"col_{col_idx}" for col_idx in cols]
+		direct_transform, inverse_transform = CmdTabs.get_custom_sorts(cols, modes)
+
+		df = pandas.DataFrame(table[start_idx:], columns=[f"col_{idx}" for idx in range(len(table[0]))])
+		for col, transform_dict in direct_transform.items(): df[col] = df[col].apply(lambda x: transform_dict[x])
+		df = df.apply(pandas.to_numeric, errors='ignore')
+		df.sort_values(by=cols, ascending=[False if mode == "d" else True for mode in modes], inplace=True) #if mode=="a" or mode=[custom_sort] then ascending is True
+		for col, inverse_transform_dict in inverse_transform.items(): df[col] = df[col].apply(lambda x: inverse_transform_dict[x])
+		df = df.astype(str)
+		sorted_table += df.values.tolist()
+		return sorted_table
+
+
+	def write_output_data(output_data, output_path=None, sep="\t", sort_rows_by=None, header=False):
 		open_file = gzip.open if CmdTabs.compressed_output else open
+		if sort_rows_by is not None:
+			output_data = CmdTabs.sort_table(output_data, sort_rows_by, header)
 		if CmdTabs.transposed:
 			output_data = CmdTabs.transpose(output_data)
-			
 		if output_path != None:
 			with open_file(output_path, 'wt') as out_file:
 				for line in output_data:

@@ -1,0 +1,53 @@
+<div class="lvl1">
+
+    <p> We can use it to sort the rows of the input table by the given column/s </p>
+    <p> Generally speaking, the logic is the following:<br><br><code> --sort_rows_by [0-based column index OR column name],["d" if descending OR "a" if ascending OR custom_sort];[other_column],[mode];... </code> </p>
+    
+    <h3> Basic example </h3>
+
+        <p> We have a table with 3 columns, pat (patient), name and score. We want to sort the rows of the table by the score column, in ascending order</p>
+        <p> We'll use the -i flag to specify the input table, -H if the table have header and --sort_rows_by to give the sorting behaviour we expect (sort ascending by the score column)</p>
+
+        <%
+            table_name = 'table_to_sort_2cols_header'
+            args = f"-i tables/{table_name} -H --sort_rows_by score,a"
+        %>
+		${show_n_exec(table_name, args, "cmdtabs")}
+
+        <p> Note that we can also use a numeric column index (0-based) to set the column we want to apply the sorting, even if the table has header (What we can't do is the opposite—try to sort by specifying a column name in a table that doesn't have a header; doing so would cause an error.)
+
+        <%
+            table_name = 'table_to_sort_2cols_header'
+            args = f"-i tables/{table_name} -H --sort_rows_by 2,a"
+        %>
+		${show_n_exec(table_name, args, "cmdtabs")}
+
+    <h3> Sorting by more than one column </h3>
+        <p> Using the same table, we want to sort by score descending, but when the score is equal, we then want to sort by the name ascending (A before B and so)
+
+        <%
+            table_name = 'table_to_sort_2cols_header'
+            args = f"-i tables/{table_name} -H --sort_rows_by score,d;name,a"
+        %>
+		${show_n_exec(table_name, args, "cmdtabs")}
+
+    <h3> Sorting by specific order in a given column (string case)</h3>
+         <p> We can also sort the rows of a table in a completely arbitrary order based on a given column. In that case, we specify the column name or index and a string (or file; see the next section) that indicates the desired sort order. If using a string, the elements are separated by “|” </p>
+
+        <%
+            table_name = 'table_to_sort_2cols_header'
+            args = f"-i tables/{table_name} -H --sort_rows_by pats,pat4|pat1|pat3|pat2"
+        %>
+        ${show_n_exec(table_name, args, "cmdtabs")}
+
+    <h3> Sorting by specific order in a given column (file case)</h3>
+        <p> We can also specify a filepath to sort the rows by the specific column. In that case it will be a one column file with the desired order.
+
+        <%
+            table_name = 'table_to_sort_2cols_header'
+            table_to_sort_text = "Table with custom sort"
+            table_to_sort = 'pats_order'
+            args = f"-i tables/{table_name} -H --sort_rows_by pats,tables/{table_to_sort}"
+        %>
+        ${show_n_exec(table_name, args, "cmdtabs", supp_tables=[[table_to_sort_text, table_to_sort]])}
+</div>                                                                            

@@ -639,3 +639,89 @@ def test_transpose_table_compressed_file(tmp_dir):
 	assert expected_result == returned
 	CmdTabs.compressed_input = False
 	CmdTabs.compressed_output = False
+
+
+def test_sort_rows_by_header_cases(tmp_dir):
+	#Sorting a table with header, giving the column name score, doing the sorting ascending numeric
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_header')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_header_by_score')
+	args = f"-i {input_file} -o {out_file} -H --sort_rows_by score,a".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_header_by_score'))
+	assert expected_result == returned
+
+	#Sorting a table with header, giving the column name cat, doing the sorting descending (alphabetic sort)
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_header')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_header_by_cat')
+	args = f"-i {input_file} -o {out_file} -H --sort_rows_by cat,d".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_header_by_cat'))
+	assert expected_result == returned
+
+	#Sorting a table with header, giving the column name "pats" and explicit giving the order "pat3,pat1,pat2"
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_header')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_header_by_pat')
+	args = f"-i {input_file} -o {out_file} -H --sort_rows_by pats,pat3|pat1|pat2".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_header_by_pat'))
+	assert expected_result == returned
+
+
+	#Same above, but giving a file with the especified order for that column"
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_header')
+	pat_order_file = os.path.join(DATA_TEST_PATH, 'pats_order')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_header_by_pat')
+	args = f"-i {input_file} -o {out_file} -H --sort_rows_by pats,{pat_order_file}".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_header_by_pat'))
+	assert expected_result == returned	
+
+
+	#Sorting a table with header, first by score, and when equal, by name
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_2cols_header')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_2cols_header')
+	args = f"-i {input_file} -o {out_file} -H --sort_rows_by score,a;name,a".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_2cols_header'))
+	assert expected_result == returned
+
+def test_sort_rows_by_noheader_cases(tmp_dir):
+	#Sorting a table with header, giving the column name score, doing the sorting ascending numeric
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_noheader')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_noheader_by_score')
+	args = f"-i {input_file} -o {out_file} --sort_rows_by 1,a".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_noheader_by_score'))
+	assert expected_result == returned
+
+	#Sorting a table with header, giving the column name cat, doing the sorting descending (alphabetic sort)
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_noheader')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_noheader_by_cat')
+	args = f"-i {input_file} -o {out_file} --sort_rows_by 2,d".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_noheader_by_cat'))
+	assert expected_result == returned
+
+	#Sorting a table with header, giving the column name "pats" and explicit giving the order "pat3,pat1,pat2"
+	input_file = os.path.join(DATA_TEST_PATH, 'table_to_sort_noheader')
+	out_file = os.path.join(tmp_dir, 'table_to_sort_noheader_by_pat')
+	args = f"-i {input_file} -o {out_file} --sort_rows_by 0,pat3|pat1|pat2".split(" ")
+	py_cmdtabs_CLIs.cmdtabs(args)
+	
+	returned = CmdTabs.load_input_data(out_file)
+	expected_result = CmdTabs.load_input_data(os.path.join(REF_DATA_PATH, 'table_to_sort_noheader_by_pat'))
+	assert expected_result == returned

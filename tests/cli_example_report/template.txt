@@ -67,6 +67,7 @@ def create_tool_section(tool_name, title_id, container_id):
 				['intersect_columns', 'inter_from', 'inter_to'],
 				['merge_tabular', 'merge_from', 'merge_to'],
 				['records_count', 'recs_from', 'recs_to'],
+				['sort_rows_by', 'sortrows_from', 'sortrows_to'],
 				['standard_name_replacer', 'repl_from', 'repl_to'],
 				['subset_table', 'subs_from', 'subs_to'],
 				['table_linker', 'link_from', 'link_to'],
