@@ -478,6 +478,15 @@ class CmdTabs:
 			
 		return sheet
 
+	def table_to_excel(table, output_file, sheet_name='Sheet1'):
+		import openpyxl
+		wb = openpyxl.Workbook()
+		ws = wb.active
+		ws.title = sheet_name
+		for row in table:
+			ws.append(row)
+		wb.save(output_file)
+
 	def get_groups(a_records, b_records): # inputs are list of string but should be nested lists. This is due to python don't allow to hash list in dicts.
 		a_rec = set(a_records)				# For this reason, the last lines convert in lists the strings of the original list to keep the format
 		b_rec = set(b_records)				# TODO: See to tranfor to tuples instead to string
@@ -572,16 +581,19 @@ class CmdTabs:
 		return sorted_table
 
 
-	def write_output_data(output_data, output_path=None, sep="\t", sort_rows_by=None, header=False):
+	def write_output_data(output_data, output_path=None, sep="\t", sort_rows_by=None, header=False, out_type='text'):
 		open_file = gzip.open if CmdTabs.compressed_output else open
 		if sort_rows_by is not None:
 			output_data = CmdTabs.sort_table(output_data, sort_rows_by, header)
 		if CmdTabs.transposed:
 			output_data = CmdTabs.transpose(output_data)
 		if output_path != None:
-			with open_file(output_path, 'wt') as out_file:
-				for line in output_data:
-					out_file.write(sep.join([str(l) for l in line]) + "\n")
+			if out_type == 'excel':
+				CmdTabs.table_to_excel(output_data, output_path)
+			elif out_type == 'text':
+				with open_file(output_path, 'wt') as out_file:
+					for line in output_data:
+						out_file.write(sep.join([str(l) for l in line]) + "\n")
 		else:
 			if CmdTabs.compressed_output:
 				columns_joined = []

@@ -301,7 +301,7 @@ def main_cmdtabs(opts):
     elif opts.sp_file_number > 0: # [subset] split by file number
       CmdTabs.split_by_nFiles(table, opts.sp_file_number, opts.output_file, file_name, header = header)
   else:
-    CmdTabs.write_output_data(table, opts.output_file, sep=output_sep, sort_rows_by=opts.sort_rows_by, header=opts.header)
+    CmdTabs.write_output_data(table, opts.output_file, sep=output_sep, sort_rows_by=opts.sort_rows_by, header=opts.header, out_type=opts.out_file_type)
   
 
 ########################################################

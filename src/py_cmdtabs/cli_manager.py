@@ -339,6 +339,8 @@ def cmdtabs(args=None):
                         help="Sheet number to work with. Default 1")
     parser.add_argument("--file_type", dest="file_type", default='text',
                         help="Default text. Other options;excel")
+    parser.add_argument("--out_file_type", dest="out_file_type", default='text',
+                        help="Default text. Other options;excel")    
     parser.add_argument("--from", dest="frm", default=0, type=based_0,
                         help="Column in index file to take reference value. Default 1. Numeration is 1 based")
     parser.add_argument("--to", dest="to", default=1, type=based_0,
