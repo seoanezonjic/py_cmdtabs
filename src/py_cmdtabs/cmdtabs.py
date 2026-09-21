@@ -461,7 +461,7 @@ class CmdTabs:
 
 	def get_table_from_excel(file, sheet_number):
 		import openpyxl
-		x = openpyxl.load_workbook(file)
+		x = openpyxl.load_workbook(file, data_only=True)
 		sheets = x.sheetnames # list excel sheets by name
 		ws = x[sheets[sheet_number]] #select sheet by index (so, we select by sheet order)
 		sheet = []
