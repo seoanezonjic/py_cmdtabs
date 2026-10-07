@@ -48,3 +48,6 @@ py_cmdtabs includes tools that make it easier for its user to manipulate tabulat
 * Replace information: The standard_name_replacer.py script replaces values in a table based on a contributed value code.
 * Filter columns: The column_filter.py script filters columns from a tabulated file whose elements match a specified pattern.
 * Transform Excel format into tabular: the excel_to_tabular.py script transforms files with an .xlsx extension into tabular files and makes their handling easier.
+
+
+See https://github.com/seoanezonjic/py_cmdtabs
