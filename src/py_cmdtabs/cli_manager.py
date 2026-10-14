@@ -114,6 +114,12 @@ def excel_to_tabular(args=None):
       help="Comma-separated row position(s) to extract (1 based). If not used, all rows will be extracted")  
     parser.add_argument("-s", "--sheet_number", dest="sheet_number", default=0, type=based_0,
       help="Sheet number to work with. Default 1")
+    parser.add_argument("--excel_replace_newlines", dest="excel_replace_newlines", default=None,
+      help="Replace newlines inside cells in the Excel file with the desired caracter")
+    parser.add_argument("--excel_fill_empty", dest="excel_fill_empty", default=None,
+      help="Fill empty cells in the Excel file with the desired caracter")
+    parser.add_argument("--excel_strip_cells", dest="excel_strip_cells", default=False, action='store_true',
+          help="Strip whitespace from cells in the Excel file")
 
     opts = parser.parse_args(args)
     main_excel_to_tabular(opts)
@@ -337,6 +343,12 @@ def cmdtabs(args=None):
                         help="Comma-separated row position(s) to extract (1 based). If not used, all rows will be extracted")  
     parser.add_argument("--excel_sheet_number", dest="excSheet_number", default=0, type=based_0,
                         help="Sheet number to work with. Default 1")
+    parser.add_argument("--excel_replace_newlines", dest="excel_replace_newlines", default=None,
+                        help="Replace newlines inside cells in the Excel file with the desired caracter")
+    parser.add_argument("--excel_fill_empty", dest="excel_fill_empty", default=None,
+                        help="Fill empty cells in the Excel file with the desired caracter")
+    parser.add_argument("--excel_strip_cells", dest="excel_strip_cells", default=False, action='store_true',
+                        help="Strip whitespace from cells in the Excel file. Boolean flag. Default False")           
     parser.add_argument("--file_type", dest="file_type", default='text',
                         help="Default text. Other options;excel")
     parser.add_argument("--out_file_type", dest="out_file_type", default='text',
