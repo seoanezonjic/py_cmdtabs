@@ -42,6 +42,13 @@ def create_tool_section(tool_name, title_id, container_id):
 
 			</div>
 
+			<p> Furthermore, the --out_file_type flag allows the specification of the desired output file format between text (default) and excel. </p>
+
+			<div class='code'>
+				cmdtabs --desaggregate -i patients_and_phens.txt --desagg_col 2 --out_file_type excel
+
+			</div>
+
 			<p> Both flags may be used at the same time, recieving and returning a compressed table. For example:  </p>
 			<div class='code'>
 				cmdtabs --desaggregate -i patients_and_phens.gz --desagg_col 2 --compressed_in --compressed_out -o desaggregated.gz
