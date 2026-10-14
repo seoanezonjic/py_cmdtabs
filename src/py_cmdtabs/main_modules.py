@@ -81,7 +81,7 @@ def main_excel_to_tabular(options): # Added to main_cmdtabs
     warn('This is deprecated. Use: cmdtabs -i input_table --file_type excel --excel_cols 1,2,3 --excel_sheet_number 1')
 
     set_class_attributes(options)
-    sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number)
+    sheet = CmdTabs.get_table_from_excel(options.input_file, options.sheet_number, options.excel_replace_newlines, options.excel_fill_empty, options.excel_strip_cells)
     storage = CmdTabs.extract_columns(sheet, options.columns2extract)
     storage = CmdTabs.extract_rows(storage, options.rows2extract)
     CmdTabs.write_output_data(storage, options.output_file)
@@ -232,7 +232,7 @@ def main_cmdtabs(opts):
   output_sep = "\t"
   CmdTabs.compressed_input = opts.compressed_in
   if opts.file_type == 'excel': #[excel2table]
-    sheet = CmdTabs.get_table_from_excel(opts.input_file, opts.excSheet_number)
+    sheet = CmdTabs.get_table_from_excel(opts.input_file, opts.excSheet_number, opts.excel_remove_newlines, opts.excel_fill_empty, opts.excel_strip_cells)
     table = CmdTabs.extract_columns(sheet, opts.excColumns2extract)
     table = CmdTabs.extract_rows(table, opts.excRows2extract)
   else:

@@ -459,7 +459,7 @@ class CmdTabs:
 		else:
 			return [ row for idx, row in enumerate(table) if idx in rows2extract ]
 
-	def get_table_from_excel(file, sheet_number):
+	def get_table_from_excel(file, sheet_number, replace_newlines=None, replace_empty=None, strip=False):
 		import openpyxl
 		x = openpyxl.load_workbook(file, data_only=True)
 		sheets = x.sheetnames # list excel sheets by name
@@ -469,7 +469,16 @@ class CmdTabs:
 		for xl_row in ws.iter_rows(min_row=1, min_col=1, max_col=ws.max_column, max_row=ws.max_row, values_only=True):
 			row = []
 			for val in xl_row:
-				if val == None: val = ''
+				if val == None:
+					if replace_empty != None:
+						val = replace_empty
+					else:
+						val = ''
+				if strip: 
+					val = val.strip() if isinstance(val, str) else val
+				if replace_newlines != None:
+					sep = replace_newlines
+					val = val.replace('\n', sep).replace('\r', sep) if isinstance(val, str) else str(val)
 				row.append(val)
 			sheet.append(row)
 
