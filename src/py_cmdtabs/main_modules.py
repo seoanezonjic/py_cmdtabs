@@ -232,7 +232,7 @@ def main_cmdtabs(opts):
   output_sep = "\t"
   CmdTabs.compressed_input = opts.compressed_in
   if opts.file_type == 'excel': #[excel2table]
-    sheet = CmdTabs.get_table_from_excel(opts.input_file, opts.excSheet_number, opts.excel_remove_newlines, opts.excel_fill_empty, opts.excel_strip_cells)
+    sheet = CmdTabs.get_table_from_excel(opts.input_file, opts.excSheet_number, opts.excel_replace_newlines, opts.excel_fill_empty, opts.excel_strip_cells)
     table = CmdTabs.extract_columns(sheet, opts.excColumns2extract)
     table = CmdTabs.extract_rows(table, opts.excRows2extract)
   else:
