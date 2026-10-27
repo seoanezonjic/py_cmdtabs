@@ -74,6 +74,7 @@ class CmdTabs:
 		return pattern
 
 	def index_array(table, col_from=0, col_to=1, header=False):
+		if col_to == []: col_to = [col_idx for col_idx in range(len(table)) if col_idx != col_from ] #Getting all columns if columns not specified
 		index = defaultdict(lambda: False)
 		if type(col_to) != list:
 			f = lambda x: x[col_to]
@@ -289,6 +290,7 @@ class CmdTabs:
 
 	def merge_tables2mainTab(main_table, table_paths, column_idxs, sep = "\t", fill_character='-', header = False, union= False):
 		table_length = len(main_table[0])
+		if column_idxs == []: column_idxs = [[0, []] for times in range(len(table_paths))] #If the flag was not defined, we merge all tables by the first column and keep the rest of the columns
 		for i, table_path in enumerate(table_paths):
 			supp_file = CmdTabs.load_input_data(table_path, sep=sep)
 			id_col, data_cols = column_idxs[i]
