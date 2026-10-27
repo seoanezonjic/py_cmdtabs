@@ -9,15 +9,42 @@
     
     <h3> Basic example </h3>
         <p> In this script, we'll use the --tables flag to specify all input tables, separated by commas (,). The --columns2add flag will be used to indicate the column indexes (1 based) of each file added to the first one (therefore, we will not specify the first table's columns), separating the columns in each set by commas and each set of columns (pet table) by a semicolon (;). The --fill_character flag will be used to specify which character we want the empty fields to be filled with. Lastly, we'll use the --union flag to also add the rows that do not have a match to the merging table (first table). </p>
-        <p> In this case, we'll join tables  <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> and <code>tables/mondo_to_orpha</code> and we will fill the empty fields with "NA". </p>
+        <p> The first index of each supplementary table will be used as the column index to use when merging, the other column indexes are the columns we want to keep from that supp table </p> 
+        <p> In this case, we'll join tables  <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> and <code>tables/mondo_to_orpha</code> and we will fill the empty fields with "NA". We will use the column 1 of each table when merging, and will also keep the column 2 (notice we are discarding the column 3 of the first supp table) </p>
         <%
             first_table = 'disease_cluster'
             second_table = 'disease_gene'
             third_table = 'mondo_to_orpha'
             second_table_tex = 'Second table'
             third_table_tex = 'Third table'
-            args = f"--tables tables/{first_table},tables/{second_table},tables/{third_table} --columns2add '1,2,3;1,2' --union --fill_character 'NA'"
+            args = f"--tables tables/{first_table},tables/{second_table},tables/{third_table} --columns2add '1,2;1,2' --union --fill_character 'NA'"
         %>
 		${show_n_exec(first_table, args, "cmdtabs_merge", supp_tables=[[second_table_tex, second_table], [third_table_tex, third_table]])}
 
+    <h3> Default behaviour </h3>
+        <p> If the flag "--columns2add" is not defined, it will use the first column of each supp table to perform the merge, and will keep the rest of the columns of that supp table </p>
+        <%
+            first_table = 'disease_cluster'
+            second_table = 'disease_gene'
+            third_table = 'mondo_to_orpha'
+            second_table_tex = 'Second table'
+            third_table_tex = 'Third table'
+            args = f"--tables tables/{first_table},tables/{second_table},tables/{third_table} --union --fill_character 'NA'"
+        %>
+		${show_n_exec(first_table, args, "cmdtabs_merge", supp_tables=[[second_table_tex, second_table], [third_table_tex, third_table]])}
+
+
+    <h3> Defining the column index for merging of a supp table and keeping all the column </h3>
+        <p> If you need to define the column index to merge the supp table(s) (because it is not the first column, so we cant use default behaviour) but want to keep the rest of the columns of that table (without explicitly defining each columns) we can only define the index column of the supp table, and we will get the all the columns for that table. </p>
+        <p> In this example, we are keeping all the columns for the first supp table, and only the second column for the second supp table
+
+        <%
+            first_table = 'disease_cluster'
+            second_table = 'disease_gene'
+            third_table = 'mondo_to_orpha'
+            second_table_tex = 'Second table'
+            third_table_tex = 'Third table'
+            args = f"--tables tables/{first_table},tables/{second_table},tables/{third_table} --columns2add '1;1,2' --union --fill_character 'NA'"
+        %>
+		${show_n_exec(first_table, args, "cmdtabs_merge", supp_tables=[[second_table_tex, second_table], [third_table_tex, third_table]])}
 </div>                                                                        
