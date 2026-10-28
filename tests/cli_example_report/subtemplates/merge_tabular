@@ -6,9 +6,15 @@
     </div>
 
     <p> It is used to merge N tables based on their first column when they share the same IDs.  </p>
-    
+    <div class="alert alert-info" role="alert">
+        <p>Note: For all examples in this section (merge_tabular), among the tables specified with the --tables flag, the first one is always considered the main table, and the remaining tables are referred to in these examples as supplementary tables. </p>
+    </div>            
+
     <h3> Basic example </h3>
         <p> In this script, we'll use the --tables flag to specify all input tables, separated by commas (,). The --columns2add flag will be used to indicate the column indexes (1 based) of each file added to the first one (therefore, we will not specify the first table's columns), separating the columns in each set by commas and each set of columns (pet table) by a semicolon (;). The --fill_character flag will be used to specify which character we want the empty fields to be filled with. Lastly, we'll use the --union flag to also add the rows that do not have a match to the merging table (first table). </p>
+        <div class="alert alert-info" role="alert">
+            <p> Note: In the main table, the first column is <strong> always </strong> assumed to be the identifier column (column by which tables are merged) and all the columns are kept. </p>
+        </div>
         <p> The first index of each supplementary table will be used as the column index to use when merging, the other column indexes are the columns we want to keep from that supp table </p> 
         <p> In this case, we'll join tables  <code>tables/disease_cluster</code>, <code>tables/disease_gene</code> and <code>tables/mondo_to_orpha</code> and we will fill the empty fields with "NA". We will use the column 1 of each table when merging, and will also keep the column 2 (notice we are discarding the column 3 of the first supp table) </p>
         <%

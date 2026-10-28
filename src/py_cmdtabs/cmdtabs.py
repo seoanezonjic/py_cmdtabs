@@ -74,7 +74,7 @@ class CmdTabs:
 		return pattern
 
 	def index_array(table, col_from=0, col_to=1, header=False):
-		if col_to == []: col_to = [col_idx for col_idx in range(len(table)) if col_idx != col_from ] #Getting all columns if columns not specified
+		if col_to == []: col_to = [col_idx for col_idx in range(len(table[0])) if col_idx != col_from ] #Getting all columns if columns not specified
 		index = defaultdict(lambda: False)
 		if type(col_to) != list:
 			f = lambda x: x[col_to]
